@@ -1,5 +1,5 @@
 {
-  description = "Zig project template";
+  description = "nomen — categorical name generator";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -94,7 +94,7 @@
         devShells.default = pkgs.mkShell {
           name = "zig-dev";
           nativeBuildInputs = [
-            pkgs.zigpkgs.master
+            pkgs.zigpkgs."0.15.2"
             pkgs.zls
             pkgs.lefthook
             pkgs.jq
@@ -112,8 +112,6 @@
               export PATH=/usr/bin:$PATH
             '');
         };
-
-        devShell = self.devShells.${system}.default;
       }
     );
 }
