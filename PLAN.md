@@ -71,8 +71,8 @@
 **Files**: `CLAUDE.md`
 **Risk**: NONE
 
-1. Replace template instructions with actual nomen architecture
-2. Document CLI commands, module layout, conventions
+1. Document actual nomen architecture, CLI commands, module layout
+2. Update conventions to reflect implemented patterns
 
 ## Dependency Graph
 
