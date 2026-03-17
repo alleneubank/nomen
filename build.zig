@@ -5,20 +5,20 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     // Library module (exposed to package consumers)
-    const mod = b.addModule("zig_template", .{
+    const mod = b.addModule("nomen", .{
         .root_source_file = b.path("src/root.zig"),
         .target = target,
     });
 
     // Executable
     const exe = b.addExecutable(.{
-        .name = "zig-template",
+        .name = "nomen",
         .root_module = b.createModule(.{
             .root_source_file = b.path("src/main.zig"),
             .target = target,
             .optimize = optimize,
             .imports = &.{
-                .{ .name = "zig_template", .module = mod },
+                .{ .name = "nomen", .module = mod },
             },
         }),
     });

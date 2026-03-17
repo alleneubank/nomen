@@ -1,6 +1,7 @@
-//! zig-template library.
+//! nomen — categorical name generator.
 //!
-//! Replace this with your library's documentation.
+//! CLI + API for generating memorable, themed names for devices,
+//! projects, and resources.
 
 const std = @import("std");
 
