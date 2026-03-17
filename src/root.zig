@@ -5,18 +5,22 @@
 
 const std = @import("std");
 
-/// Library version.
-pub const version = "0.0.0";
+pub const version = "0.1.0";
 
-/// Example library function. Replace with your own.
-pub fn add(a: i32, b: i32) i32 {
-    return a + b;
-}
+pub const types = @import("types.zig");
+pub const wordlist = @import("wordlist.zig");
+pub const generator = @import("generator.zig");
+pub const format = @import("format.zig");
+pub const cli = @import("cli.zig");
+pub const server = @import("server.zig");
 
-test "add" {
-    try std.testing.expectEqual(@as(i32, 5), add(2, 3));
-}
+pub const Category = types.Category;
+pub const Strategy = types.Strategy;
+pub const Name = types.Name;
+pub const OutputFormat = types.OutputFormat;
+pub const Generator = generator.Generator;
+pub const BatchResult = generator.BatchResult;
 
-test "add negative" {
-    try std.testing.expectEqual(@as(i32, 0), add(-1, 1));
+test {
+    std.testing.refAllDecls(@This());
 }
