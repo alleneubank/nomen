@@ -78,7 +78,7 @@ pub const Generator = struct {
 
         // Strategy tag preserves the phrase sub-pattern for machine consumers
         const strategy_tag: []const u8 = switch (pattern) {
-            .adjective_noun => "phrase",
+            .adjective_noun => "phrase:adjective_noun",
             .noun_noun => "phrase:noun_noun",
             .verb_noun => "phrase:verb_noun",
             .alliterative => "phrase:alliterative",

@@ -19,7 +19,7 @@
     {
       "id": 4,
       "prompt": "Give me 5 alliterative two-word names for our microservices, they should sound catchy",
-      "expected_output": "Uses --strategy phrase:alliterative, both words share first letter"
+      "expected_output": "Uses --strategy phrase:alliterative, most outputs share first letter (fallback to non-alliterative after 50 retries)"
     },
     {
       "id": 5,

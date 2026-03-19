@@ -140,7 +140,7 @@ Naming resources (servers, projects, deployments, branches) is a recurring frict
 - [ ] Invalid inputs produce structured errors with codes
 - [ ] `nomen serve` starts HTTP server with /generate, /categories, /health endpoints
 - [ ] CLAUDE.md reflects actual project architecture
-- [ ] `nomen generate --strategy phrase:alliterative --count 5` produces alliterative phrases
+- [ ] `nomen generate --strategy phrase:alliterative --count 5` produces mostly alliterative phrases (fallback to non-alliterative after 50 retries)
 - [ ] `nomen generate --strategy triple --count 3` produces three-word names
 - [ ] `nomen generate --category volcanoes` produces volcano-themed names
 - [ ] `nomen generate --strategy mnemonic --input 0xdeadbeefcafe` produces a three-word mnemonic

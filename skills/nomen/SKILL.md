@@ -38,7 +38,7 @@ nomen generate --count 3 --format json | jq -r '.[].value'
 nomen generate                                          # random themed name
 nomen generate -c mountains --count 3                   # three mountain names
 nomen generate --strategy phrase --count 5              # five adjective-noun phrases
-nomen generate --strategy phrase:alliterative --count 5  # five alliterative phrases
+nomen generate --strategy phrase:alliterative --count 5  # mostly alliterative phrases
 nomen generate --strategy phrase:verb_noun              # verb-noun phrase
 nomen generate --strategy triple --count 3              # three-word names
 nomen generate --strategy mnemonic --input 0xABC        # deterministic from hex
