@@ -1,0 +1,6 @@
+$ nomen generate --strategy phrase:alliterative --count 5 --format human
+brown-boston
+jade-jerome
+plastic-pilot
+heroic-hydro
+grand-gustav

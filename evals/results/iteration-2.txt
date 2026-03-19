@@ -1,50 +1,40 @@
 Forward Test Results — Iteration 2
 Date: 2026-03-19
-Method: CLI verification with 100-run alliteration stress test
+Method: Subagent forward tests with nomen skill loaded + CLI stress test
 
-=== Eval 4: Alliterative Phrases (100% guaranteed) ===
-Task: Give me 5 alliterative two-word names for microservices
-Command: nomen generate --strategy phrase:alliterative --count 5 --format json
+Each subagent read skills/nomen/SKILL.md, selected the appropriate strategy
+based on the task description, ran the nomen CLI, and saved output.
+Results are committed alongside this file as subagent-eval-*.txt.
 
-Alliteration stress test (100 runs, all must pass):
-  Run 1: capital-casino (c==c: PASS)
-  Run 2: kinetic-kavir (k==k: PASS)
-  Run 3: mimic-modern (m==m: PASS)
-  Run 4: total-taal (t==t: PASS)
-  Run 5: arctic-atlanta (a==a: PASS)
-  Run 6: simple-slang (s==s: PASS)
-  Run 7: birch-ballad (b==b: PASS)
-  Run 8: oval-oak (o==o: PASS)
-  Run 9: fresh-frame (f==f: PASS)
-  Run 10: heroic-haboob (h==h: PASS)
-  ... (runs 11-100 omitted, all PASS)
-Result: 100/100 alliterative (100%)
+=== Eval 4: Alliterative Phrases (subagent) ===
+Task: "Give me 5 alliterative two-word names for microservices"
+Subagent selected: --strategy phrase:alliterative
+Output: brown-boston, jade-jerome, plastic-pilot, heroic-hydro, grand-gustav
+Alliteration check: 5/5 PASS (all pairs share first letter)
+Evidence: subagent-eval-4-alliterative.txt
 
-=== Eval 5: Triple-Word Strategy ===
-Task: Three-word codename for Q3 release
-Command: nomen generate --strategy triple --count 5 --format json
+CLI stress test (100 runs): 100/100 alliterative (100%)
 
-Hyphen count verification (5 runs, all must have exactly 2 hyphens):
-  trivial-tropic-laura (hyphens: 2)
-  weather-moses-light (hyphens: 2)
-  botanic-critic-number (hyphens: 2)
-  union-master-escape (hyphens: 2)
-  salt-rover-skadi (hyphens: 2)
+=== Eval 5: Triple-Word Strategy (subagent) ===
+Task: "I need a three-word codename for our Q3 release"
+Subagent selected: --strategy triple
+Output: frozen-optic-border, olympic-solid-venice, royal-egypt-quartz,
+        peregrine-instant-rodent, happy-enceladus-sailor
+Hyphen check: all have exactly 2 hyphens (3 words). PASS.
+Evidence: subagent-eval-5-triple.txt
 
-=== Eval 6: Volcanoes Category ===
-Task: Name 3 servers using a volcano theme
-Command: nomen generate --category volcanoes --count 3 --format json
-Output: vesuvius, merapi, fuji (all category=volcanoes)
+=== Eval 6: Volcanoes Category (subagent) ===
+Task: "Name 3 servers using a volcano theme"
+Subagent selected: --category volcanoes
+Output: redoubt, fuji, lascar (all category=volcanoes)
+Evidence: subagent-eval-6-volcanoes.txt
 
-=== Eval 7: Long Mnemonic (3-word) ===
-Task: Memorable alias for 0xdeadbeefcafebabe
-Command: nomen generate --strategy mnemonic --input 0xdeadbeefcafebabe --format json
-
-Determinism verification (3 runs, same input must produce same output):
-  Run 1: fabric-major-alpine
-  Run 2: fabric-major-alpine
-  Run 3: fabric-major-alpine
+=== Eval 7: Long Mnemonic (subagent) ===
+Task: "Memorable alias for 0xdeadbeefcafebabe"
+Subagent selected: --strategy mnemonic --input 0xdeadbeefcafebabe
+Output: fabric-major-alpine (3 words for long input)
+Determinism: 3 consecutive runs all produce fabric-major-alpine. PASS.
+Evidence: subagent-eval-7-mnemonic.txt
 
 === Categories Count ===
-Command: nomen categories --format json | jq '. | length'
-Result: 14 categories
+Result: 14 categories (verified via nomen categories --format json | jq '. | length')

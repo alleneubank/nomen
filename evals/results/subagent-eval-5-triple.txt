@@ -1,0 +1,4 @@
+Command: nomen generate --strategy triple --count 5 --format json
+
+Output:
+[{"value":"frozen-optic-border","category":null,"strategy":"triple"},{"value":"olympic-solid-venice","category":null,"strategy":"triple"},{"value":"royal-egypt-quartz","category":null,"strategy":"triple"},{"value":"peregrine-instant-rodent","category":null,"strategy":"triple"},{"value":"happy-enceladus-sailor","category":null,"strategy":"triple"}]

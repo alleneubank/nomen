@@ -108,18 +108,21 @@ pub const Generator = struct {
 
     /// Alliterative generation: pick an adjective, then scan nouns for matching
     /// first letter. Guarantees alliteration — no fallback to non-alliterative.
+    /// Alliterative generation: pick an adjective, then scan nouns for
+    /// matching first letter. Guarantees alliteration. Applies syllable
+    /// rhythm and tonal coherence within the matching set.
     fn generateAlliterative(
         self: *Generator,
         adj_list: []const []const u8,
         noun_list: []const []const u8,
         rand: std.Random,
     ) GenerateError!Name {
-        // Try up to 26 different adjectives to find one whose first letter
-        // has matching nouns
         var adj_attempts: usize = 0;
-        while (adj_attempts < 26) : (adj_attempts += 1) {
+        while (adj_attempts < 50) : (adj_attempts += 1) {
             const adj = adj_list[rand.intRangeLessThan(usize, 0, adj_list.len)];
             const target_letter = adj[0];
+            const adj_tone = worddata.getTone(adj);
+            const adj_syl = worddata.getSyllables(adj);
 
             // Count nouns starting with the same letter
             var match_count: usize = 0;
@@ -128,12 +131,40 @@ pub const Generator = struct {
             }
             if (match_count == 0) continue;
 
-            // Pick a random match
+            // First pass: try to find a tone-compatible, syllable-balanced match
+            if (adj_attempts < 25) {
+                var good_count: usize = 0;
+                for (noun_list) |noun| {
+                    if (noun[0] != target_letter) continue;
+                    const noun_tone = worddata.getTone(noun);
+                    const total_syl = adj_syl + worddata.getSyllables(noun);
+                    if (Tone.compatible(adj_tone, noun_tone) and total_syl >= 3 and total_syl <= 5) {
+                        good_count += 1;
+                    }
+                }
+                if (good_count > 0) {
+                    var pick = rand.intRangeLessThan(usize, 0, good_count);
+                    for (noun_list) |noun| {
+                        if (noun[0] != target_letter) continue;
+                        const noun_tone = worddata.getTone(noun);
+                        const total_syl = adj_syl + worddata.getSyllables(noun);
+                        if (Tone.compatible(adj_tone, noun_tone) and total_syl >= 3 and total_syl <= 5) {
+                            if (pick == 0) {
+                                if (self.writePhraseToBuffer(adj, noun, "phrase")) |name| return name;
+                            }
+                            pick -= 1;
+                        }
+                    }
+                    continue;
+                }
+            }
+
+            // Fallback: any matching noun (alliteration still guaranteed)
             var pick = rand.intRangeLessThan(usize, 0, match_count);
             for (noun_list) |noun| {
                 if (noun[0] == target_letter) {
                     if (pick == 0) {
-                        return self.writePhraseToBuffer(adj, noun, "phrase") orelse continue;
+                        if (self.writePhraseToBuffer(adj, noun, "phrase")) |name| return name;
                     }
                     pick -= 1;
                 }

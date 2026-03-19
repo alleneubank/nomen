@@ -1,0 +1,2 @@
+$ nomen generate --category volcanoes --count 3
+[{"value":"redoubt","category":"volcanoes","strategy":"thematic"},{"value":"fuji","category":"volcanoes","strategy":"thematic"},{"value":"lascar","category":"volcanoes","strategy":"thematic"}]

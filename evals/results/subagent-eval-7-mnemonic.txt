@@ -1,0 +1,2 @@
+$ nomen generate --strategy mnemonic --input 0xdeadbeefcafebabe
+{"value":"fabric-major-alpine","category":null,"strategy":"mnemonic"}
