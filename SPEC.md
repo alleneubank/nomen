@@ -31,11 +31,13 @@ Naming resources (servers, projects, deployments, branches) is a recurring frict
 **Category** — thematic grouping of words:
 - `mountains`, `rivers`, `deserts`, `canyons`, `islands`, `passes` (American geography)
 - `moons`, `raptors`, `minerals`, `norse` (additional themes)
+- `volcanoes`, `forests`, `oceans`, `storms` (expanded themes)
 
 **Strategy** — name generation algorithm:
 - `thematic` — single word from a category word list
-- `phrase` — two-word combination (Adjective+Noun, Noun+Noun, Verb+Noun)
-- `mnemonic` — encode numeric/hex input into memorable word pairs
+- `phrase` — two-word combination (Adjective+Noun, Noun+Noun, Verb+Noun, Alliterative)
+- `triple` — three-word combination (Adjective+Adjective+Noun or Adjective+Noun+Noun)
+- `mnemonic` — encode numeric/hex input into memorable word pairs (or triples for long inputs)
 
 **Name** — generated output:
 - `value: []const u8` — the generated name string
@@ -61,6 +63,11 @@ Naming resources (servers, projects, deployments, branches) is a recurring frict
 - **REQ-GEN-008**: Accept a `--category` flag to restrict generation to a specific category.
 - **REQ-GEN-009**: Accept a `--strategy` flag to select the generation strategy (default: thematic).
 - **REQ-GEN-010**: Accept a `--seed` flag for deterministic output. Same seed + same parameters = same names.
+- **REQ-GEN-011**: Support alliterative phrase pattern — both words in a phrase share the same starting letter. Retry up to 50 times before falling back to non-alliterative.
+- **REQ-GEN-012**: Phrase generation should prefer syllable-balanced pairings (total 3-5 syllables) as a soft preference. Fall back to any pairing after 10 attempts.
+- **REQ-GEN-013**: Support triple-word strategy — three-word combinations (adjective-adjective-noun or adjective-noun-noun).
+- **REQ-GEN-014**: Mnemonic strategy must use FNV-1a hash for better distribution across the word pair space.
+- **REQ-GEN-015**: Mnemonic strategy should encode long inputs (>8 hex chars) as three words instead of two for higher entropy.
 
 ### CLI
 
@@ -90,6 +97,9 @@ Naming resources (servers, projects, deployments, branches) is a recurring frict
 - **REQ-WL-002**: Each category contains 10-30 curated words for the initial release.
 - **REQ-WL-003**: All words in lists must be lowercase, alphabetic, and <= 12 characters.
 - **REQ-WL-004**: Phrase-mode word lists include separate adjective, noun, and verb lists.
+- **REQ-WL-005**: Words carry a tone tag (`nature`, `tech`, `general`) for tonal coherence in phrase generation. Compatible pairings: nature+nature, nature+general, tech+tech, tech+general, general+general.
+- **REQ-WL-006**: Categories include at minimum: mountains, rivers, deserts, canyons, islands, passes, moons, raptors, minerals, norse, volcanoes, forests, oceans, storms.
+- **REQ-WL-007**: Each category should contain 15-50 curated words. Expanded from initial 10-30 target.
 
 ## Invariants
 
@@ -130,3 +140,8 @@ Naming resources (servers, projects, deployments, branches) is a recurring frict
 - [ ] Invalid inputs produce structured errors with codes
 - [ ] `nomen serve` starts HTTP server with /generate, /categories, /health endpoints
 - [ ] CLAUDE.md reflects actual project architecture
+- [ ] `nomen generate --strategy phrase:alliterative --count 5` produces alliterative phrases
+- [ ] `nomen generate --strategy triple --count 3` produces three-word names
+- [ ] `nomen generate --category volcanoes` produces volcano-themed names
+- [ ] `nomen generate --strategy mnemonic --input 0xdeadbeefcafe` produces a three-word mnemonic
+- [ ] `nomen categories` lists >= 14 categories
