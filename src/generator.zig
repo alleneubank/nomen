@@ -75,50 +75,76 @@ pub const Generator = struct {
 
         const rand = self.prng.random();
 
-        // For alliterative: retry until both words share the same first letter
-        const max_attempts: usize = if (pattern == .alliterative) 50 else 10;
+        if (pattern == .alliterative) {
+            return self.generateAlliterative(first_list, second_list, rand);
+        }
+
+        const max_attempts: usize = 10;
         var attempts: usize = 0;
 
         while (attempts < max_attempts) : (attempts += 1) {
-            const first_idx = rand.intRangeLessThan(usize, 0, first_list.len);
-            const second_idx = rand.intRangeLessThan(usize, 0, second_list.len);
+            const first = first_list[rand.intRangeLessThan(usize, 0, first_list.len)];
+            const second = second_list[rand.intRangeLessThan(usize, 0, second_list.len)];
 
-            const first = first_list[first_idx];
-            const second = second_list[second_idx];
-
-            // Alliteration check
-            if (pattern == .alliterative and first[0] != second[0]) continue;
-
-            // Tonal coherence: skip incompatible tone pairings
+            // Tonal coherence: skip incompatible pairings
             const tone1 = worddata.getTone(first);
             const tone2 = worddata.getTone(second);
             if (!Tone.compatible(tone1, tone2) and attempts < max_attempts - 1) continue;
 
-            // Syllable rhythm: prefer 3-5 total syllables (soft preference)
+            // Syllable rhythm: prefer 3-5 total syllables
             if (attempts < max_attempts / 2) {
                 const syl = worddata.getSyllables(first) + worddata.getSyllables(second);
                 if (syl < 3 or syl > 5) continue;
             }
 
-            const len = first.len + 1 + second.len;
-            if (len > self.buf.len) continue;
-
-            @memcpy(self.buf[0..first.len], first);
-            self.buf[first.len] = '-';
-            @memcpy(self.buf[first.len + 1 .. len], second);
-
-            return .{
-                .value = self.buf[0..len],
-                .category = null,
-                .strategy_tag = "phrase",
-            };
+            return self.writePhraseToBuffer(first, second, "phrase") orelse continue;
         }
 
-        // Fallback: just pick any pair
+        // Final fallback
         const first = first_list[rand.intRangeLessThan(usize, 0, first_list.len)];
         const second = second_list[rand.intRangeLessThan(usize, 0, second_list.len)];
+        return self.writePhraseToBuffer(first, second, "phrase") orelse error.EmptyWordList;
+    }
+
+    /// Alliterative generation: pick an adjective, then scan nouns for matching
+    /// first letter. Guarantees alliteration — no fallback to non-alliterative.
+    fn generateAlliterative(
+        self: *Generator,
+        adj_list: []const []const u8,
+        noun_list: []const []const u8,
+        rand: std.Random,
+    ) GenerateError!Name {
+        // Try up to 26 different adjectives to find one whose first letter
+        // has matching nouns
+        var adj_attempts: usize = 0;
+        while (adj_attempts < 26) : (adj_attempts += 1) {
+            const adj = adj_list[rand.intRangeLessThan(usize, 0, adj_list.len)];
+            const target_letter = adj[0];
+
+            // Count nouns starting with the same letter
+            var match_count: usize = 0;
+            for (noun_list) |noun| {
+                if (noun[0] == target_letter) match_count += 1;
+            }
+            if (match_count == 0) continue;
+
+            // Pick a random match
+            var pick = rand.intRangeLessThan(usize, 0, match_count);
+            for (noun_list) |noun| {
+                if (noun[0] == target_letter) {
+                    if (pick == 0) {
+                        return self.writePhraseToBuffer(adj, noun, "phrase") orelse continue;
+                    }
+                    pick -= 1;
+                }
+            }
+        }
+        return error.EmptyWordList;
+    }
+
+    fn writePhraseToBuffer(self: *Generator, first: []const u8, second: []const u8, tag: []const u8) ?Name {
         const len = first.len + 1 + second.len;
-        if (len > self.buf.len) return error.EmptyWordList;
+        if (len > self.buf.len) return null;
 
         @memcpy(self.buf[0..first.len], first);
         self.buf[first.len] = '-';
@@ -127,7 +153,7 @@ pub const Generator = struct {
         return .{
             .value = self.buf[0..len],
             .category = null,
-            .strategy_tag = "phrase",
+            .strategy_tag = tag,
         };
     }
 
@@ -279,7 +305,7 @@ pub const Generator = struct {
 
             if (distinct) {
                 @memcpy(values[i][0..name.value.len], name.value);
-                names[i] = Name{
+                names[i] = .{
                     .value = values[i][0..name.value.len],
                     .category = name.category,
                     .strategy_tag = name.strategy_tag,
@@ -388,17 +414,18 @@ test "phrase generation produces dns-safe names" {
     try std.testing.expect(std.mem.indexOf(u8, name.value, "-") != null);
 }
 
-test "alliterative phrase shares first letter" {
+test "alliterative phrase always shares first letter" {
     var gen = Generator.init(42);
-    // Generate several and check at least some are alliterative
-    var alliterative_count: usize = 0;
-    for (0..20) |_| {
+    // Alliteration is now guaranteed — every output must match
+    for (0..50) |_| {
         const name = try gen.generate(.{ .phrase = .alliterative }, null);
-        const hyphen = std.mem.indexOf(u8, name.value, "-") orelse continue;
-        if (name.value[0] == name.value[hyphen + 1]) alliterative_count += 1;
+        try std.testing.expect(isDnsSafe(name.value));
+        const hyphen = std.mem.indexOf(u8, name.value, "-") orelse {
+            try std.testing.expect(false);
+            continue;
+        };
+        try std.testing.expectEqual(name.value[0], name.value[hyphen + 1]);
     }
-    // Most should be alliterative (with 26 possible letters and retries)
-    try std.testing.expect(alliterative_count >= 10);
 }
 
 test "triple generation produces three-word dns-safe names" {

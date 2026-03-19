@@ -19,7 +19,7 @@ command -v nomen >/dev/null || echo "nomen not found — install from https://gi
 
 - **Phrase** — two-word combination (adjective-noun, noun-noun, verb-noun). Best for: branch names, container names, project codenames. Tonal coherence and syllable rhythm are applied automatically. ~480K combos.
 
-- **Phrase (alliterative)** — two-word phrase where both words share the same first letter. Best for: memorable codenames, marketing names. Use `--strategy phrase:alliterative`.
+- **Phrase (alliterative)** — two-word phrase where both words are guaranteed to share the same first letter (e.g., "crystal-cobra", "solar-sphinx"). Best for: memorable codenames, marketing names. Use `--strategy phrase:alliterative`.
 
 - **Triple** — three-word combination, randomly choosing adjective-adjective-noun or adjective-noun-noun. Best for: when two words aren't distinct enough, or you want extra flavor. Use `--strategy triple`.
 
