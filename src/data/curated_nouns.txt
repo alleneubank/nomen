@@ -96,7 +96,6 @@ shard
 shark
 shield
 signal
-solar
 spark
 sphinx
 spire
