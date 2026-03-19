@@ -88,12 +88,12 @@ pub const Generator = struct {
             // Alliteration check: both words must start with the same letter
             if (is_alliterative and first[0] != second[0]) continue;
 
-            // Tonal coherence: skip incompatible pairings
+            // Tonal coherence: always enforced, no exceptions
             const tone1 = worddata.getTone(first);
             const tone2 = worddata.getTone(second);
-            if (!Tone.compatible(tone1, tone2) and attempts < max_attempts - 1) continue;
+            if (!Tone.compatible(tone1, tone2)) continue;
 
-            // Syllable rhythm: prefer 3-5 total syllables
+            // Syllable rhythm: prefer 3-5 total syllables (soft, relaxed after half)
             if (attempts < max_attempts / 2) {
                 const syl = worddata.getSyllables(first) + worddata.getSyllables(second);
                 if (syl < 3 or syl > 5) continue;
@@ -102,7 +102,16 @@ pub const Generator = struct {
             return self.writePhraseToBuffer(first, second, "phrase") orelse continue;
         }
 
-        // Fallback: accept any pair (non-alliterative if retries exhausted)
+        // Fallback: drop alliteration and syllable constraints but keep tone
+        var fallback_attempts: usize = 0;
+        while (fallback_attempts < 50) : (fallback_attempts += 1) {
+            const first = first_list[rand.intRangeLessThan(usize, 0, first_list.len)];
+            const second = second_list[rand.intRangeLessThan(usize, 0, second_list.len)];
+            if (!Tone.compatible(worddata.getTone(first), worddata.getTone(second))) continue;
+            return self.writePhraseToBuffer(first, second, "phrase") orelse continue;
+        }
+
+        // Final safety: should be unreachable with general-toned words in the lists
         const first = first_list[rand.intRangeLessThan(usize, 0, first_list.len)];
         const second = second_list[rand.intRangeLessThan(usize, 0, second_list.len)];
         return self.writePhraseToBuffer(first, second, "phrase") orelse error.EmptyWordList;
