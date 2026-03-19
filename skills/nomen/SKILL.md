@@ -1,0 +1,96 @@
+---
+name: nomen
+description: Generate memorable, themed names using the nomen CLI. Must use when the user needs to name anything — resources, branches, containers, sessions, releases, deployments, servers, environments, projects, or any entity that needs a human-friendly identifier. Also use when the user says "name this", "give it a name", "what should I call this", "pick a codename", "generate a name", "I need a name for", or asks about naming conventions for infrastructure. Even if the user doesn't explicitly mention "nomen", if they need a memorable identifier for something, this skill applies.
+---
+
+# nomen — Categorical Name Generator
+
+Generate memorable, DNS-safe names from themed word lists via the `nomen` CLI.
+
+## Prerequisite
+
+The `nomen` binary must be on PATH. Verify before use:
+
+```bash
+command -v nomen >/dev/null || echo "nomen not found — install from https://github.com/0xbigboss/nomen"
+```
+
+## Choosing a Strategy
+
+Pick the right strategy for the situation:
+
+- **Thematic** (default) — single evocative word from a themed category. Best for: server names, environment names, release codenames. Use when the name should feel like a proper noun. Pass `--category` to match a theme (e.g., `mountains` for infrastructure, `norse` for internal tools, `raptors` for fast things).
+
+- **Phrase** — two-word combination (adjective-noun, noun-noun, or verb-noun). Best for: branch names, container names, project codenames, anything that benefits from being slightly more descriptive. The ~480K combo space means collisions are extremely rare.
+
+- **Mnemonic** — deterministic word pair from a numeric/hex input. Best for: giving stable memorable aliases to ugly identifiers (commit SHAs, IPs, UUIDs, port numbers). Same input always produces the same name — that's the point.
+
+## Always Use `--format json` for Programmatic Use
+
+When extracting names in scripts or pipelines, always use `--format json` and parse with `jq`:
+
+```bash
+# Single name — JSON object
+nomen generate --format json | jq -r '.value'
+
+# Multiple names — JSON array
+nomen generate --count 3 --format json | jq -r '.[].value'
+```
+
+For display to the user, use `--format human` (or `-f human`).
+
+## Quick Reference
+
+```bash
+nomen generate                                    # one random themed name
+nomen generate -c mountains --count 3             # three mountain names
+nomen generate --strategy phrase --count 5        # five adjective-noun phrases
+nomen generate --strategy phrase:verb_noun        # verb-noun phrase
+nomen generate --strategy mnemonic --input 0xABC  # deterministic from hex
+nomen generate --seed 42                          # reproducible output
+nomen categories                                  # list available categories
+```
+
+**Categories:** mountains, rivers, deserts, canyons, islands, passes, moons, raptors, minerals, norse
+
+## Common Patterns
+
+```bash
+# Name a git branch
+git checkout -b "feat/$(nomen generate -f human)"
+
+# Codename from commit SHA
+nomen generate -s mnemonic --input "$(git rev-parse --short HEAD)" -f human
+
+# Name a container
+docker run --name "$(nomen generate -s phrase -f human)" nginx
+
+# Deterministic name from any string (hash to hex first)
+nomen generate -s mnemonic --input "0x$(echo -n 'my-string' | md5 | head -c 8)" -f human
+
+# Stable daily name (same name all day, changes tomorrow)
+nomen generate --seed "$(date +%Y%m%d)" -f human
+
+# Batch names for a k8s namespace set
+nomen generate -c raptors --count 3 --fields value -f jsonl
+```
+
+## Flags
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--count N` | `-n` | Number of names (default: 1) |
+| `--category NAME` | `-c` | Restrict to category |
+| `--strategy NAME` | `-s` | thematic, phrase[:pattern], mnemonic |
+| `--seed N` | | Deterministic output |
+| `--input TEXT` | `-i` | Input for mnemonic (numeric/hex) |
+| `--format FMT` | `-f` | json, jsonl, human |
+| `--fields LIST` | | Comma-separated output fields |
+| `--dry-run` | | Validate without generating |
+
+## Output Fields
+
+Each generated name has:
+- `value` — the name string (DNS-safe: `[a-z0-9-]`)
+- `category` — source category (null for phrase/mnemonic)
+- `strategy` — generation method used

@@ -1,0 +1,9 @@
+{
+    "name": "nomen",
+    "version": "0.1.0",
+    "description": "Categorical name generator — generate memorable, themed names for resources, branches, containers, and releases",
+    "author": {
+        "name": "0xbigboss"
+    },
+    "repository": "https://github.com/0xbigboss/nomen"
+}

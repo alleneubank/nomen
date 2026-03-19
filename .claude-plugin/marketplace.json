@@ -1,0 +1,13 @@
+{
+    "name": "nomen-marketplace",
+    "owner": {
+        "name": "0xbigboss"
+    },
+    "plugins": [
+        {
+            "name": "nomen",
+            "description": "Categorical name generator for memorable, themed names",
+            "source": "./"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+  "skill_name": "nomen",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I need a codename for this feature branch, something cool and memorable",
+      "expected_output": "Runs nomen generate with phrase or thematic strategy, returns a name"
+    },
+    {
+      "id": 2,
+      "prompt": "Generate 5 names for our new k8s namespaces, they should all be from the same theme",
+      "expected_output": "Runs nomen generate --count 5 --category <something> --format json, returns 5 themed names"
+    },
+    {
+      "id": 3,
+      "prompt": "I want a deterministic friendly name for commit SHA abc123f so I can refer to it in standups",
+      "expected_output": "Runs nomen generate --strategy mnemonic --input abc123f --format human, returns a stable word pair"
+    }
+  ]
+}
