@@ -18,6 +18,10 @@ fn fnv1a(input: []const u8) u64 {
     return hash;
 }
 
+/// Number of phrase attempts that apply the syllable rhythm preference
+/// (REQ-GEN-012). After this many attempts, syllable filtering is relaxed.
+pub const syllable_preference_attempts = 10;
+
 pub const Generator = struct {
     prng: std.Random.DefaultPrng,
     // 38 bytes = max triple-word (12+1+12+1+12) or 3-word mnemonic
@@ -93,9 +97,9 @@ pub const Generator = struct {
             const tone2 = worddata.getTone(second);
             if (!Tone.compatible(tone1, tone2)) continue;
 
-            // Syllable rhythm: prefer 3-5 total syllables for the first 10
+            // Syllable rhythm: prefer 3-5 total syllables for the first N
             // attempts, then accept any pairing (REQ-GEN-012)
-            if (attempts < 10) {
+            if (attempts < syllable_preference_attempts) {
                 const syl = worddata.getSyllables(first) + worddata.getSyllables(second);
                 if (syl < 3 or syl > 5) continue;
             }
@@ -405,25 +409,37 @@ test "alliterative phrase mostly shares first letter" {
     try std.testing.expect(alliterative_count >= 40);
 }
 
-test "syllable rhythm applied for first 10 attempts then relaxed" {
-    // REQ-GEN-012: prefer 3-5 total syllables for first 10 attempts.
-    // With enough samples, most phrases should be in the 3-5 range
-    // (the preference is applied), but some may fall outside it
-    // (the preference is relaxed after 10 attempts).
+test "syllable_preference_attempts is 10 per REQ-GEN-012" {
+    // REQ-GEN-012 specifies the syllable preference applies for the
+    // first 10 attempts, then relaxes. This constant drives that cutoff.
+    try std.testing.expectEqual(@as(usize, 10), syllable_preference_attempts);
+}
+
+test "syllable rhythm preference applies to adjective_noun phrases" {
     var gen = Generator.init(42);
     var in_range: usize = 0;
-    const total: usize = 100;
-    for (0..total) |_| {
+    for (0..100) |_| {
         const name = try gen.generate(.{ .phrase = .adjective_noun }, null);
         const hyphen = std.mem.indexOf(u8, name.value, "-") orelse continue;
-        const first = name.value[0..hyphen];
-        const second = name.value[hyphen + 1 ..];
-        const syl = worddata.getSyllables(first) + worddata.getSyllables(second);
+        const syl = worddata.getSyllables(name.value[0..hyphen]) +
+            worddata.getSyllables(name.value[hyphen + 1 ..]);
         if (syl >= 3 and syl <= 5) in_range += 1;
     }
-    // With 10/10 attempts applying the preference, the majority should
-    // be in range. Without the preference, random would give ~60%.
-    // With the preference, we expect >75%.
+    // With the preference active for 10/10 attempts, expect >75%.
+    try std.testing.expect(in_range > 75);
+}
+
+test "syllable rhythm preference applies to alliterative phrases" {
+    var gen = Generator.init(42);
+    var in_range: usize = 0;
+    for (0..100) |_| {
+        const name = try gen.generate(.{ .phrase = .alliterative }, null);
+        const hyphen = std.mem.indexOf(u8, name.value, "-") orelse continue;
+        const syl = worddata.getSyllables(name.value[0..hyphen]) +
+            worddata.getSyllables(name.value[hyphen + 1 ..]);
+        if (syl >= 3 and syl <= 5) in_range += 1;
+    }
+    // Same 10-attempt syllable preference applies to alliterative mode
     try std.testing.expect(in_range > 75);
 }
 
