@@ -1,4 +1,13 @@
-Command: nomen generate --strategy triple --count 5 --format json
-
-Output:
-[{"value":"frozen-optic-border","category":null,"strategy":"triple"},{"value":"olympic-solid-venice","category":null,"strategy":"triple"},{"value":"royal-egypt-quartz","category":null,"strategy":"triple"},{"value":"peregrine-instant-rodent","category":null,"strategy":"triple"},{"value":"happy-enceladus-sailor","category":null,"strategy":"triple"}]
+SUBAGENT FORWARD TEST EVIDENCE
+Task: I need a three-word codename for our Q3 release, something epic sounding
+Skill loaded: skills/nomen/SKILL.md
+Strategy selected: Triple — the skill file states: "**Triple** — three-word combination, randomly choosing adjective-adjective-noun or adjective-noun-noun. Best for: when two words aren't distinct enough, or you want extra flavor. Use `--strategy triple`." This matches the user's explicit request for a three-word codename. The "epic sounding" qualifier aligns with the triple strategy's purpose of adding "extra flavor."
+Command: ~/.local/bin/nomen generate --strategy triple --count 3 --format json
+Output: [{"value":"velvet-betty-rufus","category":null,"strategy":"triple"},{"value":"maroon-madam-orchid","category":null,"strategy":"triple"},{"value":"english-twin-radical","category":null,"strategy":"triple"}]
+Verification:
+  - "velvet-betty-rufus" -> hyphens: 2 -> words: 3 (velvet, betty, rufus) -> PASS
+  - "maroon-madam-orchid" -> hyphens: 2 -> words: 3 (maroon, madam, orchid) -> PASS
+  - "english-twin-radical" -> hyphens: 2 -> words: 3 (english, twin, radical) -> PASS
+  - All three results have strategy "triple" -> PASS
+  - All three results have category null (expected for triple strategy) -> PASS
+Result: PASS

@@ -1,40 +1,34 @@
 Forward Test Results — Iteration 2
 Date: 2026-03-19
-Method: Subagent forward tests with nomen skill loaded + CLI stress test
+Method: Subagent forward tests — each subagent read skills/nomen/SKILL.md,
+quoted the relevant strategy section, selected the CLI command, ran it,
+and verified the output. Full evidence in subagent-eval-*.txt files.
 
-Each subagent read skills/nomen/SKILL.md, selected the appropriate strategy
-based on the task description, ran the nomen CLI, and saved output.
-Results are committed alongside this file as subagent-eval-*.txt.
+=== Eval 4: Alliterative Phrases ===
+Subagent read skill, selected phrase:alliterative (quoted skill section on
+alliterative mode). Generated 5 names, verified all 5 are alliterative.
+Result: PASS — see subagent-eval-4-alliterative.txt
 
-=== Eval 4: Alliterative Phrases (subagent) ===
-Task: "Give me 5 alliterative two-word names for microservices"
-Subagent selected: --strategy phrase:alliterative
-Output: brown-boston, jade-jerome, plastic-pilot, heroic-hydro, grand-gustav
-Alliteration check: 5/5 PASS (all pairs share first letter)
-Evidence: subagent-eval-4-alliterative.txt
+=== Eval 5: Triple-Word Strategy ===
+Subagent read skill, selected triple (quoted skill section on three-word
+combinations). Generated 3 names, verified all have exactly 2 hyphens.
+Result: PASS — see subagent-eval-5-triple.txt
 
-CLI stress test (100 runs): 100/100 alliterative (100%)
+=== Eval 6: Volcanoes Category ===
+Subagent read skill, selected thematic with --category volcanoes (quoted
+skill section recommending thematic for server names). Generated 3 names,
+verified all have category=volcanoes.
+Result: PASS — see subagent-eval-6-volcanoes.txt
 
-=== Eval 5: Triple-Word Strategy (subagent) ===
-Task: "I need a three-word codename for our Q3 release"
-Subagent selected: --strategy triple
-Output: frozen-optic-border, olympic-solid-venice, royal-egypt-quartz,
-        peregrine-instant-rodent, happy-enceladus-sailor
-Hyphen check: all have exactly 2 hyphens (3 words). PASS.
-Evidence: subagent-eval-5-triple.txt
+=== Eval 7: Long Mnemonic (3-word) ===
+Subagent read skill, selected mnemonic with --input 0xdeadbeefcafebabe
+(quoted skill section on stable aliases for ugly identifiers). Verified
+3-word output for long input and determinism across 2 runs.
+Result: PASS — see subagent-eval-7-mnemonic.txt
 
-=== Eval 6: Volcanoes Category (subagent) ===
-Task: "Name 3 servers using a volcano theme"
-Subagent selected: --category volcanoes
-Output: redoubt, fuji, lascar (all category=volcanoes)
-Evidence: subagent-eval-6-volcanoes.txt
-
-=== Eval 7: Long Mnemonic (subagent) ===
-Task: "Memorable alias for 0xdeadbeefcafebabe"
-Subagent selected: --strategy mnemonic --input 0xdeadbeefcafebabe
-Output: fabric-major-alpine (3 words for long input)
-Determinism: 3 consecutive runs all produce fabric-major-alpine. PASS.
-Evidence: subagent-eval-7-mnemonic.txt
-
-=== Categories Count ===
-Result: 14 categories (verified via nomen categories --format json | jq '. | length')
+=== Summary ===
+All 4 subagent forward tests PASS. Each test verified:
+1. Skill was loaded and the relevant section was identified
+2. Correct strategy was selected based on the task description
+3. CLI command produced valid output
+4. Output met the expected criteria (alliteration/hyphens/category/determinism)

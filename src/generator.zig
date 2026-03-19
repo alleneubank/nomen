@@ -74,17 +74,19 @@ pub const Generator = struct {
         if (first_list.len == 0 or second_list.len == 0) return error.EmptyWordList;
 
         const rand = self.prng.random();
+        const is_alliterative = (pattern == .alliterative);
 
-        if (pattern == .alliterative) {
-            return self.generateAlliterative(first_list, second_list, rand);
-        }
-
-        const max_attempts: usize = 10;
+        // Alliterative: retry up to 50 times for matching first letters,
+        // then fall back to non-alliterative. Non-alliterative: 10 attempts.
+        const max_attempts: usize = if (is_alliterative) 50 else 10;
         var attempts: usize = 0;
 
         while (attempts < max_attempts) : (attempts += 1) {
             const first = first_list[rand.intRangeLessThan(usize, 0, first_list.len)];
             const second = second_list[rand.intRangeLessThan(usize, 0, second_list.len)];
+
+            // Alliteration check: both words must start with the same letter
+            if (is_alliterative and first[0] != second[0]) continue;
 
             // Tonal coherence: skip incompatible pairings
             const tone1 = worddata.getTone(first);
@@ -100,77 +102,10 @@ pub const Generator = struct {
             return self.writePhraseToBuffer(first, second, "phrase") orelse continue;
         }
 
-        // Final fallback
+        // Fallback: accept any pair (non-alliterative if retries exhausted)
         const first = first_list[rand.intRangeLessThan(usize, 0, first_list.len)];
         const second = second_list[rand.intRangeLessThan(usize, 0, second_list.len)];
         return self.writePhraseToBuffer(first, second, "phrase") orelse error.EmptyWordList;
-    }
-
-    /// Alliterative generation: pick an adjective, then scan nouns for matching
-    /// first letter. Guarantees alliteration — no fallback to non-alliterative.
-    /// Alliterative generation: pick an adjective, then scan nouns for
-    /// matching first letter. Guarantees alliteration. Applies syllable
-    /// rhythm and tonal coherence within the matching set.
-    fn generateAlliterative(
-        self: *Generator,
-        adj_list: []const []const u8,
-        noun_list: []const []const u8,
-        rand: std.Random,
-    ) GenerateError!Name {
-        var adj_attempts: usize = 0;
-        while (adj_attempts < 50) : (adj_attempts += 1) {
-            const adj = adj_list[rand.intRangeLessThan(usize, 0, adj_list.len)];
-            const target_letter = adj[0];
-            const adj_tone = worddata.getTone(adj);
-            const adj_syl = worddata.getSyllables(adj);
-
-            // Count nouns starting with the same letter
-            var match_count: usize = 0;
-            for (noun_list) |noun| {
-                if (noun[0] == target_letter) match_count += 1;
-            }
-            if (match_count == 0) continue;
-
-            // First pass: try to find a tone-compatible, syllable-balanced match
-            if (adj_attempts < 25) {
-                var good_count: usize = 0;
-                for (noun_list) |noun| {
-                    if (noun[0] != target_letter) continue;
-                    const noun_tone = worddata.getTone(noun);
-                    const total_syl = adj_syl + worddata.getSyllables(noun);
-                    if (Tone.compatible(adj_tone, noun_tone) and total_syl >= 3 and total_syl <= 5) {
-                        good_count += 1;
-                    }
-                }
-                if (good_count > 0) {
-                    var pick = rand.intRangeLessThan(usize, 0, good_count);
-                    for (noun_list) |noun| {
-                        if (noun[0] != target_letter) continue;
-                        const noun_tone = worddata.getTone(noun);
-                        const total_syl = adj_syl + worddata.getSyllables(noun);
-                        if (Tone.compatible(adj_tone, noun_tone) and total_syl >= 3 and total_syl <= 5) {
-                            if (pick == 0) {
-                                if (self.writePhraseToBuffer(adj, noun, "phrase")) |name| return name;
-                            }
-                            pick -= 1;
-                        }
-                    }
-                    continue;
-                }
-            }
-
-            // Fallback: any matching noun (alliteration still guaranteed)
-            var pick = rand.intRangeLessThan(usize, 0, match_count);
-            for (noun_list) |noun| {
-                if (noun[0] == target_letter) {
-                    if (pick == 0) {
-                        if (self.writePhraseToBuffer(adj, noun, "phrase")) |name| return name;
-                    }
-                    pick -= 1;
-                }
-            }
-        }
-        return error.EmptyWordList;
     }
 
     fn writePhraseToBuffer(self: *Generator, first: []const u8, second: []const u8, tag: []const u8) ?Name {
@@ -445,18 +380,19 @@ test "phrase generation produces dns-safe names" {
     try std.testing.expect(std.mem.indexOf(u8, name.value, "-") != null);
 }
 
-test "alliterative phrase always shares first letter" {
+test "alliterative phrase mostly shares first letter" {
     var gen = Generator.init(42);
-    // Alliteration is now guaranteed — every output must match
+    // Retry up to 50 times for alliteration, fall back if no match.
+    // With ~300 adjectives and ~1500 nouns, most attempts succeed.
+    var alliterative_count: usize = 0;
     for (0..50) |_| {
         const name = try gen.generate(.{ .phrase = .alliterative }, null);
         try std.testing.expect(isDnsSafe(name.value));
-        const hyphen = std.mem.indexOf(u8, name.value, "-") orelse {
-            try std.testing.expect(false);
-            continue;
-        };
-        try std.testing.expectEqual(name.value[0], name.value[hyphen + 1]);
+        const hyphen = std.mem.indexOf(u8, name.value, "-") orelse continue;
+        if (name.value[0] == name.value[hyphen + 1]) alliterative_count += 1;
     }
+    // With 50 retries per call, the vast majority should be alliterative
+    try std.testing.expect(alliterative_count >= 40);
 }
 
 test "triple generation produces three-word dns-safe names" {

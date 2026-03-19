@@ -1,6 +1,35 @@
-$ nomen generate --strategy phrase:alliterative --count 5 --format human
-brown-boston
-jade-jerome
-plastic-pilot
-heroic-hydro
-grand-gustav
+SUBAGENT FORWARD TEST EVIDENCE
+Task: Give me 5 alliterative two-word names for our microservices, they should sound catchy
+Skill loaded: skills/nomen/SKILL.md
+Strategy selected: phrase:alliterative — The skill explicitly recommends this for the user's request. Quoting the relevant section:
+
+  "Phrase (alliterative) — two-word phrase that retries up to 50 times to find words
+  sharing the same first letter (e.g., 'crystal-cobra', 'solar-sphinx'). Falls back to
+  a non-alliterative pair if no match found. Best for: memorable codenames, marketing
+  names. Use --strategy phrase:alliterative."
+
+The user asked for "alliterative two-word names" that "sound catchy," which matches
+this strategy exactly — alliterative phrases are designed for memorable codenames.
+
+Command: ~/.local/bin/nomen generate --strategy phrase:alliterative --count 5 --format json
+Output:
+[
+  {"value":"mineral-mystic","category":null,"strategy":"phrase"},
+  {"value":"sweet-sushi","category":null,"strategy":"phrase"},
+  {"value":"jet-jacob","category":null,"strategy":"phrase"},
+  {"value":"celtic-copper","category":null,"strategy":"phrase"},
+  {"value":"tribal-total","category":null,"strategy":"phrase"}
+]
+
+Verification (checking alliteration — both words share the same first letter):
+  1. mineral-mystic  -> m / m -> ALLITERATIVE
+  2. sweet-sushi     -> s / s -> ALLITERATIVE
+  3. jet-jacob       -> j / j -> ALLITERATIVE
+  4. celtic-copper   -> c / c -> ALLITERATIVE
+  5. tribal-total    -> t / t -> ALLITERATIVE
+
+All 5 names are alliterative (both words start with the same letter).
+All names are two-word phrases joined by hyphen, suitable for microservice naming.
+All names are DNS-safe (lowercase alphanumeric + hyphen).
+
+Result: PASS

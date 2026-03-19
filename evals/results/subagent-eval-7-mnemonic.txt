@@ -1,2 +1,27 @@
-$ nomen generate --strategy mnemonic --input 0xdeadbeefcafebabe
-{"value":"fabric-major-alpine","category":null,"strategy":"mnemonic"}
+SUBAGENT FORWARD TEST EVIDENCE
+Task: I have this long deployment ID 0xdeadbeefcafebabe and want a memorable alias for it
+Skill loaded: skills/nomen/SKILL.md
+Strategy selected: Mnemonic — the skill recommends this strategy for giving stable aliases to ugly identifiers. Quoting the skill:
+
+  "**Mnemonic** — deterministic word pair (or triple for long inputs) from a numeric/hex input.
+   Same input always produces the same name. Best for: giving stable aliases to ugly identifiers
+   (SHAs, IPs, UUIDs). Uses FNV-1a hash for good distribution across ~2.6M combos."
+
+The task involves a hex deployment ID (0xdeadbeefcafebabe), which is exactly the "ugly identifier" use case. The input is long (8 bytes / 16 hex chars), so the skill predicts a 3-word output. The quick reference also shows a matching example:
+
+  nomen generate --strategy mnemonic --input 0xdeadbeefcafe  # 3-word for long input
+
+Command: ~/.local/bin/nomen generate --strategy mnemonic --input 0xdeadbeefcafebabe --format json
+Output: {"value":"fabric-major-alpine","category":null,"strategy":"mnemonic"}
+Human format: fabric-major-alpine
+
+Verification:
+  - 3-word check: "fabric-major-alpine" contains 3 words separated by hyphens. PASS
+  - Determinism check (run 1): fabric-major-alpine
+  - Determinism check (run 2): fabric-major-alpine
+  - Both runs produce identical output. PASS
+  - Strategy field confirms "mnemonic". PASS
+  - Category is null (expected for mnemonic). PASS
+  - Output is DNS-safe ([a-z0-9-]). PASS
+
+Result: PASS

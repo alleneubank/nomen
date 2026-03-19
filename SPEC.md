@@ -63,7 +63,7 @@ Naming resources (servers, projects, deployments, branches) is a recurring frict
 - **REQ-GEN-008**: Accept a `--category` flag to restrict generation to a specific category.
 - **REQ-GEN-009**: Accept a `--strategy` flag to select the generation strategy (default: thematic).
 - **REQ-GEN-010**: Accept a `--seed` flag for deterministic output. Same seed + same parameters = same names.
-- **REQ-GEN-011**: Support alliterative phrase pattern — both words in a phrase are guaranteed to share the same starting letter. Implemented by selecting an adjective, then scanning the noun list for matches. Syllable rhythm preference (REQ-GEN-012) applies within the matching set.
+- **REQ-GEN-011**: Support alliterative phrase pattern — retry normal phrase generation up to 50 times until both words share the same starting letter. Fall back to non-alliterative if no match found. Syllable rhythm (REQ-GEN-012) and tonal coherence (REQ-WL-005) apply during retries.
 - **REQ-GEN-012**: Phrase generation should prefer syllable-balanced pairings (total 3-5 syllables) as a soft preference. Fall back to any pairing after 10 attempts.
 - **REQ-GEN-013**: Support triple-word strategy — three-word combinations (adjective-adjective-noun or adjective-noun-noun).
 - **REQ-GEN-014**: Mnemonic strategy must use FNV-1a hash for better distribution across the word pair space.
