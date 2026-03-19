@@ -4,17 +4,37 @@
     {
       "id": 1,
       "prompt": "I need a codename for this feature branch, something cool and memorable",
-      "expected_output": "Runs nomen generate with phrase or thematic strategy, returns a name"
+      "expected_output": "Uses phrase or thematic strategy, returns a name"
     },
     {
       "id": 2,
       "prompt": "Generate 5 names for our new k8s namespaces, they should all be from the same theme",
-      "expected_output": "Runs nomen generate --count 5 --category <something> --format json, returns 5 themed names"
+      "expected_output": "Uses --category with a single theme, returns 5 themed names"
     },
     {
       "id": 3,
       "prompt": "I want a deterministic friendly name for commit SHA abc123f so I can refer to it in standups",
-      "expected_output": "Runs nomen generate --strategy mnemonic --input abc123f --format human, returns a stable word pair"
+      "expected_output": "Uses mnemonic strategy with --input abc123f, returns stable word pair"
+    },
+    {
+      "id": 4,
+      "prompt": "Give me 5 alliterative two-word names for our microservices, they should sound catchy",
+      "expected_output": "Uses --strategy phrase:alliterative, both words share first letter"
+    },
+    {
+      "id": 5,
+      "prompt": "I need a three-word codename for our Q3 release, something epic sounding",
+      "expected_output": "Uses --strategy triple, returns a three-word hyphenated name"
+    },
+    {
+      "id": 6,
+      "prompt": "Name 3 servers using a volcano theme",
+      "expected_output": "Uses --category volcanoes --count 3, returns volcano names"
+    },
+    {
+      "id": 7,
+      "prompt": "I have this long deployment ID 0xdeadbeefcafebabe and want a memorable alias for it",
+      "expected_output": "Uses mnemonic with long hex input, returns a three-word name"
     }
   ]
 }
