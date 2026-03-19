@@ -8,7 +8,7 @@ const std = @import("std");
 pub const version = "0.1.0";
 
 pub const types = @import("types.zig");
-pub const wordlist = @import("wordlist.zig");
+pub const worddata = @import("worddata.zig");
 pub const generator = @import("generator.zig");
 pub const format = @import("format.zig");
 pub const cli = @import("cli.zig");

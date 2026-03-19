@@ -1,6 +1,6 @@
 const std = @import("std");
 const types = @import("types.zig");
-const wordlist = @import("wordlist.zig");
+const worddata = @import("worddata.zig");
 const Category = types.Category;
 const Strategy = types.Strategy;
 const PhrasePattern = types.PhrasePattern;
@@ -26,14 +26,20 @@ pub const Generator = struct {
 
     pub fn generate(self: *Generator, strategy: Strategy, category: ?Category) GenerateError!Name {
         return switch (strategy) {
-            .thematic => self.generateThematic(category orelse .mountains),
+            .thematic => self.generateThematic(category orelse self.randomCategory()),
             .phrase => |pattern| self.generatePhrase(pattern),
             .mnemonic => |input| self.generateMnemonic(input),
         };
     }
 
+    fn randomCategory(self: *Generator) Category {
+        const categories = comptime std.enums.values(Category);
+        const rand = self.prng.random();
+        return categories[rand.intRangeLessThan(usize, 0, categories.len)];
+    }
+
     fn generateThematic(self: *Generator, category: Category) GenerateError!Name {
-        const list = wordlist.getWordList(category);
+        const list = worddata.getWordList(category);
         if (list.len == 0) return error.EmptyWordList;
         const rand = self.prng.random();
         const idx = rand.intRangeLessThan(usize, 0, list.len);
@@ -46,11 +52,11 @@ pub const Generator = struct {
 
     fn generatePhrase(self: *Generator, pattern: PhrasePattern) GenerateError!Name {
         const first_list: []const []const u8 = switch (pattern) {
-            .adjective_noun => &wordlist.adjectives,
-            .noun_noun => &wordlist.nouns,
-            .verb_noun => &wordlist.verbs,
+            .adjective_noun => worddata.adjectives,
+            .noun_noun => worddata.nouns,
+            .verb_noun => worddata.verbs,
         };
-        const second_list: []const []const u8 = &wordlist.nouns;
+        const second_list: []const []const u8 = worddata.nouns;
 
         if (first_list.len == 0 or second_list.len == 0) return error.EmptyWordList;
 
@@ -83,11 +89,11 @@ pub const Generator = struct {
             hash = hash *% 31 +% byte;
         }
 
-        const adj_idx = hash % wordlist.adjectives.len;
-        const noun_idx = (hash / wordlist.adjectives.len) % wordlist.nouns.len;
+        const first_idx = hash % worddata.mnemonic_all.len;
+        const second_idx = (hash / worddata.mnemonic_all.len) % worddata.mnemonic_all.len;
 
-        const adj = wordlist.adjectives[adj_idx];
-        const noun = wordlist.nouns[noun_idx];
+        const adj = worddata.mnemonic_all[first_idx];
+        const noun = worddata.mnemonic_all[second_idx];
 
         const len = adj.len + 1 + noun.len;
         if (len > self.buf.len) return error.EmptyWordList;
