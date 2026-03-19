@@ -254,8 +254,8 @@ pub fn writeGenerateHelp(writer: anytype, format: OutputFormat) !void {
             try writer.print(
                 \\{{"name":"generate","description":"Generate names from themed word lists","flags":[
                 \\{{"name":"--count","short":"-n","type":"integer","default":1,"description":"Number of names"}},
-                \\{{"name":"--category","short":"-c","type":"string","enum":["mountains","rivers","deserts","canyons","islands","passes","moons","raptors","minerals","norse"],"description":"Word list category"}},
-                \\{{"name":"--strategy","short":"-s","type":"string","enum":["thematic","phrase","phrase:adjective_noun","phrase:noun_noun","phrase:verb_noun","mnemonic"],"default":"thematic","description":"Generation strategy"}},
+                \\{{"name":"--category","short":"-c","type":"string","enum":["mountains","rivers","deserts","canyons","islands","passes","moons","raptors","minerals","norse","volcanoes","forests","oceans","storms"],"description":"Word list category"}},
+                \\{{"name":"--strategy","short":"-s","type":"string","enum":["thematic","phrase","phrase:adjective_noun","phrase:noun_noun","phrase:verb_noun","phrase:alliterative","triple","mnemonic"],"default":"thematic","description":"Generation strategy"}},
                 \\{{"name":"--seed","type":"integer","description":"Seed for deterministic output"}},
                 \\{{"name":"--input","short":"-i","type":"string","description":"Input for mnemonic strategy"}},
                 \\{{"name":"--format","short":"-f","type":"string","enum":["json","jsonl","human"],"description":"Output format"}},
@@ -274,7 +274,7 @@ pub fn writeGenerateHelp(writer: anytype, format: OutputFormat) !void {
                 \\Options:
                 \\  --count, -n <N>         Number of names (default: 1)
                 \\  --category, -c <NAME>   Restrict to category
-                \\  --strategy, -s <NAME>   Strategy: thematic, phrase[:pattern], mnemonic (default: thematic)
+                \\  --strategy, -s <NAME>   Strategy: thematic, phrase[:pattern], triple, mnemonic (default: thematic)
                 \\  --seed <N>              Seed for deterministic output
                 \\  --input, -i <TEXT>      Input for mnemonic strategy (numeric/hex)
                 \\  --format, -f <FMT>      Output format: json, jsonl, human
@@ -283,7 +283,7 @@ pub fn writeGenerateHelp(writer: anytype, format: OutputFormat) !void {
                 \\  --dry-run               Validate inputs without generating
                 \\  --help, -h              Show this help
                 \\
-                \\Categories: mountains, rivers, deserts, canyons, islands, passes, moons, raptors, minerals, norse
+                \\Categories: mountains, rivers, deserts, canyons, islands, passes, moons, raptors, minerals, norse, volcanoes, forests, oceans, storms
                 \\
             , .{});
         },
@@ -363,8 +363,8 @@ pub fn writeLlmsManifest(writer: anytype, version_str: []const u8) !void {
         \\      "description": "Generate names from themed word lists",
         \\      "flags": [
         \\        {{"name": "--count", "type": "integer", "default": 1, "description": "Number of names to generate"}},
-        \\        {{"name": "--category", "type": "string", "enum": ["mountains","rivers","deserts","canyons","islands","passes","moons","raptors","minerals","norse"], "description": "Word list category"}},
-        \\        {{"name": "--strategy", "type": "string", "enum": ["thematic","phrase","phrase:adjective_noun","phrase:noun_noun","phrase:verb_noun","mnemonic"], "default": "thematic", "description": "Generation strategy"}},
+        \\        {{"name": "--category", "type": "string", "enum": ["mountains","rivers","deserts","canyons","islands","passes","moons","raptors","minerals","norse","volcanoes","forests","oceans","storms"], "description": "Word list category"}},
+        \\        {{"name": "--strategy", "type": "string", "enum": ["thematic","phrase","phrase:adjective_noun","phrase:noun_noun","phrase:verb_noun","phrase:alliterative","triple","mnemonic"], "default": "thematic", "description": "Generation strategy"}},
         \\        {{"name": "--seed", "type": "integer", "description": "Seed for deterministic output"}},
         \\        {{"name": "--input", "type": "string", "description": "Input for mnemonic encoding"}},
         \\        {{"name": "--format", "type": "string", "enum": ["json","jsonl","human"], "description": "Output format"}},
