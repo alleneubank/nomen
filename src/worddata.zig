@@ -257,6 +257,44 @@ pub const curated_adjectives: []const []const u8 = &comptimeParseLines(curated_a
 /// Curated nouns for phrase generation — vivid objects, places, animals.
 pub const curated_nouns: []const []const u8 = &comptimeParseLines(curated_noun_raw);
 
+// Comptime validation: every curated word must exist in words.tsv with correct POS.
+// This prevents the missing-metadata and POS-leak regressions from cycles 1-2.
+comptime {
+    @setEvalBranchQuota(10_000_000);
+    // Every curated adjective must have 'a' POS in words.tsv
+    for (curated_adjectives) |word| {
+        var found = false;
+        for (all_words) |w| {
+            if (std.mem.eql(u8, w.word, word)) {
+                if (!w.is_adjective) {
+                    @compileError("curated adjective missing 'a' POS in words.tsv: " ++ word);
+                }
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            @compileError("curated adjective not found in words.tsv: " ++ word);
+        }
+    }
+    // Every curated noun must have 'n' or 'p' POS in words.tsv
+    for (curated_nouns) |word| {
+        var found = false;
+        for (all_words) |w| {
+            if (std.mem.eql(u8, w.word, word)) {
+                if (!w.is_noun and !w.is_proper) {
+                    @compileError("curated noun missing 'n'/'p' POS in words.tsv: " ++ word);
+                }
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            @compileError("curated noun not found in words.tsv: " ++ word);
+        }
+    }
+}
+
 /// Full flat word list for mnemonic encoding strategy.
 pub const mnemonic_all: []const []const u8 = &comptimeExtractWords(all_words, isAny);
 

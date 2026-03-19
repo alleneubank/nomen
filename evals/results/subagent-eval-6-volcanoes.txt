@@ -1,8 +1,8 @@
 SUBAGENT FORWARD TEST EVIDENCE
 Task: Name 3 servers using a volcano theme
 Skill loaded: skills/nomen/SKILL.md
-Strategy selected: Thematic with --category volcanoes. The skill recommends: "Thematic (default) -- single evocative word from a themed category. Best for: server names, environment names, release codenames. Pass --category to match a theme, or omit for random." The task asks for server names with a volcano theme, which maps directly to the thematic strategy with the "volcanoes" category listed in the skill's category list.
-Command: ~/.local/bin/nomen generate --category volcanoes --count 3 --format json
-Output: [{"value":"semeru","category":"volcanoes","strategy":"thematic"},{"value":"elbrus","category":"volcanoes","strategy":"thematic"},{"value":"pavlof","category":"volcanoes","strategy":"thematic"}]
-Verification: All 3 results have category "volcanoes" -- semeru (correct, volcano in Java), elbrus (correct, volcano in Caucasus), pavlof (correct, volcano in Alaska). All values are DNS-safe lowercase strings. All use strategy "thematic" as expected.
+Strategy selected: Thematic with --category volcanoes. The skill states: "Thematic (default) — single evocative word from a themed category. Best for: server names, environment names, release codenames. Pass --category to match a theme, or omit for random." The task asks for server names with a volcano theme, which maps directly to the thematic strategy with the "volcanoes" category listed in the skill's category list (mountains, rivers, deserts, canyons, islands, passes, moons, raptors, minerals, norse, volcanoes, forests, oceans, storms).
+Command: /Users/allen/0xbigboss/nomen/zig-out/bin/nomen generate --category volcanoes --count 3 --format json
+Output: [{"value":"kilauea","category":"volcanoes","strategy":"thematic"},{"value":"katmai","category":"volcanoes","strategy":"thematic"},{"value":"ruapehu","category":"volcanoes","strategy":"thematic"}]
+Verification: All 3 results have category "volcanoes" confirmed. kilauea (correct, shield volcano in Hawaii), katmai (correct, stratovolcano in Alaska), ruapehu (correct, stratovolcano in New Zealand). All values are DNS-safe lowercase strings matching [a-z0-9-]. All use strategy "thematic" as expected.
 Result: PASS

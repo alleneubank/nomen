@@ -1,34 +1,32 @@
-Forward Test Results — Iteration 2
+Forward Test Results — Iteration 2 (regenerated)
 Date: 2026-03-19
-Method: Subagent forward tests — each subagent read skills/nomen/SKILL.md,
-quoted the relevant strategy section, selected the CLI command, ran it,
-and verified the output. Full evidence in subagent-eval-*.txt files.
+Method: Subagent forward tests using workspace build (zig-out/bin/nomen)
+
+Each subagent read skills/nomen/SKILL.md, quoted the relevant strategy
+section, selected the CLI command, ran it against the workspace build,
+and verified the output. Evidence files below.
 
 === Eval 4: Alliterative Phrases ===
-Subagent read skill, selected phrase:alliterative (quoted skill section on
-alliterative mode). Generated 5 names, verified all 5 are alliterative.
+Subagent selected phrase:alliterative, ran zig-out/bin/nomen.
+Output includes strategy:"phrase:alliterative" (current serialization).
+5/5 alliterative pairs verified.
 Result: PASS — see subagent-eval-4-alliterative.txt
 
 === Eval 5: Triple-Word Strategy ===
-Subagent read skill, selected triple (quoted skill section on three-word
-combinations). Generated 3 names, verified all have exactly 2 hyphens.
+Subagent selected triple, ran zig-out/bin/nomen.
+Output includes strategy:"triple", 2 hyphens verified.
 Result: PASS — see subagent-eval-5-triple.txt
 
 === Eval 6: Volcanoes Category ===
-Subagent read skill, selected thematic with --category volcanoes (quoted
-skill section recommending thematic for server names). Generated 3 names,
-verified all have category=volcanoes.
+Subagent selected thematic with --category volcanoes, ran zig-out/bin/nomen.
+Output includes category:"volcanoes" for all 3 results.
 Result: PASS — see subagent-eval-6-volcanoes.txt
 
 === Eval 7: Long Mnemonic (3-word) ===
-Subagent read skill, selected mnemonic with --input 0xdeadbeefcafebabe
-(quoted skill section on stable aliases for ugly identifiers). Verified
-3-word output for long input and determinism across 2 runs.
+Subagent selected mnemonic with long hex input, ran zig-out/bin/nomen.
+Output is 3-word, deterministic across 2 runs.
 Result: PASS — see subagent-eval-7-mnemonic.txt
 
 === Summary ===
-All 4 subagent forward tests PASS. Each test verified:
-1. Skill was loaded and the relevant section was identified
-2. Correct strategy was selected based on the task description
-3. CLI command produced valid output
-4. Output met the expected criteria (alliteration/hyphens/category/determinism)
+All 4 subagent forward tests PASS against workspace build.
+Evidence uses zig-out/bin/nomen and shows current strategy serialization.
