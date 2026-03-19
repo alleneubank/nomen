@@ -69,13 +69,20 @@ pub const Generator = struct {
 
     fn generatePhrase(self: *Generator, pattern: PhrasePattern) GenerateError!Name {
         // Phrase generation uses curated lists for aesthetic quality.
-        // Curated lists are hand-picked for evocative, concrete words.
         const first_list: []const []const u8 = switch (pattern) {
             .adjective_noun, .alliterative => worddata.curated_adjectives,
             .noun_noun => worddata.curated_nouns,
             .verb_noun => worddata.verbs,
         };
         const second_list: []const []const u8 = worddata.curated_nouns;
+
+        // Strategy tag preserves the phrase sub-pattern for machine consumers
+        const strategy_tag: []const u8 = switch (pattern) {
+            .adjective_noun => "phrase",
+            .noun_noun => "phrase:noun_noun",
+            .verb_noun => "phrase:verb_noun",
+            .alliterative => "phrase:alliterative",
+        };
 
         if (first_list.len == 0 or second_list.len == 0) return error.EmptyWordList;
 
@@ -106,7 +113,7 @@ pub const Generator = struct {
                 if (syl < 3 or syl > 5) continue;
             }
 
-            return self.writePhraseToBuffer(first, second, "phrase") orelse continue;
+            return self.writePhraseToBuffer(first, second, strategy_tag) orelse continue;
         }
 
         // Fallback: drop alliteration and syllable constraints but keep tone
@@ -115,13 +122,13 @@ pub const Generator = struct {
             const first = first_list[rand.intRangeLessThan(usize, 0, first_list.len)];
             const second = second_list[rand.intRangeLessThan(usize, 0, second_list.len)];
             if (!Tone.compatible(worddata.getTone(first), worddata.getTone(second))) continue;
-            return self.writePhraseToBuffer(first, second, "phrase") orelse continue;
+            return self.writePhraseToBuffer(first, second, strategy_tag) orelse continue;
         }
 
-        // Final safety: should be unreachable with general-toned words in the lists
+        // Final safety
         const first = first_list[rand.intRangeLessThan(usize, 0, first_list.len)];
         const second = second_list[rand.intRangeLessThan(usize, 0, second_list.len)];
-        return self.writePhraseToBuffer(first, second, "phrase") orelse error.EmptyWordList;
+        return self.writePhraseToBuffer(first, second, strategy_tag) orelse error.EmptyWordList;
     }
 
     fn writePhraseToBuffer(self: *Generator, first: []const u8, second: []const u8, tag: []const u8) ?Name {
