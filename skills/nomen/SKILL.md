@@ -17,13 +17,13 @@ command -v nomen >/dev/null || echo "nomen not found — install from https://gi
 
 - **Thematic** (default) — single evocative word from a themed category. Best for: server names, environment names, release codenames. Pass `--category` to match a theme, or omit for random.
 
-- **Phrase** — two-word combination (adjective-noun, noun-noun, verb-noun). Best for: branch names, container names, project codenames. Tonal coherence and syllable rhythm are applied automatically. ~480K combos.
+- **Phrase** — two-word combination (adjective-noun, noun-noun, verb-noun). Best for: branch names, container names, project codenames. Tonal coherence and syllable rhythm are applied automatically. ~13K curated combos.
 
 - **Phrase (alliterative)** — two-word phrase that retries up to 50 times to find words sharing the same first letter (e.g., "crystal-cobra", "solar-sphinx"). Falls back to a non-alliterative pair if no match found. Best for: memorable codenames, marketing names. Use `--strategy phrase:alliterative`.
 
 - **Triple** — three-word combination, randomly choosing adjective-adjective-noun or adjective-noun-noun. Best for: when two words aren't distinct enough, or you want extra flavor. Use `--strategy triple`.
 
-- **Mnemonic** — deterministic word pair (or triple for long inputs) from a numeric/hex input. Same input always produces the same name. Best for: giving stable aliases to ugly identifiers (SHAs, IPs, UUIDs). Uses FNV-1a hash for good distribution across ~2.6M combos.
+- **Mnemonic** — deterministic word pair (or triple for long inputs) from a numeric/hex input. Same input always produces the same name. Best for: giving stable aliases to ugly identifiers (SHAs, IPs, UUIDs). Uses FNV-1a hash for good distribution across ~4.4M combos.
 
 ## Always Use `--format json` for Programmatic Use
 

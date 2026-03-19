@@ -137,7 +137,7 @@ fn parseQueryParams(target: []const u8) QueryParams {
         } else if (std.mem.eql(u8, key, "strategy")) {
             result.strategy = Strategy.fromString(val) catch {
                 result.err_code = "INVALID_STRATEGY";
-                result.err_msg = "invalid strategy, options: thematic, phrase, phrase:alliterative, triple, mnemonic";
+                result.err_msg = "invalid strategy, options: thematic, phrase, phrase:adjective_noun, phrase:noun_noun, phrase:verb_noun, phrase:alliterative, triple, mnemonic";
                 return result;
             };
             explicit_strategy = true;

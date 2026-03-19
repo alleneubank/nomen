@@ -160,7 +160,7 @@ fn errorToCode(err: lib.types.ParseError) []const u8 {
 fn errorToMessage(err: lib.types.ParseError) []const u8 {
     return switch (err) {
         error.InvalidCategory => "invalid category name, use 'nomen categories' to list",
-        error.InvalidStrategy => "invalid strategy, options: thematic, phrase, phrase:alliterative, triple, mnemonic",
+        error.InvalidStrategy => "invalid strategy, options: thematic, phrase, phrase:adjective_noun, phrase:noun_noun, phrase:verb_noun, phrase:alliterative, triple, mnemonic",
         error.InvalidFormat => "invalid format, options: json, jsonl, human",
         error.InvalidCount => "count must be a positive integer",
         error.InvalidSeed => "seed must be a non-negative integer",
