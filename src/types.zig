@@ -11,6 +11,10 @@ pub const Category = enum {
     raptors,
     minerals,
     norse,
+    volcanoes,
+    forests,
+    oceans,
+    storms,
 
     pub fn toString(self: Category) []const u8 {
         return @tagName(self);
@@ -25,11 +29,13 @@ pub const PhrasePattern = enum {
     adjective_noun,
     noun_noun,
     verb_noun,
+    alliterative,
 };
 
 pub const Strategy = union(enum) {
     thematic,
     phrase: PhrasePattern,
+    triple,
     mnemonic: []const u8,
 
     pub fn fromString(s: []const u8) ParseError!Strategy {
@@ -38,6 +44,8 @@ pub const Strategy = union(enum) {
         if (std.mem.eql(u8, s, "phrase:adjective_noun")) return .{ .phrase = .adjective_noun };
         if (std.mem.eql(u8, s, "phrase:noun_noun")) return .{ .phrase = .noun_noun };
         if (std.mem.eql(u8, s, "phrase:verb_noun")) return .{ .phrase = .verb_noun };
+        if (std.mem.eql(u8, s, "phrase:alliterative")) return .{ .phrase = .alliterative };
+        if (std.mem.eql(u8, s, "triple")) return .triple;
         if (std.mem.eql(u8, s, "mnemonic")) return .{ .mnemonic = "" };
         return error.InvalidStrategy;
     }
