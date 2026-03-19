@@ -93,8 +93,9 @@ pub const Generator = struct {
             const tone2 = worddata.getTone(second);
             if (!Tone.compatible(tone1, tone2)) continue;
 
-            // Syllable rhythm: prefer 3-5 total syllables (soft, relaxed after half)
-            if (attempts < max_attempts / 2) {
+            // Syllable rhythm: prefer 3-5 total syllables for the first 10
+            // attempts, then accept any pairing (REQ-GEN-012)
+            if (attempts < 10) {
                 const syl = worddata.getSyllables(first) + worddata.getSyllables(second);
                 if (syl < 3 or syl > 5) continue;
             }
@@ -402,6 +403,28 @@ test "alliterative phrase mostly shares first letter" {
     }
     // With 50 retries per call, the vast majority should be alliterative
     try std.testing.expect(alliterative_count >= 40);
+}
+
+test "syllable rhythm applied for first 10 attempts then relaxed" {
+    // REQ-GEN-012: prefer 3-5 total syllables for first 10 attempts.
+    // With enough samples, most phrases should be in the 3-5 range
+    // (the preference is applied), but some may fall outside it
+    // (the preference is relaxed after 10 attempts).
+    var gen = Generator.init(42);
+    var in_range: usize = 0;
+    const total: usize = 100;
+    for (0..total) |_| {
+        const name = try gen.generate(.{ .phrase = .adjective_noun }, null);
+        const hyphen = std.mem.indexOf(u8, name.value, "-") orelse continue;
+        const first = name.value[0..hyphen];
+        const second = name.value[hyphen + 1 ..];
+        const syl = worddata.getSyllables(first) + worddata.getSyllables(second);
+        if (syl >= 3 and syl <= 5) in_range += 1;
+    }
+    // With 10/10 attempts applying the preference, the majority should
+    // be in range. Without the preference, random would give ~60%.
+    // With the preference, we expect >75%.
+    try std.testing.expect(in_range > 75);
 }
 
 test "triple generation produces three-word dns-safe names" {
