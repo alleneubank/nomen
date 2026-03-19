@@ -215,14 +215,47 @@ fn isAny(_: TaggedWord) bool {
     return true;
 }
 
-/// Words usable as adjectives (modifiers) in phrase generation.
+/// All words tagged as adjectives (used for triple strategy fallback).
 pub const adjectives: []const []const u8 = &comptimeExtractWords(all_words, isAdj);
 
-/// Words usable as nouns (including proper nouns) in phrase generation.
+/// All words tagged as nouns (used for triple strategy fallback).
 pub const nouns: []const []const u8 = &comptimeExtractWords(all_words, isNoun);
 
 /// Words usable as verbs in phrase generation.
 pub const verbs: []const []const u8 = &comptimeExtractWords(all_words, isVerb);
+
+// --- Curated phrase lists (hand-picked for aesthetic quality) ---
+
+const curated_adj_raw = @embedFile("data/curated_adjectives.txt");
+const curated_noun_raw = @embedFile("data/curated_nouns.txt");
+
+fn comptimeParseLines(comptime data: []const u8) [comptimeCountLines(data)][]const u8 {
+    @setEvalBranchQuota(100_000);
+    const count = comptimeCountLines(data);
+    var result: [count][]const u8 = undefined;
+    var idx: usize = 0;
+    var line_start: usize = 0;
+    for (data, 0..) |c, i| {
+        if (c == '\n') {
+            if (i > line_start) {
+                result[idx] = data[line_start..i];
+                idx += 1;
+            }
+            line_start = i + 1;
+        }
+    }
+    if (line_start < data.len) {
+        result[idx] = data[line_start..];
+        idx += 1;
+    }
+    return result;
+}
+
+/// Curated adjectives for phrase generation — evocative, concrete, pleasant.
+pub const curated_adjectives: []const []const u8 = &comptimeParseLines(curated_adj_raw);
+
+/// Curated nouns for phrase generation — vivid objects, places, animals.
+pub const curated_nouns: []const []const u8 = &comptimeParseLines(curated_noun_raw);
 
 /// Full flat word list for mnemonic encoding strategy.
 pub const mnemonic_all: []const []const u8 = &comptimeExtractWords(all_words, isAny);
@@ -273,7 +306,9 @@ pub const adjective_count = adjectives.len;
 pub const noun_count = nouns.len;
 pub const verb_count = verbs.len;
 pub const category_count = std.enums.values(Category).len;
-pub const phrase_combo_space = adjective_count * noun_count;
+pub const curated_adj_count = curated_adjectives.len;
+pub const curated_noun_count = curated_nouns.len;
+pub const phrase_combo_space = curated_adj_count * curated_noun_count;
 pub const mnemonic_combo_space = word_count * word_count;
 
 // --- Tests ---
@@ -295,8 +330,8 @@ test "verb list exists" {
     try std.testing.expect(verb_count >= 50);
 }
 
-test "phrase combo space exceeds 100k" {
-    try std.testing.expect(phrase_combo_space > 100_000);
+test "curated phrase combo space exceeds 10k" {
+    try std.testing.expect(phrase_combo_space > 10_000);
 }
 
 test "mnemonic combo space exceeds 2M" {
@@ -353,4 +388,24 @@ test "category words include known entries" {
         if (std.mem.eql(u8, w, "denali")) found_denali = true;
     }
     try std.testing.expect(found_denali);
+}
+
+test "curated adjectives are substantial and valid" {
+    try std.testing.expect(curated_adj_count >= 80);
+    for (curated_adjectives) |word| {
+        try std.testing.expect(word.len >= 2);
+        try std.testing.expect(word.len <= 12);
+    }
+}
+
+test "curated nouns are substantial and valid" {
+    try std.testing.expect(curated_noun_count >= 80);
+    for (curated_nouns) |word| {
+        try std.testing.expect(word.len >= 2);
+        try std.testing.expect(word.len <= 12);
+    }
+}
+
+test "curated phrase combo space is sufficient" {
+    try std.testing.expect(phrase_combo_space >= 10_000);
 }

@@ -68,12 +68,14 @@ pub const Generator = struct {
     }
 
     fn generatePhrase(self: *Generator, pattern: PhrasePattern) GenerateError!Name {
+        // Phrase generation uses curated lists for aesthetic quality.
+        // Curated lists are hand-picked for evocative, concrete words.
         const first_list: []const []const u8 = switch (pattern) {
-            .adjective_noun, .alliterative => worddata.adjectives,
-            .noun_noun => worddata.nouns,
+            .adjective_noun, .alliterative => worddata.curated_adjectives,
+            .noun_noun => worddata.curated_nouns,
             .verb_noun => worddata.verbs,
         };
-        const second_list: []const []const u8 = worddata.nouns;
+        const second_list: []const []const u8 = worddata.curated_nouns;
 
         if (first_list.len == 0 or second_list.len == 0) return error.EmptyWordList;
 
@@ -138,19 +140,21 @@ pub const Generator = struct {
     }
 
     fn generateTriple(self: *Generator) GenerateError!Name {
-        if (worddata.adjectives.len == 0 or worddata.nouns.len == 0) return error.EmptyWordList;
+        const ca = worddata.curated_adjectives;
+        const cn = worddata.curated_nouns;
+        if (ca.len == 0 or cn.len == 0) return error.EmptyWordList;
 
         const rand = self.prng.random();
 
         // Randomly choose: adjective-adjective-noun or adjective-noun-noun
         const use_adj_adj_noun = rand.boolean();
 
-        const w1 = worddata.adjectives[rand.intRangeLessThan(usize, 0, worddata.adjectives.len)];
+        const w1 = ca[rand.intRangeLessThan(usize, 0, ca.len)];
         const w2 = if (use_adj_adj_noun)
-            worddata.adjectives[rand.intRangeLessThan(usize, 0, worddata.adjectives.len)]
+            ca[rand.intRangeLessThan(usize, 0, ca.len)]
         else
-            worddata.nouns[rand.intRangeLessThan(usize, 0, worddata.nouns.len)];
-        const w3 = worddata.nouns[rand.intRangeLessThan(usize, 0, worddata.nouns.len)];
+            cn[rand.intRangeLessThan(usize, 0, cn.len)];
+        const w3 = cn[rand.intRangeLessThan(usize, 0, cn.len)];
 
         const adj1 = w1;
         const adj2 = w2;
