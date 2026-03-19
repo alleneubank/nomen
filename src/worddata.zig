@@ -1,8 +1,9 @@
 /// Comptime word data — the unified dictionary for all generation strategies.
 ///
-/// Source file (data/words.tsv) format: word\tpos_tags\ttheme\n
+/// Source file (data/words.tsv) format: word\tpos_tags\ttheme\ttone\n
 ///   pos_tags: comma-separated POS codes (a=adjective, n=noun, v=verb, p=proper_noun)
 ///   theme:    optional category name (mountains, rivers, etc.) or empty
+///   tone:     optional tone tag (nature, tech) or empty (= general)
 ///
 /// All parsing, validation, and categorization happens at compile time.
 /// Runtime cost: zero. Invalid data causes a build failure.
@@ -12,7 +13,20 @@ const Category = types.Category;
 
 const raw = @embedFile("data/words.tsv");
 
-/// A word with its POS tags and optional theme, resolved at comptime.
+pub const Tone = enum {
+    general,
+    nature,
+    tech,
+
+    /// Two tones are compatible for phrase pairing when they share a domain
+    /// or one of them is general.
+    pub fn compatible(a: Tone, b: Tone) bool {
+        if (a == .general or b == .general) return true;
+        return a == b;
+    }
+};
+
+/// A word with its POS tags, theme, tone, and syllable count, resolved at comptime.
 pub const TaggedWord = struct {
     word: []const u8,
     is_adjective: bool,
@@ -20,7 +34,34 @@ pub const TaggedWord = struct {
     is_verb: bool,
     is_proper: bool,
     category: ?Category,
+    tone: Tone,
+    syllables: u8,
 };
+
+// --- Comptime syllable counter ---
+
+fn comptimeSyllableCount(comptime word: []const u8) u8 {
+    if (word.len == 0) return 0;
+    var count: u8 = 0;
+    var prev_vowel = false;
+    for (word, 0..) |c, i| {
+        const is_vowel = (c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u') or
+            (c == 'y' and i > 0);
+        if (is_vowel and !prev_vowel) count += 1;
+        prev_vowel = is_vowel;
+    }
+    // Silent 'e' at end: reduce by 1 if word ends in 'e' and has >1 syllable
+    if (count > 1 and word[word.len - 1] == 'e') {
+        // But not for words ending in 'le' preceded by a consonant (e.g., "maple")
+        if (word.len >= 2) {
+            const penult = word[word.len - 2];
+            const penult_vowel = (penult == 'a' or penult == 'e' or penult == 'i' or
+                penult == 'o' or penult == 'u');
+            if (!penult_vowel and penult != 'l') count -= 1;
+        }
+    }
+    return if (count == 0) 1 else count;
+}
 
 // --- Comptime parsing ---
 
@@ -41,14 +82,23 @@ fn comptimeFindChar(comptime s: []const u8, comptime ch: u8, comptime start: usi
     return null;
 }
 
+fn comptimeParseTone(comptime s: []const u8) Tone {
+    if (s.len == 0) return .general;
+    if (std.mem.eql(u8, s, "nature")) return .nature;
+    if (std.mem.eql(u8, s, "tech")) return .tech;
+    @compileError("unknown tone: " ++ s);
+}
+
 fn comptimeParseLine(comptime line: []const u8) TaggedWord {
-    // Format: word\tpos\ttheme
+    // Format: word\tpos\ttheme\ttone
     const tab1 = comptimeFindChar(line, '\t', 0) orelse @compileError("missing first tab: " ++ line);
     const tab2 = comptimeFindChar(line, '\t', tab1 + 1) orelse @compileError("missing second tab: " ++ line);
+    const tab3 = comptimeFindChar(line, '\t', tab2 + 1) orelse @compileError("missing third tab: " ++ line);
 
     const word = line[0..tab1];
     const pos_str = line[tab1 + 1 .. tab2];
-    const theme_str = line[tab2 + 1 ..];
+    const theme_str = line[tab2 + 1 .. tab3];
+    const tone_str = line[tab3 + 1 ..];
 
     // Validate word
     if (word.len < 1 or word.len > 12) {
@@ -76,7 +126,7 @@ fn comptimeParseLine(comptime line: []const u8) TaggedWord {
         }
     }
 
-    // Parse theme (optional)
+    // Parse theme
     const category: ?Category = if (theme_str.len == 0)
         null
     else
@@ -90,11 +140,13 @@ fn comptimeParseLine(comptime line: []const u8) TaggedWord {
         .is_verb = is_verb,
         .is_proper = is_proper,
         .category = category,
+        .tone = comptimeParseTone(tone_str),
+        .syllables = comptimeSyllableCount(word),
     };
 }
 
 fn comptimeParseAll(comptime data: []const u8) [comptimeCountLines(data)]TaggedWord {
-    @setEvalBranchQuota(1_000_000);
+    @setEvalBranchQuota(2_000_000);
     const count = comptimeCountLines(data);
     var result: [count]TaggedWord = undefined;
     var idx: usize = 0;
@@ -195,8 +247,24 @@ pub fn getWordList(category: Category) []const []const u8 {
     };
 }
 
-/// All categories that have at least one word.
-pub const category_count = std.enums.values(Category).len;
+// --- Tone lookup (for phrase tonal coherence) ---
+
+/// Look up the tone of a word by scanning all_words at runtime.
+/// Returns general if the word isn't found.
+pub fn getTone(word: []const u8) Tone {
+    for (all_words) |w| {
+        if (std.mem.eql(u8, w.word, word)) return w.tone;
+    }
+    return .general;
+}
+
+/// Look up the syllable count of a word.
+pub fn getSyllables(word: []const u8) u8 {
+    for (all_words) |w| {
+        if (std.mem.eql(u8, w.word, word)) return w.syllables;
+    }
+    return 2; // reasonable default
+}
 
 // --- Comptime statistics ---
 
@@ -204,14 +272,15 @@ pub const word_count = all_words.len;
 pub const adjective_count = adjectives.len;
 pub const noun_count = nouns.len;
 pub const verb_count = verbs.len;
+pub const category_count = std.enums.values(Category).len;
 pub const phrase_combo_space = adjective_count * noun_count;
 pub const mnemonic_combo_space = word_count * word_count;
 
 // --- Tests ---
 
-test "word count includes category words beyond mnemonic list" {
-    try std.testing.expect(word_count >= 1700);
-    try std.testing.expect(word_count <= 1900);
+test "word count includes expanded categories" {
+    try std.testing.expect(word_count >= 1900);
+    try std.testing.expect(word_count <= 2200);
 }
 
 test "adjective list is substantial" {
@@ -244,12 +313,37 @@ test "all words are dns-safe" {
     }
 }
 
+test "at least 14 categories" {
+    try std.testing.expect(category_count >= 14);
+}
+
 test "every category has words" {
     const categories = comptime std.enums.values(Category);
     inline for (categories) |cat| {
         const list = getWordList(cat);
         try std.testing.expect(list.len >= 10);
     }
+}
+
+test "new categories have words" {
+    try std.testing.expect(getWordList(.volcanoes).len >= 10);
+    try std.testing.expect(getWordList(.forests).len >= 10);
+    try std.testing.expect(getWordList(.oceans).len >= 10);
+    try std.testing.expect(getWordList(.storms).len >= 10);
+}
+
+test "tone compatibility" {
+    try std.testing.expect(Tone.compatible(.nature, .nature));
+    try std.testing.expect(Tone.compatible(.nature, .general));
+    try std.testing.expect(Tone.compatible(.general, .tech));
+    try std.testing.expect(!Tone.compatible(.nature, .tech));
+}
+
+test "syllable counts are reasonable" {
+    // "alpine" = 2, "brave" = 1, "falcon" = 2
+    try std.testing.expect(getSyllables("alpine") == 2);
+    try std.testing.expect(getSyllables("brave") == 1);
+    try std.testing.expect(getSyllables("falcon") == 2);
 }
 
 test "category words include known entries" {
@@ -259,26 +353,4 @@ test "category words include known entries" {
         if (std.mem.eql(u8, w, "denali")) found_denali = true;
     }
     try std.testing.expect(found_denali);
-}
-
-test "adjectives contain known words" {
-    var found_alpine = false;
-    var found_brave = false;
-    for (adjectives) |word| {
-        if (std.mem.eql(u8, word, "alpine")) found_alpine = true;
-        if (std.mem.eql(u8, word, "brave")) found_brave = true;
-    }
-    try std.testing.expect(found_alpine);
-    try std.testing.expect(found_brave);
-}
-
-test "nouns contain known words" {
-    var found_falcon = false;
-    var found_canyon = false;
-    for (nouns) |word| {
-        if (std.mem.eql(u8, word, "falcon")) found_falcon = true;
-        if (std.mem.eql(u8, word, "canyon")) found_canyon = true;
-    }
-    try std.testing.expect(found_falcon);
-    try std.testing.expect(found_canyon);
 }

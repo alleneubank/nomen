@@ -1,1763 +1,2013 @@
-abraham	n	
-absent	a,v	
-absorb	v	
-absurd	a,n	
-academy	n	
-accent	n,v	
-acid	a,n	
-acrobat	n	
-action	n,v	
-active	a,n	
-actor	n	
-adak	p	islands
-adam	n	
-address	n,v	
-adios	n	
-admiral	n	
-adrian	n	
-africa	n	
-agatha	p	
-agenda	n	
-agent	n	
-airline	n	
-airport	n	
-alabama	n	
-aladdin	n	
-alamo	n	
-alarm	n,v	
-alaska	n	
-albert	n	
-albino	n	
-album	n	
-alcatraz	p	islands
-alcohol	n	
-alert	a,n,v	
-alex	p	
-alfonso	p	
-alfred	n	
-algebra	n	
-alias	n	
-alibi	n,v	
-alice	p	
-alien	a,n,v	
-almanac	n	
-almond	n	
-aloha	n	
-alpha	a,n	
-alpine	a	mountains
-alvord	p	deserts
-amadeus	p	
-amanda	p	
-amargosa	p	deserts
-amazon	n	rivers
-amber	a,n	
-ambient	a	
-amelia	n	islands
-america	n	
-amigo	n	
-ammonia	n	
-anagram	n,v	
-analog	a,n	
-analyze	v	
-anatomy	n	
-andrea	p	
-android	n	
-andy	p	
-angel	n	
-animal	a,n	
-anita	p	
-annex	n,v	
-annual	a,n	
-answer	n,v	
-antelope	n	canyons
-antenna	n	
-antonio	p	
-anvil	n	
-apatite	n	minerals
-apollo	n	
-appear	v	
-apple	n	
-april	n	
-apropos	a	
-arcade	n	
-archer	n	
-archive	n,v	
-arctic	a,n	
-arena	n	
-ariel	p	moons
-arizona	n	
-arkansas	n	rivers
-armada	n	
-armani	p	
-armor	n,v	
-arnold	n	
-aroma	n	
-arrow	n	
-arsenal	n	
-arthur	n	
-artist	n	
-asia	n	
-aspect	n	
-aspirin	n	
-athena	n	
-athlete	n	
-atlanta	n	
-atlas	n	
-atomic	a	
-audio	n	
-august	a,n	
-aurora	n	
-austin	n	
-austria	n	
-avalon	p	
-avatar	n	
-avenue	n	
-average	a,n,v	
-axiom	n	
-axis	n	
-aztec	n	
-baboon	n	
-baby	n,v	
-bagel	n	
-baggage	n	
-bahama	p	
-baker	n	
-balance	n,v	
-baldur	p	norse
-bali	n	islands
-ballad	n	
-ballet	n	
-balloon	n,v	
-balsa	n	
-bambino	n	
-bamboo	n	
-banana	n	
-bandit	n	
-banjo	n	
-bank	n,v	
-barbara	p	
-barcode	p	
-barite	n	minerals
-baron	n	
-basic	a,n	
-basil	n	
-basket	n	
-battery	n	
-bazaar	n	
-bazooka	n	
-beach	n,v	
-beast	n	
-beatles	n	
-beauty	n	
-before	n	
-begin	n,v	
-belgium	n	
-benefit	n,v	
-benny	n	
-berlin	n	
-bermuda	n	
-bernard	n	
-berthoud	p	passes
-beryl	n	minerals
-betty	p	
-between	n	
-beyond	n	
-bicycle	n,v	
-bierstadt	p	mountains
-bikini	n	
-billy	n	
-binary	a,n	
-bingo	n	
-biology	n	
-biscuit	n	
-bishop	n	
-bison	n	
-blanca	p	mountains
-blast	n,v	
-bless	v	
-blitz	n,v	
-block	n,v	islands
-blonde	a,n	
-blue	a,n,v	
-bogart	n	
-bombay	n	
-bonanza	n	
-bonjour	p	
-bonus	n	
-book	n,v	
-border	n,v	
-boris	p	
-borrego	p	deserts
-boston	n	
-botanic	a	
-bottle	n,v	
-boxer	n	
-bragi	n	norse
-brain	n,v	
-brandy	n	
-brave	a,n,v	
-bravo	n,v	
-brazil	n	
-brazos	n	rivers
-bread	n,v	
-break	n,v	
-brenda	p	
-bridge	n,v	
-brigade	n,v	
-british	a,n	
-broken	a,v	
-bronze	a,n,v	
-brother	n	
-brown	a,n,v	
-bruce	n	
-bruno	n	
-brush	n,v	
-bryce	p	canyons
-bucket	n,v	
-buckskin	n	canyons
-budget	n,v	
-buenos	p	
-buffalo	n,v	
-bundle	n,v	
-burger	n	
-burma	n	
-button	n,v	
-buzzard	n	raptors
-buzzer	n	
-byte	n	
-cabaret	n	
-cabinet	n	
-cable	n,v	
-cactus	n	
-cadet	n	
-caesar	n	
-cafe	n	
-cairo	n	
-cake	n,v	
-calcite	n	minerals
-calibre	n	
-callisto	n	moons
-calypso	n	
-camel	n	
-camera	n	
-camilla	p	
-campus	n	
-canada	n	
-canal	n,v	
-canary	a,n	
-candid	a	
-candle	n,v	
-cannon	n,v	
-canoe	n,v	
-cantina	p	
-canvas	n,v	
-canyon	n	canyons
-capital	a,n	
-capsule	n,v	
-caracara	n	raptors
-caramel	a,n	
-caravan	n,v	
-carbon	n	minerals
-career	n,v	
-cargo	n	
-carlo	p	
-carmen	p	
-carol	n,v	
-carpet	n,v	
-carrot	n	
-cartel	n	
-cartoon	n,v	
-casino	n	
-castle	n,v	
-castro	n	
-catalina	p	islands
-catalog	n,v	
-cave	n,v	
-caviar	n	
-cecilia	p	
-cello	n	
-celtic	a,n	
-cement	n,v	
-center	a,n,v	
-century	n	
-ceramic	a,n	
-chamber	n,v	
-chance	a,n,v	
-change	n,v	
-channel	n,v	
-chant	n,v	
-chaos	n	
-chapter	n	
-chariot	n,v	
-charlie	p	
-charm	n,v	
-charon	n	moons
-charter	n,v	
-cheese	n,v	
-chef	n	
-chemist	n	
-cherry	a,n	
-chess	n	
-chicago	n	
-chicken	a,n	
-chief	a,n	
-chihuahua	n	deserts
-child	n	
-china	n	
-chinook	n	passes
-choice	a,n	
-chris	p	
-chrome	n,v	
-cigar	n	
-cinema	n	
-cipher	n,v	
-circle	n,v	
-circus	n	
-citizen	n	
-citrus	n	
-city	n	
-civil	a	
-clara	p	
-clarion	a,n,v	
-clark	n	
-classic	a,n	
-claudia	p	
-clean	a,n,v	
-clever	a	
-client	n	
-cliff	n	
-climax	n,v	
-clinic	n	
-clock	n,v	
-clone	n,v	
-cloud	n,v	
-club	n,v	
-cobalt	n	minerals
-cobra	n	
-cockpit	n	
-coconut	n	
-cola	n	
-collect	a,n,v	
-colombo	n	
-colony	n	
-color	a,n,v	
-colorado	n	rivers
-columbia	n	rivers
-combat	n,v	
-combine	n,v	
-comedy	n	
-comet	n	
-command	n,v	
-common	a,n	
-compact	a,n,v	
-company	n,v	
-complex	a,n	
-comrade	n	
-conan	p	
-concert	n,v	
-condor	n	raptors
-conduct	n,v	
-confide	v	
-congo	n	
-connect	v	
-consul	n	
-contact	n,v	
-context	n	
-contour	n,v	
-control	n,v	
-convert	n,v	
-cool	a,n,v	
-copper	n,v	minerals
-copy	n,v	
-coral	a,n	minerals
-corner	n,v	
-corona	n	
-coronado	p	islands
-correct	a,v	
-cosmos	n	
-costume	n,v	
-cotton	n,v	
-couple	n,v	
-courage	n	
-cover	n,v	
-cowboy	n	
-crack	a,n,v	
-craft	n,v	
-crash	n,v	
-crater	n	
-credit	n,v	
-cricket	n,v	
-crimson	a,n,v	
-critic	n	
-crown	n,v	
-crystal	n	minerals
-cuba	n	islands
-cubic	a	
-culture	n,v	
-cupid	n	
-current	a,n	
-cycle	n,v	
-cyclone	n	
-dallas	n	
-dance	n,v	
-daniel	n	
-danube	n	rivers
-darwin	n	
-data	n	
-david	n	
-deal	n,v	
-decade	n	
-decide	v	
-decimal	a,n	
-declare	v	
-define	v	
-degree	n	
-deimos	n	moons
-delete	v	
-deliver	v	
-delphi	n	
-delta	n	
-deluxe	a	
-demand	n,v	
-demo	n,v	
-denali	n	mountains
-denmark	n	
-denver	n	
-depend	v	
-deposit	n,v	
-derby	n	
-desert	n,v	
-design	n,v	
-desire	n,v	
-detail	n,v	
-detect	v	
-develop	v	
-dexter	a	
-diagram	n,v	
-dialog	n	
-diamond	n	
-diana	n	
-diego	p	
-diesel	n	
-diet	n,v	
-digital	a	
-dilemma	n	
-dinner	n	
-diploma	n	
-direct	a,v	
-disco	n,v	
-disney	n	
-dispute	n,v	
-distant	a	
-divide	n,v	
-doctor	n,v	
-dolby	n	
-dollar	n	
-dolphin	n	
-domain	n	
-domino	n	
-donald	p	
-donner	p	passes
-donor	n	
-door	n	
-double	a,n,v	
-dragon	n	
-drama	n	
-dream	n,v	
-drink	n,v	
-driver	n	
-druid	n	
-drum	n,v	
-dublin	n	
-duet	n	
-dynamic	a,n	
-dynasty	n	
-eagle	n,v	raptors
-earth	n,v	
-east	a,n	
-easy	a	
-echo	n,v	
-eclipse	n,v	
-ecology	n	
-economy	n	
-eddie	p	
-edgar	n	
-edison	n	
-edition	n	
-editor	n	
-educate	v	
-edward	n	
-effect	n,v	
-ego	n	
-egypt	n	
-elastic	a,n	
-elbert	p	mountains
-electra	n	
-elegant	a	
-element	n	
-elite	a,n	
-elvis	n	
-email	n,v	
-emerald	n	
-emotion	n	
-empire	n	
-empty	a,n,v	
-enceladus	p	moons
-energy	n	
-engine	n	
-english	a,n	
-enigma	n	
-enjoy	v	
-enrico	p	
-episode	n	
-epoxy	n,v	
-equal	a,n,v	
-equator	n	
-eric	p	
-erosion	n	
-escalante	p	deserts
-escape	n,v	
-escort	n,v	
-eternal	a	
-ethnic	a,n	
-europa	n	moons
-europe	n	
-evans	n	mountains
-evening	n,v	
-event	n	
-everest	n	mountains
-evident	a	
-evita	p	
-exact	a,v	
-example	n	
-except	v	
-exhibit	n,v	
-exile	n,v	
-exit	n,v	
-exodus	n	
-exotic	a	
-expand	v	
-explain	v	
-explore	v	
-export	n,v	
-express	a,n,v	
-extend	v	
-extra	a,n	
-extreme	a,n	
-fabric	n	
-factor	n,v	
-falcon	n,v	raptors
-fame	n	
-family	n	
-famous	a	
-fantasy	n,v	
-farmer	n	
-fashion	n,v	
-fast	a,n,v	
-father	n,v	
-fax	n,v	
-feldspar	n	minerals
-felix	p	
-fern	n	canyons
-ferrari	p	
-fiber	n	
-fiction	n	
-fidel	p	
-field	n,v	
-fiesta	n	
-figure	n,v	
-film	n,v	
-filter	n,v	
-final	a,n	
-finance	n,v	
-finish	n,v	
-finland	n	
-fiona	p	
-fire	n,v	
-first	a,n	
-fish	n,v	
-flag	n,v	
-flame	n,v	
-flash	a,n,v	
-flex	n,v	
-flipper	n	
-float	n,v	
-flood	n,v	
-floor	n,v	
-florida	n	
-flower	n,v	
-fluid	a,n	
-flute	n,v	
-focus	n,v	
-folio	n	
-food	n	
-forbid	v	
-ford	n,v	
-forest	n,v	
-forever	n	
-forget	v	
-formal	a,n	
-formula	n	
-forseti	n	norse
-fortune	n	
-forum	n	
-forward	a,n,v	
-fossil	a,n	
-fractal	n	
-fragile	a	
-frame	n,v	
-france	n	
-frank	a,n,v	
-freddie	p	
-freedom	n	
-fremont	n	passes
-fresh	a	
-freya	n	norse
-friday	n	
-friend	n	
-frigg	n	norse
-frog	n,v	
-front	a,n,v	
-frozen	a,v	
-fruit	n,v	
-fuel	n,v	
-fuji	n	
-future	a,n	
-gabriel	n	
-galaxy	n	
-galena	n	minerals
-galileo	n	
-gallery	n	
-gallop	n,v	
-game	a,n,v	
-gamma	n	
-ganymede	n	moons
-garage	n,v	
-garbo	n	
-garcia	p	
-garden	n,v	
-garlic	n	
-garnet	n	minerals
-gate	n,v	
-gelatin	n	
-gemini	n	
-general	a,n,v	
-genesis	n	
-genetic	a	
-geneva	n	
-genius	n	
-gentle	a,v	
-genuine	a	
-george	n	
-germany	n	
-giant	a,n	
-gibson	n	
-gila	n	rivers
-gilbert	n	
-ginger	a,n,v	
-giraffe	n	
-gizmo	n	
-glacier	n	passes
-glass	n,v	
-global	a	
-gloria	p	
-goblin	n	
-gold	a,n	
-golf	n,v	
-gondola	n	
-gong	n,v	
-good	a,n	
-gopher	n	
-gordon	p	
-gorilla	n	
-goshawk	n	raptors
-gossip	n,v	
-grace	n,v	
-gram	n	
-grand	a,n	
-granite	n	minerals
-graph	n,v	
-gravity	n	
-gray	a,n,v	
-greek	a,n	
-green	a,n,v	
-gregory	n	
-grid	n	
-griffin	n	
-grille	n	
-ground	n,v	
-group	n,v	
-guest	n	
-guide	n,v	
-guitar	n	
-guru	n	
-gustav	p	
-gypsum	n	minerals
-gyro	n	
-habitat	n	
-hair	n	
-halt	a,n,v	
-hamlet	n	
-hammer	n,v	
-hand	n,v	
-happy	a	
-harbor	n,v	
-harlem	n	
-harmony	n	
-harrier	n	raptors
-harris	n	
-harvard	n	mountains
-harvest	n,v	
-havana	n	
-havasu	p	canyons
-hawaii	n	islands
-hawk	n,v	raptors
-hazard	n,v	
-heart	n	
-heaven	n	
-heavy	a,n	
-heimdall	n	norse
-helena	n	
-helium	n	
-hello	n	
-henry	n	
-herbert	n	
-herman	n	
-heroic	a,n	
-hexagon	n	
-hilton	p	islands
-hippie	n	
-history	n	
-hobby	n	raptors
-holiday	n,v	
-honey	a,n,v	
-hood	n,v	mountains
-hoosier	n	passes
-hope	n,v	
-horizon	n	
-horse	n,v	
-hostel	n	
-hotel	n	
-house	n,v	
-human	a,n	
-humor	n,v	
-hunter	n	
-husband	n,v	
-hydro	p	
-hyperion	n	moons
-ibiza	p	islands
-iceberg	n	
-icon	n	
-idea	n	
-idiom	n	
-idun	n	norse
-igloo	n	
-igor	p	
-image	n,v	
-imagine	v	
-imitate	v	
-immune	a,n	
-impact	n,v	
-import	n,v	
-impress	n,v	
-inca	n	
-inch	n,v	
-include	v	
-index	n,v	
-india	n	
-indigo	a,n	
-infant	n	
-info	n	
-ingrid	p	
-initial	a,n,v	
-input	n,v	
-insect	n	
-inside	a,n	
-instant	a,n	
-invent	v	
-invest	v	
-invite	n,v	
-io	n	moons
-iris	n	
-ironic	a	
-isabel	p	
-isotope	n	
-italian	a,n	
-ivan	p	
-ivory	n	
-jacket	n,v	
-jackson	n	
-jacob	n	
-jaguar	n	
-jamaica	n	islands
-james	n,v	
-janet	p	
-japan	n,v	
-jargon	n	
-jasmine	n	
-jason	n	
-java	n	
-jazz	n,v	
-jeep	n	
-jerome	n	
-jessica	p	
-jester	n	
-jet	a,n,v	
-jimmy	n,v	
-job	n,v	
-joel	n	
-john	n	
-join	n,v	
-joker	n	
-jordan	n	
-jornada	p	deserts
-joseph	n	
-joshua	n	
-journal	n	
-judge	n,v	
-judo	n	
-juice	n	
-juliet	p	
-julius	p	
-july	n	
-jumbo	a	
-jump	n,v	
-june	n	
-juneau	n	islands
-jungle	n	
-junior	a,n	
-jupiter	n	
-justice	n	
-kansas	n	
-karakum	p	deserts
-karate	n	
-karl	p	
-karma	n	
-kayak	n,v	
-kenosha	p	passes
-kermit	p	
-kestrel	n	raptors
-kevin	p	
-kiawah	p	islands
-kilo	n	
-kimono	n	
-kinetic	a	
-king	n	
-kitchen	n	
-kite	n,v	raptors
-kiwi	n	
-koala	n	
-kodiak	n	islands
-korea	n	
-labor	n,v	
-ladder	n,v	
-lady	n	
-lagoon	n	
-lake	n	
-laptop	n	
-laser	n	
-latin	a,n	
-laura	p	
-lava	n	
-lazarus	n	
-learn	v	
-lecture	n,v	
-left	a,n,v	
-legacy	n	
-legal	a	
-legend	n	
-lemon	n	
-leonid	p	
-leopard	n	
-lesson	n	
-letter	n,v	
-level	a,n,v	
-lexicon	n	
-liberal	a,n	
-libra	n	
-license	n,v	
-life	n	
-light	a,n,v	
-lily	n	
-lima	n	
-limbo	n	
-limit	n,v	
-lincoln	n	mountains
-linda	p	
-linear	a	
-lion	n	
-liquid	a,n	
-list	n,v	
-liter	n	
-lithium	n	
-little	a,n	
-llama	n	
-lobby	n,v	
-lobster	n	
-local	a,n	
-locate	v	
-logan	n	passes
-logic	n	
-logo	n	
-loki	n	norse
-lola	p	
-london	n	
-longs	v	mountains
-lopez	p	
-lorenzo	p	
-lotus	n	
-love	n,v	
-loveland	p	passes
-loyal	a	
-lucas	n	
-lucky	a	
-lunar	a	
-lunch	n,v	
-machine	n,v	
-macro	a,n	
-madam	n	
-madonna	n	
-madrid	n	
-maestro	n	
-magenta	a,n	
-magic	a,n	
-magnet	n	
-magnum	n	
-mailbox	n	
-major	a,n,v	
-malta	n	islands
-mama	n	
-mambo	n,v	
-mammal	n	
-manager	n	
-mango	n	
-manila	n	
-manual	a,n	
-marble	n,v	canyons
-marco	p	
-margin	n	
-margo	p	
-marina	n	
-marion	p	
-market	n,v	
-mars	n,v	
-martin	n	
-marvin	p	
-mary	n	
-mask	n,v	
-massive	a	mountains
-master	a,n,v	
-match	n,v	
-matrix	n	
-maximum	a,n	
-maxwell	n	
-mayday	n	
-mayor	n	
-maze	n	
-meaning	a,n,v	
-media	n	
-medical	a,n	
-medusa	n	
-mega	p	
-melody	n	
-melon	n	
-member	n	
-memo	n	
-memphis	n	
-mental	a	
-mentor	n,v	
-menu	n	
-mercury	n	
-mercy	n	
-merlin	n	raptors
-message	n,v	
-metal	a,n,v	
-meteor	n	
-meter	n,v	
-method	n	
-metro	n	
-mexico	n	
-miami	n	
-mica	n	minerals
-michael	n	
-micro	a	
-middle	a,n,v	
-miguel	p	
-mike	n	
-milan	n	
-mile	n	
-milk	n,v	
-miller	n	
-million	a,n	
-mimic	a,n,v	
-mimosa	n	
-mineral	a,n	
-minimum	a,n	
-minus	a,n	
-minute	a,n	
-miracle	n	
-mirage	n	
-miranda	p	moons
-mirror	n,v	
-mission	n	
-missouri	n	rivers
-mister	n	
-mixer	n	
-mobile	a,n	
-model	a,n,v	
-modem	n	
-modern	a,n	
-modest	a	
-modular	a	
-mojave	n	deserts
-moment	n	
-monaco	n	
-monarch	n	passes
-monday	n	
-money	n	
-monica	p	
-monitor	n,v	
-monkey	n,v	
-mono	a,n	
-monster	n	
-montana	n	mountains
-moral	a,n	
-morgan	n	
-morning	n	
-morph	v	
-morris	n	
-moses	n	
-motel	n	
-mother	n,v	
-motif	n	
-motor	a,n,v	
-mouse	n,v	
-mozart	n	
-multi	p	
-museum	n	
-music	n	
-mustang	n	
-mystery	n	
-mystic	a,n	
-nadia	p	
-namib	p	deserts
-nancy	n	
-nantucket	n	islands
-natasha	p	
-native	a,n	
-nato	n	
-natural	a,n	
-navy	n	
-nebula	n	
-neches	p	rivers
-nectar	n	
-needle	n,v	
-nelson	n	
-neon	n	
-nepal	n	
-neptune	n	
-nerve	n,v	
-network	n,v	
-neuron	n	
-neutral	a,n	
-nevada	n	
-never	n	
-news	n	
-newton	n	
-next	a	
-nice	a,n	
-nickel	n,v	minerals
-night	n	
-nikita	p	
-nina	n	
-ninja	n	
-nirvana	n	
-nissan	n	
-nitro	p	
-nixon	n	
-njord	n	norse
-nobel	n	
-nobody	n	
-noise	n,v	
-nominal	a,n	
-normal	a,n	
-north	a,n	
-norway	n	
-nothing	n	
-nova	n	
-novel	a,n	
-nuclear	a	
-nueces	p	rivers
-null	a,n	
-number	n,v	
-numeric	a	
-nurse	n,v	
-nylon	n	
-oak	n	canyons
-oasis	n	
-oberon	p	moons
-object	n,v	
-obscure	a,v	
-observe	v	
-ocean	n	
-octavia	p	
-october	n	
-octopus	n	
-odin	n	norse
-office	n	
-ohio	n	
-olga	p	
-oliver	n	
-olivia	p	
-olivine	n	minerals
-olympic	a	
-omega	n	
-open	a,n,v	
-opera	n	
-opinion	n	
-optic	a,n	
-optimal	a	
-option	n	
-opus	n	
-orange	a,n	
-orbit	n,v	
-orca	n	
-orchid	n	
-order	n,v	
-oregano	n	
-organic	a,n	
-orient	n,v	
-origami	n	
-origin	n	
-orinoco	n	
-orion	n	
-orlando	n	
-oscar	n	
-osprey	n	raptors
-othello	n	
-outside	a,n	
-oval	a,n	
-owner	n	
-oxford	n	
-oxygen	n	
-ozone	n	
-pablo	p	
-pacific	a,n	
-package	n,v	
-padre	n	islands
-page	n,v	
-pagoda	n	
-paint	n,v	
-painted	a,v	deserts
-palace	n	
-palma	p	
-pamela	p	
-panama	n	
-pancake	n	
-panda	n	
-pandora	n	
-panel	n,v	
-panic	n,v	
-panther	n	
-papa	n	
-paper	n,v	
-paprika	n	
-paradox	n	
-pardon	n,v	
-parent	n,v	
-paria	p	canyons
-paris	n	
-parker	n	
-parking	n,v	
-parlor	n	
-parody	n,v	
-parole	n,v	
-partner	n,v	
-passage	n	
-passive	a,n	
-pasta	n	
-pastel	a,n	
-patent	a,n,v	
-patient	a,n	
-patriot	n	
-patrol	n,v	
-pattern	n,v	
-paul	n	
-peace	n	
-pearl	n,v	
-pecos	n	rivers
-pedro	p	
-pegasus	n	
-pelican	n	
-pencil	n,v	
-penguin	n	
-people	n,v	
-pepper	n,v	
-percent	n	
-perfect	a,n,v	
-perform	v	
-perfume	n,v	
-period	n	
-permit	n,v	
-person	n	
-peru	n	
-phantom	a,n	
-philips	n	
-phobos	n	moons
-phoenix	n	
-phone	n,v	
-photo	n	
-phrase	n,v	
-piano	a,n	
-picasso	n	
-picnic	n,v	
-picture	n,v	
-pierre	n	
-pigment	n,v	
-pikes	n	mountains
-pilgrim	n	
-pilot	n,v	
-pinball	n	
-pioneer	n,v	
-pirate	n,v	
-pixel	n	
-pizza	n	
-place	n,v	
-planet	n	
-plasma	n	
-plastic	a,n	
-plate	n,v	
-plato	n	
-platte	n	rivers
-plaza	n	
-plume	n,v	
-pluto	n	
-pocket	n,v	
-podium	n	
-poem	n	
-poetic	a	
-pogo	p	
-point	n,v	
-poker	n	
-polaris	n	
-police	n,v	
-politic	a	
-polka	n,v	
-polo	n	
-polygon	n	
-poncho	n	
-pony	n	
-popcorn	n	
-popular	a	
-portal	n	
-postage	n	
-potato	n	
-powder	n,v	
-prague	n	
-precise	a	
-prefer	v	
-prefix	n,v	
-prelude	n,v	
-premium	a,n	
-prepare	v	
-present	a,n,v	
-press	n,v	
-presto	a	
-pretend	a,n,v	
-pretty	a	
-price	n,v	
-prime	a,n,v	
-prince	n	
-printer	n	
-prism	n	
-private	a,n	
-prize	a,n,v	
-process	n,v	
-prodigy	n	
-product	n	
-profile	n,v	
-program	n,v	
-project	n,v	
-promise	n,v	
-promo	p	
-prosper	v	
-protect	v	
-proton	n	
-provide	v	
-proxy	n	
-public	a,n	
-pulse	n,v	
-puma	n	
-pump	n,v	
-pupil	n	
-puzzle	n,v	
-pyramid	n,v	
-pyrite	n	minerals
-python	n	
-quality	a,n	
-quandary	n	mountains
-quarter	n,v	
-quartz	n	minerals
-queen	n,v	
-quest	n,v	
-quick	a,n	
-quiet	a,n,v	
-quiz	n,v	
-quota	n	
-rabbit	n,v	
-race	n,v	
-rachel	n	
-radar	n	
-radical	a,n	
-radio	a,n,v	
-radius	n	
-rainbow	n	
-rainier	a	mountains
-raja	n	
-ralph	p	
-ramirez	p	
-random	a	
-ranger	n	
-rapid	a,n	
-ravioli	n	
-raymond	p	
-rebel	n,v	
-record	n,v	
-recycle	v	
-reflex	a,n	
-reform	n,v	
-regard	n,v	
-region	n	
-regular	a,n	
-relax	v	
-remark	n,v	
-remote	a,n	
-rent	n,v	
-repair	n,v	
-reply	n,v	
-report	n,v	
-reptile	n	
-respect	n,v	
-respond	v	
-result	n,v	
-resume	n,v	
-reverse	a,n,v	
-reward	n,v	
-rhea	n	moons
-rhino	n	
-ribbon	n	
-ricardo	n	
-richard	p	
-rider	n	
-right	a,n,v	
-ringo	p	
-rio	n	rivers
-risk	n,v	
-ritual	a,n	
-rival	n,v	
-river	n	
-riviera	n	
-road	n	
-robert	n	
-robin	n	
-robot	n	
-rocket	n,v	
-rodent	n	
-rodeo	n	
-roger	p	
-roman	a,n	
-romeo	n	
-rondo	n	
-rose	a,n,v	
-round	a,n,v	
-rover	n	
-royal	a,n	
-rubber	a,n,v	
-ruby	a,n	
-rudolf	p	
-rufus	p	
-russian	a,n	
-sabine	a,n	rivers
-sabrina	p	
-saddle	n,v	
-safari	n	
-saga	n	
-sahara	n	deserts
-sahel	p	deserts
-sailor	n	
-saint	n,v	
-salad	n	
-salami	n	
-salary	n	
-salmon	a,n	
-salon	n	
-salsa	n	
-salt	a,n,v	
-salute	n,v	
-samba	n,v	
-sample	n,v	
-samuel	n	
-sandra	p	
-sanibel	p	islands
-santana	p	
-sardine	n	
-saturn	n	
-savage	a,n,v	
-scale	n,v	
-scarlet	a,n	
-scholar	n	
-school	n,v	
-scoop	n,v	
-scorpio	n	
-scratch	n,v	
-screen	n,v	
-script	n,v	
-scroll	n,v	
-scuba	n	
-season	n,v	
-second	a,n,v	
-secret	a,n	
-section	n,v	
-sector	n	
-secure	a,v	
-sedona	p	canyons
-segment	n,v	
-select	a,v	
-seminar	n	
-senator	n	
-senior	a,n	
-sensor	n	
-serial	a,n	
-serpent	n	
-service	n,v	
-shadow	n,v	
-shake	n,v	
-shallow	a,n,v	
-shampoo	n,v	
-shannon	n	
-sharon	p	
-sharp	a,n	
-shasta	n	mountains
-shave	n,v	
-shelf	n	
-shelter	n,v	
-sheriff	n	
-sherman	n	
-shine	n,v	
-ship	n,v	
-shirt	n,v	
-shock	n,v	
-shoe	n,v	
-short	a,n,v	
-shrink	n,v	
-side	a,n,v	
-sierra	n	mountains
-sigma	n	
-signal	a,n,v	
-silence	n,v	
-silicon	n	minerals
-silk	n	
-silver	a,n,v	
-similar	a	
-simon	n	
-simple	a,n	
-sinatra	n	
-sincere	a	
-single	a,n,v	
-siren	n	
-sister	n	
-sitka	n	islands
-size	a,n,v	
-skadi	p	norse
-ski	n,v	
-slalom	n,v	
-slang	n,v	
-sleep	n,v	
-slogan	n	
-slow	a,v	
-small	a,n	
-smart	a,n,v	
-smile	n,v	
-smoke	n,v	
-snake	n,v	rivers
-snow	n,v	
-social	a,n	
-society	n	
-soda	n	
-sofia	n	
-solar	a	
-solid	a,n	
-solo	a,n,v	
-sonar	n	
-sonata	n	
-song	n	
-sonic	a	
-sonora	n	passes
-sonoran	p	deserts
-soprano	a,n	
-sound	a,n,v	
-source	n,v	
-south	a,n	
-soviet	a,n	
-spain	n	
-spark	n,v	
-sparrow	n	raptors
-sparta	n	
-special	a,n	
-speech	n	
-speed	n,v	
-spell	n,v	
-spend	v	
-sphere	n	
-spider	n	
-spiral	a,n,v	
-spirit	n,v	
-split	a,n,v	
-sponsor	n,v	
-spoon	n,v	
-sport	n,v	
-spray	n,v	
-spring	n,v	
-square	a,n,v	
-stadium	n	
-stage	n,v	
-stamp	n,v	
-stand	n,v	
-star	a,n,v	
-state	n,v	
-static	a,n	
-status	n	
-stella	n	
-stereo	a,n	
-stick	n,v	
-sting	n,v	
-stock	a,n,v	
-stone	a,n,v	
-stop	n,v	
-store	n,v	
-storm	n,v	
-story	n	
-strange	a	
-street	n	
-stretch	a,n,v	
-strong	a	
-stuart	n	
-student	n	
-studio	n	
-style	n,v	
-subject	a,n,v	
-subway	n	
-sugar	n,v	
-sulfur	n,v	minerals
-sultan	n	
-summer	n,v	
-sunday	n	
-sunset	a,n	
-super	a,n	
-support	n,v	
-supreme	a	
-survive	v	
-susan	p	
-sushi	n	
-suzuki	p	
-sweden	n	
-sweet	a,n	
-swim	n,v	
-swing	n,v	
-switch	n,v	
-symbol	n	
-system	n	
-tabernas	p	deserts
-table	n,v	
-taboo	a,n,v	
-tactic	n	
-tahiti	n	islands
-talc	n,v	minerals
-talent	n	
-tanami	p	deserts
-tango	n,v	
-tape	n,v	
-target	n,v	
-tarzan	n	
-tavern	n	
-taxi	n,v	
-teacher	n	
-telecom	n	
-telex	n,v	
-temple	n	
-tempo	n	
-tennis	n	
-teton	n	passes
-texas	n	
-textile	a,n	
-theory	n	
-thermos	n	
-think	n,v	
-thomas	n	
-thor	n	norse
-tibet	n	
-ticket	n,v	
-tictac	n	
-tiger	n	
-time	n,v	
-tina	p	
-tioga	p	passes
-titan	n	moons
-titanic	a	
-toast	n,v	
-tobacco	n	
-today	n	
-toga	n	
-tokyo	n	
-tomato	n	
-tommy	p	
-tonight	n	
-tonto	p	canyons
-topaz	n	minerals
-topic	n	
-torch	n,v	
-tornado	n	
-toronto	n	
-torpedo	n,v	
-torso	n	
-total	a,n,v	
-totem	n	
-touch	n,v	
-tourist	n	
-tower	n,v	
-toyota	n	
-tractor	n	
-trade	n,v	
-traffic	n,v	
-transit	n,v	
-trapeze	n	
-travel	n,v	
-tribal	a	
-tribune	n	
-trick	n,v	
-trident	n	
-trilogy	n	
-trinity	n	rivers
-tripod	n	
-triton	n	moons
-trivial	a	
-tropic	a,n	
-truck	n,v	
-trumpet	n,v	
-trust	n,v	
-tulip	n	
-tuna	n	
-tunnel	n,v	
-turbo	p	
-turtle	n,v	
-twin	a,n,v	
-twist	n,v	
-type	n,v	
-tyr	n	norse
-ultra	a	
-unalaska	p	islands
-uncle	n	
-under	a	
-unicorn	n	
-uniform	a,n,v	
-union	a,n	
-unique	a	
-unit	n	
-update	n,v	
-uranium	n	
-urban	a	
-urgent	a	
-user	n	
-vacuum	n,v	
-vail	p	passes
-valery	p	
-vali	n	norse
-valid	a	
-value	n,v	
-vampire	n	
-vanilla	a,n	
-vatican	n	
-vega	n	
-velvet	a,n	
-vendor	n	
-venice	n	
-ventura	p	
-venus	n	
-verde	p	canyons
-verona	n	
-version	n	
-vertigo	n	
-veteran	a,n	
-vibrate	v	
-victor	n	
-vidar	n	norse
-video	n	
-vienna	n	
-viking	n	norse
-village	n	
-vincent	p	
-violet	a,n	
-violin	n	
-virgo	n	
-virtual	a	
-virus	n	
-visa	n,v	
-visible	a	
-vision	n	
-visitor	n	
-vista	n	
-visual	a	
-vital	a	
-vitamin	n	
-viva	n	
-vizcaino	n	deserts
-vocal	a,n	
-vodka	n	
-voice	n,v	
-volcano	n	
-voltage	n	
-volume	n	
-voodoo	n,v	
-vortex	n	
-voyage	n,v	
-vulture	n	raptors
-waiter	n	
-walnut	n	canyons
-warning	a,n,v	
-watch	n,v	
-water	n,v	
-wave	n,v	
-weather	a,n,v	
-wedding	n,v	
-weekend	n,v	
-welcome	a,n,v	
-western	a,n	
-wheel	n,v	
-whiskey	n	
-whitney	n	mountains
-william	p	
-window	n	
-winter	n,v	
-wisdom	n	
-wizard	a,n	
-wolf	n,v	passes
-wonder	n,v	
-world	a,n	
-xray	p	
-yankee	a,n	
-year	n	
-yellow	a,n,v	
-yes	n	
-yoga	n	
-yogurt	n	
-young	a,n	
-yoyo	p	
-yukon	n	rivers
-zebra	n	
-zero	a,n,v	
-zigzag	a,n,v	
-zion	n	canyons
-zipper	n,v	
-zircon	n	minerals
-zodiac	n	
-zoom	n,v	
+abraham	n		
+absent	a,v		
+absorb	v		
+absurd	a,n		
+acacia	n	forests	nature
+academy	n		
+accent	n,v		tech
+accipiter	n	raptors	nature
+acid	a,n		
+acrobat	n		
+action	n,v		tech
+active	a,n		
+actor	n		
+adak	p	islands	nature
+adam	n		
+adams	n	mountains	nature
+address	n,v		tech
+adios	n		
+admiral	n		nature
+adrian	n		
+adriatic	n	oceans	nature
+aegean	a,n	oceans	nature
+africa	n		
+agatha	p		
+agenda	n		tech
+agent	n		
+agung	p	volcanoes	nature
+airline	n		
+airport	n		
+akutan	p	volcanoes	nature
+alabama	n		nature
+aladdin	n		
+alamo	n		
+alarm	n,v		tech
+alaska	n		nature
+albert	n		
+albino	n		
+alboran	p	oceans	nature
+album	n		
+alcatraz	p	islands	nature
+alcohol	n		
+alder	n	forests	nature
+alert	a,n,v		tech
+alex	p		
+alfonso	p		
+alfred	n		
+algebra	n		
+alias	n		
+alibi	n,v		
+alice	p		
+alien	a,n,v		
+almanac	n		
+almond	n		nature
+aloha	n		
+alpha	a,n		tech
+alpine	a	mountains	nature
+alvord	p	deserts	nature
+amadeus	p		
+amalthea	p	moons	nature
+amanda	p		
+amargosa	p	deserts	nature
+amazon	n	rivers	nature
+amber	a,n	minerals	nature
+ambient	a		
+amelia	n	islands	nature
+america	n		nature
+amethyst	a,n	minerals	nature
+amigo	n		
+ammonia	n		
+anagram	n,v		
+anak	p	volcanoes	nature
+analog	a,n		
+analyze	v		
+anatomy	n		
+andaman	p	oceans	nature
+andrea	p		
+android	n		tech
+andy	p		
+angel	n		nature
+animal	a,n		nature
+anita	p		
+annex	n,v		
+annual	a,n		nature
+answer	n,v		
+antelope	n	canyons	nature
+antenna	n		
+antero	p	mountains	nature
+antonio	p		
+anvil	n		
+apatite	n	minerals	nature
+aplomado	p	raptors	nature
+apollo	n		
+appear	v		
+apple	n		nature
+april	n		
+apropos	a		
+aquila	n	raptors	nature
+arafura	p	oceans	nature
+arcade	n		
+archer	n		nature
+archive	n,v		
+arctic	a,n	oceans	nature
+arena	n		nature
+ariel	p	moons	nature
+arizona	n		nature
+arkansas	n	rivers	nature
+armada	n		
+armani	p		
+armor	n,v		nature
+arnold	n		
+aroma	n		
+arrow	n		tech
+arroyo	n	canyons	nature
+arsenal	n		nature
+arthur	n		
+artist	n		
+asgard	n	norse	nature
+asia	n		
+aspect	n		
+aspen	n	forests	nature
+aspirin	n		
+atacama	p	deserts	nature
+athena	n		
+athlete	n		
+atlanta	n		nature
+atlantic	a,n	oceans	nature
+atlas	n		
+atomic	a		tech
+audio	n		tech
+august	a,n		
+augustine	n	volcanoes	nature
+aurora	n		
+austin	n		nature
+austria	n		nature
+avalon	p		
+avatar	n		
+avenue	n		
+average	a,n,v		
+axiom	n		
+axis	n		nature
+azov	p	oceans	nature
+aztec	n		
+baboon	n		nature
+baby	n,v		nature
+badlands	n	deserts	nature
+bagel	n		
+baggage	n		nature
+bahama	p		
+baker	n	mountains	nature
+balance	n,v		
+baldur	p	norse	nature
+bali	n	islands	nature
+ballad	n		
+ballet	n		
+balloon	n,v		
+balsa	n		nature
+baltic	a,n	oceans	nature
+bambino	n		
+bamboo	n	forests	nature
+banana	n		nature
+banda	p	oceans	nature
+bandit	n		
+banjo	n		tech
+bank	n,v		nature
+banyan	n	forests	nature
+baobab	n	forests	nature
+barbara	p		
+barcode	p		
+barite	n	minerals	nature
+baron	n		
+barranca	p	canyons	nature
+basic	a,n		
+basil	n		nature
+basket	n		
+bateleur	p	raptors	nature
+battery	n		nature
+bazaar	n		
+bazooka	n		
+beach	n,v		nature
+beast	n		nature
+beatles	n		
+beaufort	p	oceans	nature
+beauty	n		
+before	n		
+begin	n,v		
+belford	p	mountains	nature
+belgium	n		nature
+benefit	n,v		
+benny	n		nature
+bering	n	oceans	nature
+berlin	n		nature
+bermuda	n	oceans	nature
+bernard	n		
+bernina	p	passes	nature
+berthoud	p	passes	nature
+beryl	n	minerals	nature
+betty	p		
+between	n		
+beyond	n		
+bicycle	n,v		
+bierstadt	p	mountains	nature
+bifrost	p	norse	nature
+bikini	n		nature
+billy	n		nature
+binary	a,n		tech
+bingo	n		
+biology	n		
+birch	a,n,v	forests	nature
+biscuit	n		
+bishop	n		nature
+bismarck	n	oceans	nature
+bison	n		nature
+blanca	p	mountains	nature
+blast	n,v		nature
+bless	v		
+blitz	n,v		
+blizzard	n	storms	nature
+block	n,v	islands	nature
+blonde	a,n		
+blue	a,n,v		nature
+blyde	p	canyons	nature
+bogart	n		
+bolson	p	deserts	nature
+bombay	n		nature
+bonanza	n		
+bonelli	p	raptors	nature
+bonjour	p		
+bonus	n		
+book	n,v		
+bora	p	storms	nature
+border	n,v		nature
+boreal	a	forests	nature
+boris	p		
+borneo	n	islands	nature
+borrego	p	deserts	nature
+boston	n		nature
+botanic	a		
+bottle	n,v		
+boxer	n		nature
+bragi	n	norse	nature
+brain	n,v		
+brandy	n		
+brave	a,n,v		nature
+bravo	n,v		
+brazil	n		nature
+brazos	n	rivers	nature
+bread	n,v		
+break	n,v		
+brenda	p		
+brenner	p	passes	nature
+bridge	n,v		tech
+brigade	n,v		
+british	a,n		
+broken	a,v		
+bromo	p	volcanoes	nature
+bronze	a,n,v		nature
+brother	n		
+brown	a,n,v		nature
+bruce	n		
+bruno	n		
+brush	n,v		
+bryce	p	canyons	nature
+bucket	n,v		
+buckeye	n	forests	nature
+buckskin	n	canyons	nature
+budget	n,v		
+buenos	p		
+buffalo	n,v		nature
+bundle	n,v		
+burger	n		
+burma	n		nature
+buteo	n	raptors	nature
+button	n,v		
+buzzard	n	raptors	nature
+buzzer	n		tech
+byte	n		
+cabaret	n		
+cabinet	n		
+cable	n,v		tech
+cactus	n		nature
+cadet	n		
+caesar	n		
+cafe	n		
+cairo	n		nature
+cake	n,v		
+calcite	n	minerals	nature
+calibre	n		
+callisto	n	moons	nature
+calypso	n		nature
+camel	n		nature
+camera	n		
+camilla	p		
+campus	n		nature
+canada	n		nature
+canal	n,v		nature
+canary	a,n		nature
+candid	a		
+candle	n,v		
+cannon	n,v		tech
+canoe	n,v		
+cantina	p		
+canvas	n,v		
+canyon	n	canyons	nature
+capital	a,n		nature
+capsule	n,v		
+caracara	n	raptors	nature
+caramel	a,n		
+caravan	n,v		
+carbon	n	minerals	nature
+career	n,v		
+cargo	n		
+carlo	p		
+carmen	p		
+carol	n,v		
+carpet	n,v		nature
+carrot	n		nature
+cartel	n		
+cartoon	n,v		
+casino	n		
+caspian	n	oceans	nature
+castle	n,v	mountains	nature
+castro	n		
+catalina	p	islands	nature
+catalog	n,v		
+cave	n,v		
+caviar	n		
+cayuse	n	passes	nature
+cecilia	p		
+cedar	n	forests	nature
+celebes	n	oceans	nature
+cello	n		tech
+celtic	a,n		
+cement	n,v		
+center	a,n,v		nature
+century	n		
+ceramic	a,n		
+chamber	n,v		
+chance	a,n,v		
+change	n,v		
+channel	n,v		nature
+chant	n,v		
+chaos	n		
+chapter	n		
+chariot	n,v		
+charlie	p		
+charm	n,v		
+charon	n	moons	nature
+charter	n,v		tech
+chasm	n	canyons	nature
+cheese	n,v		nature
+chef	n		
+chemist	n		
+cherry	a,n		nature
+chess	n		nature
+chestnut	a,n	forests	nature
+chicago	n		nature
+chicken	a,n		nature
+chief	a,n		
+chihuahua	n	deserts	nature
+child	n		
+china	n		nature
+chinook	n	passes	nature
+choice	a,n		
+chris	p		
+chrome	n,v		
+cigar	n		
+cinema	n		
+cipher	n,v		tech
+circle	n,v		tech
+circus	n		nature
+citizen	n		
+citrine	n	minerals	nature
+citrus	n		nature
+city	n		nature
+civil	a		
+clara	p		
+clarion	a,n,v		
+clark	n		
+classic	a,n		nature
+claudia	p		
+clean	a,n,v		
+clever	a		
+client	n		tech
+cliff	n		
+climax	n,v		tech
+clinic	n		
+clock	n,v		tech
+clone	n,v		nature
+cloud	n,v		
+cloudburst	n	storms	nature
+club	n,v		
+cobalt	n	minerals	nature
+cobra	n		nature
+cockpit	n		
+coconut	n		nature
+cola	n		nature
+colca	p	canyons	nature
+collect	a,n,v		
+colombo	n		nature
+colony	n		nature
+color	a,n,v		
+colorado	n	rivers	nature
+columbia	n	rivers	nature
+combat	n,v		
+combine	n,v		tech
+comedy	n		
+comet	n		
+command	n,v		tech
+common	a,n		nature
+compact	a,n,v		tech
+company	n,v		
+complex	a,n		
+comrade	n		
+conan	p		
+concert	n,v		
+condor	n	raptors	nature
+conduct	n,v		
+confide	v		
+congo	n		nature
+connect	v		
+consul	n		
+contact	n,v		
+context	n		
+contour	n,v		
+control	n,v		tech
+convert	n,v		
+cool	a,n,v		
+copper	n,v	minerals	nature
+copy	n,v		
+coral	a,n	minerals	nature
+corner	n,v		nature
+corona	n		
+coronado	p	islands	nature
+correct	a,v		
+corsica	n	islands	nature
+cosmos	n		nature
+costume	n,v		
+cotopaxi	n	volcanoes	nature
+cotton	n,v		nature
+coulee	p	canyons	nature
+couple	n,v		
+courage	n		
+cover	n,v		nature
+cowboy	n		
+crack	a,n,v		nature
+craft	n,v		
+crash	n,v		
+crater	n		nature
+credit	n,v		
+crestone	p	mountains	nature
+crete	n	islands	nature
+crevasse	n	canyons	nature
+cricket	n,v		nature
+crimson	a,n,v		
+critic	n		
+crown	n,v		
+crystal	n	minerals	nature
+cuba	n	islands	nature
+cubic	a		
+culture	n,v		
+cumbres	p	passes	nature
+cupid	n		
+current	a,n		
+cycle	n,v		
+cyclone	n	storms	nature
+cypress	n	forests	nature
+dallas	n		nature
+dance	n,v		
+daniel	n		
+danube	n	rivers	nature
+darwin	n		nature
+dasht	p	deserts	nature
+data	n		
+david	n		
+deal	n,v		nature
+decade	n		
+decide	v		
+decimal	a,n		
+declare	v		
+define	v		
+degree	n		tech
+deimos	n	moons	nature
+delete	v		
+deliver	v		
+delphi	n		nature
+delta	n		tech
+deluge	n,v	storms	nature
+deluxe	a		
+demand	n,v		
+demo	n,v		
+denali	n	mountains	nature
+denmark	n		nature
+denver	n		nature
+depend	v		
+deposit	n,v		
+derby	n		
+derecho	p	storms	nature
+desert	n,v		nature
+design	n,v		tech
+desire	n,v		
+detail	n,v		
+detect	v		
+develop	v		
+dexter	a		
+diagram	n,v		
+dialog	n		
+diamond	n	minerals	nature
+diana	n		
+diego	p		
+diesel	n		tech
+diet	n,v		
+digital	a		tech
+dilemma	n		
+dinner	n		
+dione	p	moons	nature
+diploma	n		
+direct	a,v		
+disco	n,v		
+disney	n		
+dispute	n,v		
+distant	a		
+divide	n,v		
+doctor	n,v		
+dogwood	n	forests	nature
+dolby	n		
+dollar	n		tech
+dolphin	n		nature
+domain	n		nature
+domino	n		nature
+donald	p		
+donner	p	passes	nature
+donor	n		
+door	n		
+double	a,n,v		
+downburst	p	storms	nature
+dragon	n		nature
+drama	n		
+dream	n,v		
+drink	n,v		
+driver	n		tech
+druid	n		
+drum	n,v		nature
+dublin	n		nature
+duet	n		
+dynamic	a,n		
+dynasty	n		
+eagle	n,v	raptors	nature
+earth	n,v		nature
+east	a,n		nature
+easy	a		
+ebony	a,n	forests	nature
+echo	n,v		
+eclipse	n,v		
+ecology	n		
+economy	n		
+eddie	p		
+edgar	n		
+edison	n		
+edition	n		
+editor	n		tech
+educate	v		
+edward	n		
+effect	n,v		
+ego	n		
+egypt	n		nature
+elastic	a,n		
+elbe	n	rivers	nature
+elbert	p	mountains	nature
+elbrus	p	volcanoes	nature
+electra	n		
+elegant	a		
+element	n		nature
+eleonora	p	raptors	nature
+elite	a,n		
+elvis	n		
+email	n,v		
+emerald	n	minerals	nature
+emotion	n		
+empire	n		nature
+empty	a,n,v		
+enceladus	p	moons	nature
+energy	n		
+engine	n		tech
+english	a,n		
+enigma	n		
+enjoy	v		
+enrico	p		
+episode	n		tech
+epoxy	n,v		
+equal	a,n,v		
+equator	n		
+eric	p		
+erosion	n		
+escalante	p	deserts	nature
+escape	n,v		nature
+escort	n,v		
+eternal	a		
+ethnic	a,n		
+etna	n	volcanoes	nature
+europa	n	moons	nature
+europe	n		
+evans	n	mountains	nature
+evening	n,v		
+event	n		
+everest	n	mountains	nature
+evident	a		
+evita	p		
+exact	a,v		
+example	n		
+except	v		
+exhibit	n,v		
+exile	n,v		
+exit	n,v		
+exodus	n		
+exotic	a		
+expand	v		
+explain	v		
+explore	v		
+export	n,v		
+express	a,n,v		
+extend	v		
+extra	a,n		nature
+extreme	a,n		nature
+fabric	n		
+factor	n,v		
+falcon	n,v	raptors	nature
+fame	n		
+family	n		
+famous	a		
+fantasy	n,v		
+farmer	n		
+fashion	n,v		
+fast	a,n,v		
+father	n,v		
+fax	n,v		
+feldspar	n	minerals	nature
+felix	p		
+fenrir	n	norse	nature
+fern	n	canyons	nature
+ferrari	p		
+fiber	n		
+fiction	n		
+fidel	p		
+field	n,v		nature
+fiesta	n		
+figure	n,v		nature
+fiji	n	islands	nature
+film	n,v		
+filter	n,v		
+final	a,n		
+finance	n,v		
+finish	n,v		nature
+finland	n		nature
+fiona	p		
+fire	n,v		
+first	a,n		tech
+fish	n,v		nature
+flag	n,v		nature
+flame	n,v		
+flash	a,n,v		tech
+flex	n,v		
+flipper	n		
+float	n,v		
+flood	n,v		nature
+floor	n,v		nature
+florida	n		nature
+flower	n,v		nature
+fluid	a,n		
+flurry	n,v	storms	nature
+flute	n,v		
+focus	n,v		
+foehn	n	storms	nature
+folio	n		
+food	n		
+forbid	v		
+ford	n,v		nature
+forest	n,v		nature
+forever	n		
+forget	v		
+formal	a,n		
+formula	n		
+forseti	n	norse	nature
+fortune	n		
+forum	n		
+forward	a,n,v		
+fossil	a,n		
+fractal	n		
+fragile	a		
+frame	n,v		tech
+france	n		nature
+frank	a,n,v		
+fraser	p	rivers	nature
+freddie	p		
+freedom	n		
+fremont	n	passes	nature
+fresh	a		
+freya	n	norse	nature
+friday	n		
+friend	n		
+frigg	n	norse	nature
+frog	n,v		nature
+front	a,n,v		nature
+frozen	a,v		nature
+fruit	n,v		nature
+fuel	n,v		
+fuji	n	volcanoes	nature
+furka	p	passes	nature
+future	a,n		
+gabriel	n		
+galaxy	n		nature
+gale	n	storms	nature
+galena	n	minerals	nature
+galileo	n		
+gallery	n		
+gallop	n,v		
+game	a,n,v		nature
+gamma	n		tech
+ganges	n,v	rivers	nature
+ganymede	n	moons	nature
+garage	n,v		
+garbo	n		
+garcia	p		
+garden	n,v		nature
+garlic	n		nature
+garnet	n	minerals	nature
+gate	n,v		tech
+gelatin	n		
+gemini	n		nature
+general	a,n,v		
+genesis	n		
+genetic	a		
+geneva	n		nature
+genius	n		nature
+gentle	a,v		
+genuine	a		
+george	n		
+germany	n		nature
+giant	a,n		nature
+gibson	n		
+gila	n	rivers	nature
+gilbert	n		
+ginger	a,n,v		nature
+giraffe	n		nature
+gizmo	n		
+glacier	n	passes	nature
+glass	n,v		tech
+glen	n	canyons	nature
+global	a		
+gloria	p		
+gobi	n	deserts	nature
+goblin	n		
+gold	a,n		
+golf	n,v		
+gondola	n		
+gong	n,v		tech
+good	a,n		
+gopher	n		nature
+gordon	p		
+gorge	n,v	canyons	nature
+gorilla	n		nature
+goshawk	n	raptors	nature
+gossip	n,v		
+gotthard	p	passes	nature
+grace	n,v		
+gram	n		
+grand	a,n	canyons	nature
+granite	n	minerals	nature
+graph	n,v		
+gravity	n		
+gray	a,n,v		nature
+grays	n,v	mountains	nature
+greek	a,n		
+green	a,n,v		nature
+gregory	n		
+grid	n		
+griffin	n		
+grille	n		
+ground	n,v		nature
+group	n,v		
+guam	n	islands	nature
+guest	n		tech
+guide	n,v		nature
+guitar	n		tech
+gulch	n	canyons	nature
+gungnir	p	norse	nature
+guru	n		
+gust	n	storms	nature
+gustav	p		
+gypsum	n	minerals	nature
+gyrfalcon	n	raptors	nature
+gyro	n		tech
+habitat	n		nature
+haboob	p	storms	nature
+hailstorm	n	storms	nature
+hair	n		nature
+halt	a,n,v		
+hamlet	n		nature
+hammer	n,v		tech
+hand	n,v		nature
+happy	a		
+harbor	n,v		nature
+harlem	n		nature
+harmattan	n	storms	nature
+harmony	n		
+harrier	n	raptors	nature
+harris	n		
+harvard	n	mountains	nature
+harvest	n,v		
+havana	n		nature
+havasu	p	canyons	nature
+hawaii	n	islands	nature
+hawk	n,v	raptors	nature
+hazard	n,v		
+heart	n		nature
+heaven	n		nature
+heavy	a,n		
+heimdall	n	norse	nature
+helena	n		nature
+helens	n	volcanoes	nature
+helium	n		
+hello	n		
+hemlock	n	forests	nature
+henry	n		
+herbert	n		
+herman	n		
+heroic	a,n		
+hexagon	n		
+hickory	n	forests	nature
+hilton	p	islands	nature
+hippie	n		
+history	n		
+hobby	n	raptors	nature
+holiday	n,v		
+honey	a,n,v		
+hood	n,v	mountains	nature
+hoosier	n	passes	nature
+hope	n,v		
+horizon	n		nature
+horse	n,v		nature
+hostel	n		
+hotel	n		
+house	n,v		nature
+huginn	p	norse	nature
+human	a,n		nature
+humor	n,v		
+hunter	n		nature
+husband	n,v		
+hydro	p		
+hyperion	n	moons	nature
+iapetus	n	moons	nature
+ibiza	p	islands	nature
+iceberg	n		
+icon	n		tech
+idea	n		
+idiom	n		
+idun	n	norse	nature
+igloo	n		
+igor	p		
+image	n,v		
+imagine	v		
+imitate	v		
+immune	a,n		
+impact	n,v		
+import	n,v		nature
+impress	n,v		
+inca	n		
+inch	n,v		
+include	v		
+index	n,v		
+india	n		nature
+indian	a,n	oceans	nature
+indigo	a,n		nature
+infant	n		
+info	n		
+ingrid	p		
+initial	a,n,v		tech
+input	n,v		tech
+insect	n		nature
+inside	a,n		nature
+instant	a,n		
+invent	v		
+invest	v		
+invite	n,v		
+io	n	moons	nature
+ionian	a,n	oceans	nature
+iris	n		nature
+ironic	a		
+isabel	p		
+isotope	n		
+italian	a,n		
+ivan	p		
+ivory	n		nature
+jacket	n,v		
+jackson	n		nature
+jacob	n		
+jade	a,n,v	minerals	nature
+jaguar	n		nature
+jamaica	n	islands	nature
+james	n,v		nature
+janet	p		
+janus	n	moons	nature
+japan	n,v		nature
+jargon	n		
+jasmine	n		nature
+jason	n		
+jasper	n	minerals	nature
+java	n	islands	nature
+jazz	n,v		
+jeep	n		
+jerome	n		
+jessica	p		
+jester	n		
+jet	a,n,v		
+jimmy	n,v		
+job	n,v		tech
+joel	n		
+john	n		nature
+join	n,v		
+joker	n		
+jordan	n		nature
+jormun	p	norse	nature
+jornada	p	deserts	nature
+joseph	n		
+joshua	n		
+journal	n		
+judge	n,v		
+judo	n		
+juice	n		
+julier	p	passes	nature
+juliet	p		
+julius	p		
+july	n		
+jumbo	a		
+jump	n,v		
+june	n		
+juneau	n	islands	nature
+jungle	n		nature
+junior	a,n		
+juniper	n	forests	nature
+jupiter	n		nature
+justice	n		
+kalahari	n	deserts	nature
+kansas	n		nature
+karakum	p	deserts	nature
+karate	n		
+karl	p		
+karma	n		
+katmai	p	volcanoes	nature
+kavir	p	deserts	nature
+kayak	n,v		
+kenosha	p	passes	nature
+kermit	p		
+kestrel	n	raptors	nature
+kevin	p		
+khyber	p	passes	nature
+kiawah	p	islands	nature
+kilauea	p	volcanoes	nature
+kilo	n		
+kimono	n		
+kinetic	a		
+king	n		nature
+kitchen	n		
+kite	n,v	raptors	nature
+kiwi	n		nature
+koala	n		nature
+kodiak	n	islands	nature
+korea	n		
+krakatoa	n	volcanoes	nature
+labor	n,v		
+ladder	n,v		
+lady	n		
+lagoon	n		
+lake	n		
+lanin	p	volcanoes	nature
+lanner	p	raptors	nature
+lapis	p	minerals	nature
+laptop	n		tech
+larch	n	forests	nature
+lascar	n	volcanoes	nature
+laser	n		tech
+latin	a,n		
+laura	p		
+lava	n		nature
+lazarus	n		
+learn	v		
+lecture	n,v		
+left	a,n,v		nature
+legacy	n		
+legal	a		
+legend	n		
+lemon	n		nature
+leonid	p		
+leopard	n		nature
+lesson	n		
+letter	n,v		
+levanter	n	storms	nature
+level	a,n,v		
+lexicon	n		
+liberal	a,n		
+libra	n		nature
+license	n,v		tech
+life	n		
+light	a,n,v		nature
+ligurian	p	oceans	nature
+lily	n		nature
+lima	n		nature
+limbo	n		
+limit	n,v		nature
+lincoln	n	mountains	nature
+linda	p		
+linden	n	forests	nature
+linear	a		
+lion	n		nature
+liquid	a,n		
+list	n,v		
+liter	n		
+lithium	n		
+little	a,n		
+llama	n		nature
+lobby	n,v		
+lobster	n		nature
+local	a,n		
+locate	v		
+logan	n	passes	nature
+logic	n		
+logo	n		tech
+loki	n	norse	nature
+lola	p		
+london	n		nature
+longs	v	mountains	nature
+lopez	p		
+lorenzo	p		
+lotus	n		nature
+love	n,v		
+loveland	p	passes	nature
+loyal	a		
+lucas	n		
+lucky	a		
+lunar	a		nature
+lunch	n,v		
+luzon	n	islands	nature
+machine	n,v		tech
+macro	a,n		tech
+madam	n		
+madonna	n		
+madrid	n		nature
+maelstrom	n	storms	nature
+maestro	n		
+magenta	a,n		
+magic	a,n		
+magnet	n		
+magnum	n		
+mahogany	n	forests	nature
+mailbox	n		
+major	a,n,v		
+malachite	n	minerals	nature
+maloja	p	passes	nature
+malta	n	islands	nature
+mama	n		
+mambo	n,v		
+mammal	n		nature
+manager	n		
+mango	n		nature
+mangrove	n	forests	nature
+manila	n		nature
+manual	a,n		
+maple	n	forests	nature
+marble	n,v	canyons	nature
+marco	p		
+margin	n		
+margo	p		
+mariana	p	oceans	nature
+marina	n		
+marion	p		
+market	n,v		
+marmara	n	oceans	nature
+maroon	a,n,v	mountains	nature
+mars	n,v		nature
+martial	a,n	raptors	nature
+martin	n		nature
+marvin	p		
+mary	n		
+mask	n,v		
+massive	a	mountains	nature
+master	a,n,v		nature
+match	n,v		nature
+matrix	n		nature
+mauna	p	volcanoes	nature
+maximum	a,n		nature
+maxwell	n		
+mayday	n		tech
+mayor	n		
+maze	n		
+mckenzie	p	passes	nature
+meaning	a,n,v		
+media	n		nature
+medical	a,n		
+medusa	n		nature
+mega	p		tech
+mekong	n	rivers	nature
+melody	n		
+melon	n		nature
+member	n		
+memo	n		
+memphis	n		nature
+mental	a		
+mentor	n,v		
+menu	n		tech
+merapi	p	volcanoes	nature
+mercury	n		nature
+mercy	n		
+merlin	n	raptors	nature
+mesa	n	deserts	nature
+message	n,v		
+metal	a,n,v		
+meteor	n		
+meter	n,v		tech
+method	n		
+metis	n	moons	nature
+metro	n		
+mexico	n		nature
+miami	n		nature
+mica	n	minerals	nature
+michael	n		
+micro	a		tech
+middle	a,n,v		nature
+midgard	n	norse	nature
+miguel	p		
+mike	n		
+milan	n		nature
+mile	n		
+milk	n,v		nature
+miller	n		nature
+million	a,n		
+mimas	p	moons	nature
+mimic	a,n,v		
+mimosa	n		nature
+mindanao	n	islands	nature
+mineral	a,n		
+minimum	a,n		nature
+minus	a,n		
+minute	a,n		
+miracle	n		
+mirage	n		
+miranda	p	moons	nature
+mirror	n,v		
+mission	n		
+missouri	n	rivers	nature
+mister	n		
+mistral	n	storms	nature
+mixer	n		
+mjolnir	p	norse	nature
+mobile	a,n		nature
+model	a,n,v		nature
+modem	n		tech
+modern	a,n		tech
+modest	a		
+modular	a		
+mojave	n	deserts	nature
+moment	n		
+monaco	n		nature
+monarch	n	passes	nature
+monday	n		
+money	n		
+monica	p		
+monitor	n,v		nature
+monkey	n,v		nature
+mono	a,n		
+monsoon	n	storms	nature
+monster	n		nature
+montana	n	mountains	nature
+moral	a,n		
+morgan	n		nature
+morning	n		
+morph	v		
+morris	n		
+moses	n		
+motel	n		
+mother	n,v		
+motif	n		
+motor	a,n,v		tech
+mouse	n,v		nature
+mozart	n		
+multi	p		
+muninn	p	norse	nature
+murray	n	rivers	nature
+museum	n		
+music	n		
+mustang	n		nature
+mystery	n		
+mystic	a,n		
+nadia	p		
+namib	p	deserts	nature
+nancy	n		nature
+nantucket	n	islands	nature
+narrows	n,v	canyons	nature
+natasha	p		
+native	a,n		
+nato	n		
+natural	a,n		
+nauru	n	islands	nature
+navy	n		
+nebula	n		nature
+neches	p	rivers	nature
+nectar	n		
+needle	n,v		nature
+negev	n	deserts	nature
+nelson	n		
+neon	n		
+nepal	n		nature
+neptune	n		nature
+nereid	n	moons	nature
+nerve	n,v		
+network	n,v		tech
+neuron	n		
+neutral	a,n		
+nevada	n		nature
+never	n		
+news	n		tech
+newton	n		
+next	a		
+nice	a,n		nature
+nickel	n,v	minerals	nature
+night	n		
+nikita	p		
+nile	n	rivers	nature
+nina	n		
+ninja	n		
+nirvana	n		nature
+nissan	n		
+nitro	p		tech
+nix	n,v	moons	nature
+nixon	n		
+njord	n	norse	nature
+nobel	n		
+nobody	n		
+noise	n,v		
+nominal	a,n		
+normal	a,n		
+norns	n	norse	nature
+north	a,n		nature
+norther	n	storms	nature
+norway	n		nature
+nothing	n		
+nova	n		nature
+novel	a,n		
+nuclear	a		tech
+nueces	p	rivers	nature
+null	a,n		
+number	n,v		tech
+numeric	a		
+nurse	n,v		
+nylon	n		
+oak	n	canyons	nature
+oasis	n	deserts	nature
+oberon	p	moons	nature
+object	n,v		
+obscure	a,v		
+observe	v		
+obsidian	n	minerals	nature
+ocean	n		nature
+octavia	p		
+october	n		
+octopus	n		nature
+odin	n	norse	nature
+office	n		
+ohio	n		nature
+olga	p		
+oliver	n		
+olivia	p		
+olivine	n	minerals	nature
+olympic	a		
+olympus	n	mountains	nature
+omega	n		tech
+onyx	n	minerals	nature
+opal	n	minerals	nature
+open	a,n,v		nature
+opera	n		tech
+opinion	n		tech
+optic	a,n		
+optimal	a		
+option	n		tech
+opus	n		
+orange	a,n		nature
+orbit	n,v		
+orca	n		nature
+orchid	n		nature
+order	n,v		tech
+ordos	p	deserts	nature
+oregano	n		nature
+organic	a,n		
+orient	n,v		nature
+origami	n		
+origin	n		
+orinoco	n		nature
+orion	n		nature
+orlando	n		nature
+oscar	n		tech
+osorno	p	volcanoes	nature
+osprey	n	raptors	nature
+othello	n		
+outside	a,n		nature
+oval	a,n		
+owner	n		
+oxford	n		nature
+oxygen	n		
+ozone	n		
+pablo	p		
+pacific	a,n	oceans	nature
+package	n,v		tech
+padre	n	islands	nature
+page	n,v		
+pagoda	n		
+paint	n,v		nature
+painted	a,v	deserts	nature
+palace	n		
+palau	n	islands	nature
+palma	p		
+pamela	p		
+pampero	p	storms	nature
+panama	n		nature
+pancake	n		
+panda	n		nature
+pandora	n	moons	nature
+panel	n,v		
+panic	n,v		
+panther	n		nature
+papa	n		
+paper	n,v		
+paprika	n		nature
+paradox	n		
+pardon	n,v		tech
+parent	n,v		
+paria	p	canyons	nature
+paris	n		nature
+parker	n		
+parking	n,v		
+parlor	n		
+parody	n,v		
+parole	n,v		
+partner	n,v		
+passage	n		
+passive	a,n		
+pasta	n		
+pastel	a,n		
+patent	a,n,v		tech
+patient	a,n		
+patriot	n		
+patrol	n,v		
+pattern	n,v		
+paul	n		
+pavlof	p	volcanoes	nature
+peace	n		tech
+pearl	n,v		
+pecos	n	rivers	nature
+pedro	p		
+pegasus	n		
+pelee	p	volcanoes	nature
+pelican	n		nature
+pencil	n,v		
+penguin	n		nature
+people	n,v		
+pepper	n,v		nature
+percent	n		
+peregrine	a,n	raptors	nature
+perfect	a,n,v		
+perform	v		
+perfume	n,v		
+period	n		tech
+permit	n,v		nature
+person	n		nature
+peru	n		nature
+phantom	a,n		
+philips	n		
+phobos	n	moons	nature
+phoebe	n	moons	nature
+phoenix	n		nature
+phone	n,v		
+photo	n		
+phrase	n,v		
+piano	a,n		tech
+picasso	n		
+picnic	n,v		
+picture	n,v		
+pierre	n		nature
+pigment	n,v		
+pikes	n	mountains	nature
+pilgrim	n		
+pilot	n,v		nature
+pinatubo	n	volcanoes	nature
+pinball	n		
+pioneer	n,v		
+pirate	n,v		nature
+pixel	n		tech
+pizza	n		
+place	n,v		nature
+planet	n		nature
+plasma	n		tech
+plastic	a,n		
+plate	n,v		nature
+plato	n		
+platte	n	rivers	nature
+playa	p	deserts	nature
+plaza	n		nature
+plume	n,v		nature
+pluto	n		nature
+pocket	n,v		nature
+podium	n		
+poem	n		
+poetic	a		
+pogo	p		
+point	n,v		nature
+poker	n		
+polaris	n		nature
+police	n,v		
+politic	a		
+polka	n,v		
+polo	n		
+polygon	n		
+poncho	n		
+pony	n		nature
+popcorn	n		nature
+poplar	n	forests	nature
+popular	a		
+portal	n		tech
+postage	n		tech
+potato	n		nature
+powder	n,v		
+prague	n		nature
+precise	a		
+prefer	v		
+prefix	n,v		
+prelude	n,v		
+premium	a,n		
+prepare	v		
+present	a,n,v		
+press	n,v		tech
+presto	a		
+pretend	a,n,v		
+pretty	a		
+price	n,v		
+prime	a,n,v		
+prince	n		
+printer	n		
+prism	n		
+private	a,n		
+prize	a,n,v		tech
+process	n,v		tech
+prodigy	n		
+product	n		
+profile	n,v		
+program	n,v		tech
+project	n,v		
+promise	n,v		
+promo	p		
+prosper	v		
+protect	v		
+proteus	n	moons	nature
+proton	n		
+provide	v		
+proxy	n		tech
+public	a,n		
+pulse	n,v		
+puma	n		nature
+pump	n,v		tech
+pupil	n		nature
+puzzle	n,v		
+pyramid	n,v		
+pyrite	n	minerals	nature
+python	n		nature
+quality	a,n		
+quandary	n	mountains	nature
+quarter	n,v		nature
+quartz	n	minerals	nature
+queen	n,v		nature
+quest	n,v		
+quick	a,n		
+quiet	a,n,v		
+quiz	n,v		
+quota	n		
+rabbit	n,v		nature
+race	n,v		
+rachel	n		
+radar	n		tech
+radical	a,n		tech
+radio	a,n,v		tech
+radius	n		nature
+ragnar	p	norse	nature
+rainbow	n		
+rainier	a	mountains	nature
+raja	n		
+ralph	p		
+ramirez	p		
+random	a		
+ranger	n		
+rapid	a,n		
+raton	p	passes	nature
+ravine	n	canyons	nature
+ravioli	n		
+raymond	p		
+rebel	n,v		
+record	n,v		tech
+recycle	v		
+redoubt	n	volcanoes	nature
+redwood	n	forests	nature
+reflex	a,n		
+reform	n,v		
+regard	n,v		
+region	n		nature
+regular	a,n		
+relax	v		
+remark	n,v		
+remote	a,n		
+rent	n,v		
+repair	n,v		nature
+reply	n,v		
+report	n,v		
+reptile	n		nature
+respect	n,v		
+respond	v		
+result	n,v		
+resume	n,v		
+reverse	a,n,v		tech
+reward	n,v		
+rhea	n	moons	nature
+rhine	n	rivers	nature
+rhino	n		nature
+ribbon	n		tech
+ricardo	n		
+richard	p		
+rider	n		
+right	a,n,v		nature
+rincon	p	canyons	nature
+ringo	p		
+rio	n	rivers	nature
+risk	n,v		
+ritual	a,n		
+rival	n,v		
+river	n		nature
+riviera	n		nature
+road	n		
+robert	n		
+robin	n		nature
+robot	n		tech
+rocket	n,v		tech
+rodent	n		nature
+rodeo	n		
+roger	p		
+roman	a,n		tech
+romeo	n		
+rondo	n		
+rose	a,n,v		nature
+ross	n	oceans	nature
+round	a,n,v		tech
+rover	n		
+royal	a,n		nature
+ruapehu	p	volcanoes	nature
+rubber	a,n,v		
+ruby	a,n	minerals	nature
+rudolf	p		
+rufus	p		
+russian	a,n		
+sabine	a,n	rivers	nature
+sabrina	p		
+saddle	n,v		nature
+safari	n		
+saga	n		
+sahara	n	deserts	nature
+sahel	p	deserts	nature
+sailor	n		nature
+saint	n,v		
+saker	p	raptors	nature
+sakura	p	volcanoes	nature
+salad	n		
+salami	n		
+salary	n		
+salmon	a,n		nature
+salon	n		
+salsa	n		
+salt	a,n,v		
+salute	n,v		
+samba	n,v		nature
+samoa	n	islands	nature
+sample	n,v		
+samuel	n		
+sandra	p		
+sanibel	p	islands	nature
+santana	p		
+santiam	p	passes	nature
+sapphire	a,n	minerals	nature
+sardine	n		nature
+sargasso	n	oceans	nature
+saturn	n		nature
+savage	a,n,v		
+scale	n,v		tech
+scarlet	a,n		
+scholar	n		
+school	n,v		
+scoop	n,v		
+scorpio	n		nature
+scotia	p	oceans	nature
+scratch	n,v		
+screen	n,v		
+script	n,v		
+scroll	n,v		
+scuba	n		
+season	n,v		
+second	a,n,v		
+secret	a,n		
+secretary	n	raptors	nature
+section	n,v		nature
+sector	n		nature
+secure	a,v		
+sedona	p	canyons	nature
+segment	n,v		
+seine	n,v	rivers	nature
+select	a,v		
+semeru	p	volcanoes	nature
+seminar	n		
+senator	n		
+senior	a,n		
+sensor	n		
+sequoia	n	forests	nature
+serial	a,n		
+serpent	n		nature
+service	n,v		nature
+shadow	n,v		nature
+shake	n,v		nature
+shallow	a,n,v		
+shampoo	n,v		
+shannon	n		
+sharon	p		
+sharp	a,n		
+shasta	n	mountains	nature
+shave	n,v		
+shelf	n		nature
+shelter	n,v		
+sheriff	n		
+sherman	n		nature
+shikra	p	raptors	nature
+shine	n,v		
+ship	n,v		
+shirt	n,v		
+shock	n,v		
+shoe	n,v		
+short	a,n,v		nature
+shrink	n,v		
+side	a,n,v		nature
+sierra	n	mountains	nature
+sigma	n		tech
+signal	a,n,v		tech
+sigurd	n	norse	nature
+silence	n,v		
+silicon	n	minerals	nature
+silk	n		
+silver	a,n,v		nature
+similar	a		
+simon	n		
+simple	a,n		nature
+simplon	p	passes	nature
+simpson	n	deserts	nature
+sinatra	n		
+sincere	a		
+single	a,n,v		
+siren	n		
+sirocco	n	storms	nature
+sister	n		
+sitka	n	islands	nature
+size	a,n,v		
+skadi	p	norse	nature
+ski	n,v		
+slalom	n,v		
+slang	n,v		
+sleep	n,v		
+sleipnir	p	norse	nature
+slogan	n		
+slot	n,v	canyons	nature
+slow	a,v		
+small	a,n		
+smart	a,n,v		
+smile	n,v		
+smoke	n,v		
+snake	n,v	rivers	nature
+snow	n,v		nature
+social	a,n		
+society	n		
+soda	n		
+sofia	n		nature
+solar	a		nature
+solid	a,n		
+solo	a,n,v		
+solomon	n	oceans	nature
+sonar	n		tech
+sonata	n		
+song	n		tech
+sonic	a		tech
+sonora	n	passes	nature
+sonoran	p	deserts	nature
+soprano	a,n		
+sopris	p	mountains	nature
+sound	a,n,v		
+source	n,v		nature
+south	a,n		nature
+soviet	a,n		
+spain	n		nature
+spark	n,v		
+sparrow	n	raptors	nature
+sparta	n		nature
+special	a,n		tech
+speech	n		
+speed	n,v		
+spell	n,v		
+spend	v		
+sphere	n		nature
+spider	n		tech
+spiral	a,n,v		nature
+spirit	n,v		
+split	a,n,v		nature
+spluga	p	passes	nature
+sponsor	n,v		
+spoon	n,v		
+sport	n,v		
+spray	n,v		
+spring	n,v		nature
+spruce	a,n,v	forests	nature
+spurr	p	volcanoes	nature
+squall	n,v	storms	nature
+square	a,n,v		nature
+stadium	n		
+stage	n,v		nature
+stamp	n,v		tech
+stand	n,v		nature
+star	a,n,v		nature
+state	n,v		nature
+static	a,n		
+status	n		
+stella	n		
+stelvio	p	passes	nature
+steppe	n	deserts	nature
+stereo	a,n		tech
+stick	n,v		nature
+sting	n,v		
+stock	a,n,v		nature
+stone	a,n,v		nature
+stop	n,v		tech
+store	n,v		
+storm	n,v		
+story	n		
+strange	a		
+street	n		
+stretch	a,n,v		
+stromboli	p	volcanoes	nature
+strong	a		
+stuart	n		
+student	n		
+studio	n		nature
+style	n,v		nature
+subject	a,n,v		
+subway	n		
+sugar	n,v		
+sulfur	n,v	minerals	nature
+sultan	n		
+sumatra	n	islands	nature
+summer	n,v		
+sunday	n		
+sunset	a,n		
+super	a,n		
+support	n,v		tech
+supreme	a		
+surge	n,v	storms	nature
+survive	v		
+susan	p		
+sushi	n		
+suzuki	p		
+sweden	n		nature
+sweet	a,n		
+swim	n,v		
+swing	n,v		tech
+switch	n,v		tech
+sycamore	n	forests	nature
+symbol	n		tech
+system	n		
+taal	n	volcanoes	nature
+tabeguache	p	mountains	nature
+tabernas	p	deserts	nature
+table	n,v		nature
+taboo	a,n,v		
+tactic	n		
+tahiti	n	islands	nature
+taiga	p	forests	nature
+talc	n,v	minerals	nature
+talent	n		
+tambora	p	volcanoes	nature
+tanami	p	deserts	nature
+tango	n,v		
+tape	n,v		
+target	n,v		nature
+tarzan	n		
+tasman	n	oceans	nature
+tavern	n		
+taxi	n,v		
+teacher	n		
+teak	n	forests	nature
+telecom	n		
+telex	n,v		tech
+tempest	n	storms	nature
+temple	n		
+tempo	n		
+tennis	n		
+tercel	n	raptors	nature
+tethys	n	moons	nature
+teton	n	passes	nature
+texas	n		nature
+textile	a,n		
+thames	n	rivers	nature
+thar	p	deserts	nature
+thebe	n	moons	nature
+theory	n		
+thermos	n		
+think	n,v		
+thomas	n		
+thor	n	norse	nature
+tibet	n		nature
+ticket	n,v		tech
+tictac	n		
+tiger	n		nature
+tigris	n	rivers	nature
+time	n,v		
+timor	n	oceans	nature
+tina	p		
+tioga	p	passes	nature
+titan	n	moons	nature
+titania	n	moons	nature
+titanic	a		
+toast	n,v		
+tobacco	n		nature
+today	n		
+toga	n		
+tokyo	n		nature
+tomato	n		nature
+tommy	p		
+tonga	n	islands	nature
+tonight	n		
+tonto	p	canyons	nature
+topaz	n	minerals	nature
+topic	n		
+torch	n,v		nature
+tornado	n	storms	nature
+toronto	n		nature
+torpedo	n,v		nature
+torreys	p	mountains	nature
+torso	n		
+total	a,n,v		
+totem	n		
+touch	n,v		
+tourist	n		
+tower	n,v		
+toyota	n		nature
+tractor	n		
+trade	n,v		nature
+traffic	n,v		
+transit	n,v		tech
+trapeze	n		tech
+travel	n,v		
+tribal	a		
+tribune	n		nature
+trick	n,v		
+trident	n		tech
+trilogy	n		
+trinity	n	rivers	nature
+tripod	n		
+triton	n	moons	nature
+trivial	a		
+tropic	a,n		
+truck	n,v		
+trumpet	n,v		
+trust	n,v		
+tulip	n		nature
+tuna	n		nature
+tunnel	n,v		nature
+turbo	p		tech
+turquoise	n	minerals	nature
+turtle	n,v		nature
+twin	a,n,v		nature
+twist	n,v		
+type	n,v		
+typhoon	n	storms	nature
+tyr	n	norse	nature
+tyrrhenian	p	oceans	nature
+ultra	a		tech
+umbriel	p	moons	nature
+unalaska	p	islands	nature
+uncle	n		
+under	a		
+unicorn	n		
+uniform	a,n,v		
+union	a,n		nature
+unique	a		
+unit	n		
+update	n,v		
+uranium	n		
+urban	a		
+urgent	a		
+user	n		
+vacuum	n,v		nature
+vail	p	passes	nature
+valery	p		
+vali	n	norse	nature
+valid	a		
+valkyrie	n	norse	nature
+value	n,v		
+vampire	n		
+vanilla	a,n		nature
+vatican	n		
+vega	n		nature
+velvet	a,n		
+vendor	n		
+venice	n		nature
+ventura	p		
+venus	n		nature
+verde	p	canyons	nature
+verdon	p	canyons	nature
+verona	n		nature
+verreaux	p	raptors	nature
+version	n		
+vertigo	n		
+vesuvius	n	volcanoes	nature
+veteran	a,n		
+vibrate	v		
+victor	n		
+vidar	n	norse	nature
+video	n		tech
+vienna	n		nature
+viking	n	norse	nature
+village	n		nature
+vincent	p		
+violet	a,n		nature
+violin	n		tech
+virgo	n		nature
+virtual	a		tech
+virus	n		tech
+visa	n,v		
+visible	a		
+vision	n		
+visitor	n		
+vista	n		
+visual	a		
+vital	a		
+vitamin	n		
+viva	n		
+vizcaino	n	deserts	nature
+vocal	a,n		
+vodka	n		
+voice	n,v		
+volcano	n		nature
+volga	n	rivers	nature
+voltage	n		
+volume	n		
+voodoo	n,v		
+vortex	n	storms	nature
+voyage	n,v		
+vulture	n	raptors	nature
+wadi	n	deserts	nature
+waimea	p	canyons	nature
+waiter	n		
+walnut	n	canyons	nature
+warning	a,n,v		
+watch	n,v		
+water	n,v		nature
+waterspout	n	storms	nature
+wave	n,v		nature
+weather	a,n,v		
+weddell	p	oceans	nature
+wedding	n,v		
+weekend	n,v		
+welcome	a,n,v		
+western	a,n		
+wheel	n,v		tech
+whiskey	n		
+whiteout	n,v	storms	nature
+whitney	n	mountains	nature
+william	p		
+willow	n	forests	nature
+window	n		nature
+winter	n,v		
+wisdom	n		
+wizard	a,n		nature
+wolf	n,v	passes	nature
+wonder	n,v		
+world	a,n		nature
+xray	p		
+yale	n	mountains	nature
+yangtze	n	rivers	nature
+yankee	a,n		
+year	n		
+yellow	a,n,v		
+yes	n		
+yggdra	p	norse	nature
+yoga	n		
+yogurt	n		
+young	a,n		nature
+yoyo	p		
+yukon	n	rivers	nature
+zambezi	n	rivers	nature
+zebra	n		nature
+zephyr	n	storms	nature
+zero	a,n,v		tech
+zigzag	a,n,v		
+zion	n	canyons	nature
+zipper	n,v		
+zircon	n	minerals	nature
+zodiac	n		nature
+zoom	n,v		
