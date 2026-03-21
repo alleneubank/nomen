@@ -46,6 +46,7 @@ pub const Generator = struct {
             .phrase => |pattern| self.generatePhrase(pattern),
             .triple => self.generateTriple(),
             .mnemonic => |input| self.generateMnemonic(input),
+            .construct => error.ConstructionFailed,
         };
     }
 

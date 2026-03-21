@@ -32,11 +32,30 @@ pub const PhrasePattern = enum {
     alliterative,
 };
 
+pub const ConstructTechnique = enum {
+    portmanteau,
+    compound,
+    clip,
+    affix,
+    backform,
+    phonosym,
+    acronym,
+
+    pub fn fromString(s: []const u8) ?ConstructTechnique {
+        return std.meta.stringToEnum(ConstructTechnique, s);
+    }
+
+    pub fn toString(self: ConstructTechnique) []const u8 {
+        return @tagName(self);
+    }
+};
+
 pub const Strategy = union(enum) {
     thematic,
     phrase: PhrasePattern,
     triple,
     mnemonic: []const u8,
+    construct: ConstructTechnique,
 
     pub fn fromString(s: []const u8) ParseError!Strategy {
         if (std.mem.eql(u8, s, "thematic")) return .thematic;
@@ -47,6 +66,14 @@ pub const Strategy = union(enum) {
         if (std.mem.eql(u8, s, "phrase:alliterative")) return .{ .phrase = .alliterative };
         if (std.mem.eql(u8, s, "triple")) return .triple;
         if (std.mem.eql(u8, s, "mnemonic")) return .{ .mnemonic = "" };
+        if (std.mem.eql(u8, s, "construct")) return .{ .construct = .portmanteau };
+        if (std.mem.startsWith(u8, s, "construct:")) {
+            const technique_str = s["construct:".len..];
+            if (ConstructTechnique.fromString(technique_str)) |technique| {
+                return .{ .construct = technique };
+            }
+            return error.InvalidStrategy;
+        }
         return error.InvalidStrategy;
     }
 };
@@ -83,6 +110,7 @@ pub const ParseError = error{
 pub const GenerateError = error{
     EmptyWordList,
     NoDistinctNames,
+    ConstructionFailed,
 };
 
 pub const HelpOptions = struct {
@@ -139,6 +167,32 @@ pub fn validateMnemonicInput(input: []const u8) ParseError!void {
             return error.InvalidInput;
         }
     }
+}
+
+/// Validate construct input: comma-separated lowercase words, max 5 words, max 20 chars each.
+pub fn validateConstructInput(input: []const u8) ParseError!void {
+    if (input.len == 0) return error.InvalidInput;
+
+    var word_count: u8 = 0;
+    var word_len: u8 = 0;
+
+    for (input) |c| {
+        if (c == ',') {
+            if (word_len == 0) return error.InvalidInput;
+            word_count += 1;
+            if (word_count > 5) return error.InvalidInput;
+            word_len = 0;
+        } else if (c >= 'a' and c <= 'z') {
+            word_len += 1;
+            if (word_len > 20) return error.InvalidInput;
+        } else {
+            return error.InvalidInput;
+        }
+    }
+
+    if (word_len == 0) return error.InvalidInput;
+    word_count += 1;
+    if (word_count > 5) return error.InvalidInput;
 }
 
 test "validateMnemonicInput accepts decimal" {
@@ -208,4 +262,59 @@ test "Category.toString roundtrip" {
     const s = cat.toString();
     const back = try Category.fromString(s);
     try std.testing.expectEqual(cat, back);
+}
+
+test "ConstructTechnique.fromString valid" {
+    const ct = ConstructTechnique.fromString("portmanteau");
+    try std.testing.expectEqual(ConstructTechnique.portmanteau, ct.?);
+}
+
+test "ConstructTechnique.fromString invalid" {
+    try std.testing.expect(ConstructTechnique.fromString("bogus") == null);
+}
+
+test "Strategy.fromString construct bare" {
+    const s = try Strategy.fromString("construct");
+    try std.testing.expect(s == .construct);
+    try std.testing.expectEqual(ConstructTechnique.portmanteau, s.construct);
+}
+
+test "Strategy.fromString construct:compound" {
+    const s = try Strategy.fromString("construct:compound");
+    try std.testing.expect(s == .construct);
+    try std.testing.expectEqual(ConstructTechnique.compound, s.construct);
+}
+
+test "Strategy.fromString construct:invalid" {
+    const result = Strategy.fromString("construct:bogus");
+    try std.testing.expectError(error.InvalidStrategy, result);
+}
+
+test "validateConstructInput accepts comma-separated words" {
+    try validateConstructInput("spell,master");
+}
+
+test "validateConstructInput accepts single word" {
+    try validateConstructInput("quill");
+}
+
+test "validateConstructInput rejects non-alpha" {
+    try std.testing.expectError(error.InvalidInput, validateConstructInput("spell,123"));
+}
+
+test "validateConstructInput rejects too many words" {
+    try std.testing.expectError(error.InvalidInput, validateConstructInput("a,b,c,d,e,f"));
+}
+
+test "validateConstructInput rejects too-long word" {
+    try std.testing.expectError(error.InvalidInput, validateConstructInput("abcdefghijklmnopqrstu"));
+}
+
+test "validateConstructInput rejects empty" {
+    try std.testing.expectError(error.InvalidInput, validateConstructInput(""));
+}
+
+test "GenerateError includes ConstructionFailed" {
+    const err: GenerateError = error.ConstructionFailed;
+    try std.testing.expect(err == error.ConstructionFailed);
 }
