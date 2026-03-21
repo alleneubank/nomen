@@ -186,7 +186,7 @@ The existing `Generator.buf` is `[38]u8`. Construct strategies can produce longe
 - [ ] `zig build test` passes with tests covering all 7 construct techniques
 - [ ] `nomen generate --strategy construct:portmanteau --input "spell,master" --seed 42` produces a deterministic blended word that shares a prefix with "spell" and a suffix with "master"
 - [ ] `nomen generate --strategy construct:compound --input "storm,forge"` produces `stormforge`
-- [ ] `nomen generate --strategy construct:clip --input "spell,champion"` produces `spellon` (first syllable of "spell" = whole word + last syllable of "champion" = "on")
+- [ ] `nomen generate --strategy construct:clip --input "spell,master"` produces `spellter` (first syllable of "spell" = whole word [monosyllabic] + last syllable of "master" = "ter" [from last C→V boundary])
 - [ ] `nomen generate --strategy construct:affix --input "quill" --seed 42` produces a deterministic prefixed or suffixed word
 - [ ] `nomen generate --strategy construct:backform --input "constellation"` produces `constella` (strips `-tion`, the longest matching suffix)
 - [ ] `nomen generate --strategy construct:phonosym --input "sharp" --seed 42` produces a deterministic 4-8 char word using only consonants from the sharp set and vowels
