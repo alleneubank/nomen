@@ -215,6 +215,7 @@ fn runtimeErrorToCode(err: anyerror) []const u8 {
         error.EmptyWordList => "EMPTY_WORD_LIST",
         error.NoDistinctNames => "NO_DISTINCT_NAMES",
         error.ConstructionFailed => "CONSTRUCTION_FAILED",
+        error.InvalidInput => "INVALID_INPUT",
         error.BindFailed => "BIND_FAILED",
         else => "INTERNAL_ERROR",
     };
@@ -225,6 +226,7 @@ fn runtimeErrorToMessage(err: anyerror) []const u8 {
         error.EmptyWordList => "no words available for this category/strategy",
         error.NoDistinctNames => "cannot generate enough phonetically distinct names, reduce count or omit category",
         error.ConstructionFailed => "construction algorithm produced no valid output",
+        error.InvalidInput => "invalid input for strategy",
         error.BindFailed => "failed to bind server to port",
         else => "unexpected error",
     };
