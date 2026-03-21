@@ -96,26 +96,36 @@ fn run(gpa: std.mem.Allocator, stdout: anytype, stderr: anytype, cmd: lib.types.
 
             var strategy = opts.strategy;
             if (opts.input) |input| {
-                // --input is only valid with --strategy mnemonic
-                if (strategy != .mnemonic) {
+                if (strategy == .mnemonic) {
+                    lib.types.validateMnemonicInput(input) catch {
+                        const format = opts.format orelse lib.cli.resolveFormat(null);
+                        try lib.format.formatError(stderr, .{
+                            .code = "INVALID_INPUT",
+                            .message = "mnemonic input must be numeric or hex (e.g. 12345, 0xdeadbeef)",
+                        }, format);
+                        try stderr.flush();
+                        std.process.exit(2);
+                    };
+                    strategy = .{ .mnemonic = input };
+                } else if (strategy == .construct) {
+                    lib.types.validateConstructInput(input) catch {
+                        const format = opts.format orelse lib.cli.resolveFormat(null);
+                        try lib.format.formatError(stderr, .{
+                            .code = "INVALID_INPUT",
+                            .message = "construct input must be comma-separated lowercase words (max 5 words, max 20 chars each)",
+                        }, format);
+                        try stderr.flush();
+                        std.process.exit(2);
+                    };
+                } else {
                     const format = opts.format orelse lib.cli.resolveFormat(null);
                     try lib.format.formatError(stderr, .{
                         .code = "INVALID_INPUT",
-                        .message = "--input is only valid with --strategy mnemonic",
+                        .message = "--input is only valid with --strategy mnemonic or construct",
                     }, format);
                     try stderr.flush();
                     std.process.exit(2);
                 }
-                lib.types.validateMnemonicInput(input) catch {
-                    const format = opts.format orelse lib.cli.resolveFormat(null);
-                    try lib.format.formatError(stderr, .{
-                        .code = "INVALID_INPUT",
-                        .message = "mnemonic input must be numeric or hex (e.g. 12345, 0xdeadbeef)",
-                    }, format);
-                    try stderr.flush();
-                    std.process.exit(2);
-                };
-                strategy = .{ .mnemonic = input };
             } else if (strategy == .mnemonic) {
                 const format = opts.format orelse lib.cli.resolveFormat(null);
                 try lib.format.formatError(stderr, .{
@@ -126,17 +136,45 @@ fn run(gpa: std.mem.Allocator, stdout: anytype, stderr: anytype, cmd: lib.types.
                 std.process.exit(2);
             }
 
-            var gen = lib.Generator.init(opts.seed);
             const format = opts.format orelse lib.cli.resolveFormat(null);
 
-            if (opts.count == 1) {
-                const name = try gen.generate(strategy, opts.category);
-                const names = [_]lib.Name{name};
-                try lib.format.formatNames(stdout, &names, format, opts.fields);
+            if (strategy == .construct) {
+                // Parse comma-separated input words into a buffer
+                var input_buf: [5][]const u8 = undefined;
+                var word_count: usize = 0;
+                if (opts.input) |input| {
+                    var it = std.mem.splitScalar(u8, input, ',');
+                    while (it.next()) |word| {
+                        if (word_count >= 5) break;
+                        input_buf[word_count] = word;
+                        word_count += 1;
+                    }
+                }
+                const input_words = input_buf[0..word_count];
+
+                var construct_eng = lib.ConstructEngine.init(opts.seed);
+
+                if (opts.count == 1) {
+                    const name = try construct_eng.generateConstruct(strategy.construct, opts.category, input_words);
+                    const names = [_]lib.Name{name};
+                    try lib.format.formatNames(stdout, &names, format, opts.fields);
+                } else {
+                    const batch = try construct_eng.generateConstructBatch(gpa, opts.count, strategy.construct, opts.category, input_words);
+                    defer batch.deinit(gpa);
+                    try lib.format.formatNames(stdout, batch.names, format, opts.fields);
+                }
             } else {
-                const batch = try gen.generateBatch(gpa, opts.count, strategy, opts.category);
-                defer batch.deinit(gpa);
-                try lib.format.formatNames(stdout, batch.names, format, opts.fields);
+                var gen = lib.Generator.init(opts.seed);
+
+                if (opts.count == 1) {
+                    const name = try gen.generate(strategy, opts.category);
+                    const names = [_]lib.Name{name};
+                    try lib.format.formatNames(stdout, &names, format, opts.fields);
+                } else {
+                    const batch = try gen.generateBatch(gpa, opts.count, strategy, opts.category);
+                    defer batch.deinit(gpa);
+                    try lib.format.formatNames(stdout, batch.names, format, opts.fields);
+                }
             }
         },
     }
@@ -160,7 +198,7 @@ fn errorToCode(err: lib.types.ParseError) []const u8 {
 fn errorToMessage(err: lib.types.ParseError) []const u8 {
     return switch (err) {
         error.InvalidCategory => "invalid category name, use 'nomen categories' to list",
-        error.InvalidStrategy => "invalid strategy, options: thematic, phrase, phrase:adjective_noun, phrase:noun_noun, phrase:verb_noun, phrase:alliterative, triple, mnemonic",
+        error.InvalidStrategy => "invalid strategy, options: thematic, phrase, phrase:adjective_noun, phrase:noun_noun, phrase:verb_noun, phrase:alliterative, triple, mnemonic, construct, construct:portmanteau, construct:compound, construct:clip, construct:affix, construct:backform, construct:phonosym, construct:acronym",
         error.InvalidFormat => "invalid format, options: json, jsonl, human",
         error.InvalidCount => "count must be a positive integer",
         error.InvalidSeed => "seed must be a non-negative integer",
@@ -176,6 +214,7 @@ fn runtimeErrorToCode(err: anyerror) []const u8 {
     return switch (err) {
         error.EmptyWordList => "EMPTY_WORD_LIST",
         error.NoDistinctNames => "NO_DISTINCT_NAMES",
+        error.ConstructionFailed => "CONSTRUCTION_FAILED",
         error.BindFailed => "BIND_FAILED",
         else => "INTERNAL_ERROR",
     };
@@ -185,6 +224,7 @@ fn runtimeErrorToMessage(err: anyerror) []const u8 {
     return switch (err) {
         error.EmptyWordList => "no words available for this category/strategy",
         error.NoDistinctNames => "cannot generate enough phonetically distinct names, reduce count or omit category",
+        error.ConstructionFailed => "construction algorithm produced no valid output",
         error.BindFailed => "failed to bind server to port",
         else => "unexpected error",
     };

@@ -255,9 +255,9 @@ pub fn writeGenerateHelp(writer: anytype, format: OutputFormat) !void {
                 \\{{"name":"generate","description":"Generate names from themed word lists","flags":[
                 \\{{"name":"--count","short":"-n","type":"integer","default":1,"description":"Number of names"}},
                 \\{{"name":"--category","short":"-c","type":"string","enum":["mountains","rivers","deserts","canyons","islands","passes","moons","raptors","minerals","norse","volcanoes","forests","oceans","storms"],"description":"Word list category"}},
-                \\{{"name":"--strategy","short":"-s","type":"string","enum":["thematic","phrase","phrase:adjective_noun","phrase:noun_noun","phrase:verb_noun","phrase:alliterative","triple","mnemonic"],"default":"thematic","description":"Generation strategy"}},
+                \\{{"name":"--strategy","short":"-s","type":"string","enum":["thematic","phrase","phrase:adjective_noun","phrase:noun_noun","phrase:verb_noun","phrase:alliterative","triple","mnemonic","construct","construct:portmanteau","construct:compound","construct:clip","construct:affix","construct:backform","construct:phonosym","construct:acronym"],"default":"thematic","description":"Generation strategy"}},
                 \\{{"name":"--seed","type":"integer","description":"Seed for deterministic output"}},
-                \\{{"name":"--input","short":"-i","type":"string","description":"Input for mnemonic strategy"}},
+                \\{{"name":"--input","short":"-i","type":"string","description":"Input for mnemonic encoding or construct seed words"}},
                 \\{{"name":"--format","short":"-f","type":"string","enum":["json","jsonl","human"],"description":"Output format"}},
                 \\{{"name":"--fields","type":"string","description":"Comma-separated output fields"}},
                 \\{{"name":"--dry-run","type":"boolean","description":"Validate without generating"}}
@@ -274,9 +274,9 @@ pub fn writeGenerateHelp(writer: anytype, format: OutputFormat) !void {
                 \\Options:
                 \\  --count, -n <N>         Number of names (default: 1)
                 \\  --category, -c <NAME>   Restrict to category
-                \\  --strategy, -s <NAME>   Strategy: thematic, phrase[:pattern], triple, mnemonic (default: thematic)
+                \\  --strategy, -s <NAME>   Strategy: thematic, phrase[:pattern], triple, mnemonic, construct[:technique] (default: thematic)
                 \\  --seed <N>              Seed for deterministic output
-                \\  --input, -i <TEXT>      Input for mnemonic strategy (numeric/hex)
+                \\  --input, -i <TEXT>      Input for mnemonic (numeric/hex) or construct (comma-separated words)
                 \\  --format, -f <FMT>      Output format: json, jsonl, human
                 \\  --json                  Shorthand for --format json
                 \\  --fields <FIELDS>       Comma-separated fields to include
@@ -364,9 +364,9 @@ pub fn writeLlmsManifest(writer: anytype, version_str: []const u8) !void {
         \\      "flags": [
         \\        {{"name": "--count", "type": "integer", "default": 1, "description": "Number of names to generate"}},
         \\        {{"name": "--category", "type": "string", "enum": ["mountains","rivers","deserts","canyons","islands","passes","moons","raptors","minerals","norse","volcanoes","forests","oceans","storms"], "description": "Word list category"}},
-        \\        {{"name": "--strategy", "type": "string", "enum": ["thematic","phrase","phrase:adjective_noun","phrase:noun_noun","phrase:verb_noun","phrase:alliterative","triple","mnemonic"], "default": "thematic", "description": "Generation strategy"}},
+        \\        {{"name": "--strategy", "type": "string", "enum": ["thematic","phrase","phrase:adjective_noun","phrase:noun_noun","phrase:verb_noun","phrase:alliterative","triple","mnemonic","construct","construct:portmanteau","construct:compound","construct:clip","construct:affix","construct:backform","construct:phonosym","construct:acronym"], "default": "thematic", "description": "Generation strategy"}},
         \\        {{"name": "--seed", "type": "integer", "description": "Seed for deterministic output"}},
-        \\        {{"name": "--input", "type": "string", "description": "Input for mnemonic encoding"}},
+        \\        {{"name": "--input", "type": "string", "description": "Input for mnemonic encoding or construct seed words"}},
         \\        {{"name": "--format", "type": "string", "enum": ["json","jsonl","human"], "description": "Output format"}},
         \\        {{"name": "--fields", "type": "string", "description": "Comma-separated output fields"}},
         \\        {{"name": "--dry-run", "type": "boolean", "description": "Validate without generating"}}
@@ -376,7 +376,12 @@ pub fn writeLlmsManifest(writer: anytype, version_str: []const u8) !void {
         \\        {{"command": "nomen generate --count 5 --category rivers", "description": "Five river names"}},
         \\        {{"command": "nomen generate --strategy phrase --format json", "description": "Two-word phrase as JSON"}},
         \\        {{"command": "nomen generate --seed 42 --format json", "description": "Deterministic JSON output"}},
-        \\        {{"command": "nomen generate --strategy mnemonic --input 0xdeadbeef", "description": "Mnemonic encoding"}}
+        \\        {{"command": "nomen generate --strategy mnemonic --input 0xdeadbeef", "description": "Mnemonic encoding"}},
+        \\        {{"command": "nomen generate --strategy construct:portmanteau --input spell,master", "description": "Blend two words into a portmanteau"}},
+        \\        {{"command": "nomen generate --strategy construct:compound --input storm,forge", "description": "Concatenate words into compound"}},
+        \\        {{"command": "nomen generate --strategy construct:phonosym --input sharp --count 5", "description": "Generate sharp-sounding constructed words"}},
+        \\        {{"command": "nomen generate --strategy construct:affix --input quill", "description": "Add prefix or suffix to a word"}},
+        \\        {{"command": "nomen generate --strategy construct:acronym --input spell,practice,app", "description": "Create pronounceable acronym"}}
         \\      ],
         \\      "mutates": false,
         \\      "destructive": false,
@@ -607,4 +612,27 @@ test "serve rejects control chars in format value" {
     const args = [_][]const u8{ "serve", "--format", "jso\x01n" };
     const result = parseArgs(&args);
     try std.testing.expectError(error.ControlCharRejected, result);
+}
+
+test "parse construct strategy" {
+    const args = [_][]const u8{ "generate", "--strategy", "construct:portmanteau", "--input", "spell,master" };
+    const cmd = try parseArgs(&args);
+    switch (cmd) {
+        .generate => |opts| {
+            try std.testing.expect(opts.strategy == .construct);
+            try std.testing.expectEqualStrings("spell,master", opts.input.?);
+        },
+        else => try std.testing.expect(false),
+    }
+}
+
+test "parse bare construct strategy" {
+    const args = [_][]const u8{ "generate", "--strategy", "construct" };
+    const cmd = try parseArgs(&args);
+    switch (cmd) {
+        .generate => |opts| {
+            try std.testing.expect(opts.strategy == .construct);
+        },
+        else => try std.testing.expect(false),
+    }
 }
