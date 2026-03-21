@@ -74,23 +74,80 @@ pub const ConstructEngine = struct {
         const max_attempts = count * 20;
 
         while (i < count and attempts < max_attempts) : (attempts += 1) {
-            // For batch variation (REQ-CON-027): on iterations after the first,
-            // replace word2 with a built-in word for two-word techniques,
-            // or draw a new base word for single-word techniques.
+            // Technique-aware batch variation (REQ-CON-027)
             var varied_words_buf: [5][]const u8 = undefined;
             var varied_words: []const []const u8 = input_words;
-            if (i > 0 and input_words.len >= 2) {
-                // Replace word2 with a random built-in word
+
+            if (i > 0) {
+                const rand = self.prng.random();
                 const list = if (category) |cat| worddata.getWordList(cat) else worddata.curated_nouns;
-                if (list.len > 0) {
-                    const rand = self.prng.random();
-                    varied_words_buf[0] = input_words[0];
-                    varied_words_buf[1] = list[rand.intRangeLessThan(usize, 0, list.len)];
-                    varied_words = varied_words_buf[0..2];
+
+                switch (technique) {
+                    .portmanteau, .compound, .clip => {
+                        // Two-word techniques: replace word2 with a built-in word
+                        if (input_words.len >= 2 and list.len > 0) {
+                            varied_words_buf[0] = input_words[0];
+                            varied_words_buf[1] = list[rand.intRangeLessThan(usize, 0, list.len)];
+                            varied_words = varied_words_buf[0..2];
+                        } else if (input_words.len >= 1 and list.len > 0) {
+                            varied_words_buf[0] = input_words[0];
+                            varied_words_buf[1] = list[rand.intRangeLessThan(usize, 0, list.len)];
+                            varied_words = varied_words_buf[0..2];
+                        }
+                    },
+                    .affix => {
+                        // Different prefix/suffix selected per iteration (PRNG advances naturally)
+                        // If no input, pick a different base word each time
+                        if (input_words.len == 0 and list.len > 0) {
+                            varied_words_buf[0] = list[rand.intRangeLessThan(usize, 0, list.len)];
+                            varied_words = varied_words_buf[0..1];
+                        }
+                    },
+                    .backform => {
+                        // Draw new words from built-in lists for subsequent iterations
+                        if (list.len > 0) {
+                            const mnemonic_list = worddata.mnemonic_all;
+                            var found = false;
+                            var back_attempts: usize = 0;
+                            while (back_attempts < 100) : (back_attempts += 1) {
+                                const w = mnemonic_list[rand.intRangeLessThan(usize, 0, mnemonic_list.len)];
+                                if (w.len >= 6) {
+                                    varied_words_buf[0] = w;
+                                    varied_words = varied_words_buf[0..1];
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (!found) {
+                                varied_words_buf[0] = mnemonic_list[rand.intRangeLessThan(usize, 0, mnemonic_list.len)];
+                                varied_words = varied_words_buf[0..1];
+                            }
+                        }
+                    },
+                    .phonosym => {
+                        // PRNG state varies naturally per iteration
+                    },
+                    .acronym => {
+                        // Substitute individual input words with built-in alternatives
+                        if (input_words.len >= 2 and list.len > 0) {
+                            const replace_idx = rand.intRangeLessThan(usize, 0, input_words.len);
+                            const copy_len = @min(input_words.len, 5);
+                            for (input_words[0..copy_len], 0..) |w, idx| {
+                                varied_words_buf[idx] = w;
+                            }
+                            varied_words_buf[replace_idx] = list[rand.intRangeLessThan(usize, 0, list.len)];
+                            varied_words = varied_words_buf[0..copy_len];
+                        }
+                    },
                 }
             }
 
-            const name = self.generateConstruct(technique, category, varied_words) catch continue;
+            // Propagate InvalidInput immediately (e.g. phonosym with bad mood)
+            // Only catch ConstructionFailed/EmptyWordList for retry
+            const name = self.generateConstruct(technique, category, varied_words) catch |err| {
+                if (err == error.InvalidInput) return err;
+                continue;
+            };
 
             // First-syllable phonetic dedup (REQ-CON-029)
             const new_syl = generator_mod.firstSyllable(name.value);
@@ -217,10 +274,26 @@ pub const ConstructEngine = struct {
             break :blk list[self.prng.random().intRangeLessThan(usize, 0, list.len)];
         };
 
+        // Determine base word tone for tonal coherence (REQ-CON-023/014)
+        // User-supplied words are treated as general tone (compatible with all)
+        const base_tone: Tone = if (input_words.len >= 1) .general else worddata.getTone(base);
+
         const rand = self.prng.random();
         const use_prefix = rand.boolean();
 
         if (use_prefix) {
+            // Find a tone-compatible prefix (try up to 20 times, then accept any)
+            var pick_attempts: usize = 0;
+            while (pick_attempts < 20) : (pick_attempts += 1) {
+                const p = constructdata.prefixes[rand.intRangeLessThan(usize, 0, constructdata.prefixes.len)];
+                if (!Tone.compatible(p.tone, base_tone)) continue;
+                const len = p.value.len + base.len;
+                if (len > self.buf.len) return error.ConstructionFailed;
+                @memcpy(self.buf[0..p.value.len], p.value);
+                @memcpy(self.buf[p.value.len..len], base);
+                return .{ .value = self.buf[0..len], .category = category, .strategy_tag = "construct:affix" };
+            }
+            // Fallback: use any prefix
             const p = constructdata.prefixes[rand.intRangeLessThan(usize, 0, constructdata.prefixes.len)];
             const len = p.value.len + base.len;
             if (len > self.buf.len) return error.ConstructionFailed;
@@ -228,6 +301,18 @@ pub const ConstructEngine = struct {
             @memcpy(self.buf[p.value.len..len], base);
             return .{ .value = self.buf[0..len], .category = category, .strategy_tag = "construct:affix" };
         } else {
+            // Find a tone-compatible suffix (try up to 20 times, then accept any)
+            var pick_attempts: usize = 0;
+            while (pick_attempts < 20) : (pick_attempts += 1) {
+                const s = constructdata.suffixes[rand.intRangeLessThan(usize, 0, constructdata.suffixes.len)];
+                if (!Tone.compatible(s.tone, base_tone)) continue;
+                const len = base.len + s.value.len;
+                if (len > self.buf.len) return error.ConstructionFailed;
+                @memcpy(self.buf[0..base.len], base);
+                @memcpy(self.buf[base.len..len], s.value);
+                return .{ .value = self.buf[0..len], .category = category, .strategy_tag = "construct:affix" };
+            }
+            // Fallback: use any suffix
             const s = constructdata.suffixes[rand.intRangeLessThan(usize, 0, constructdata.suffixes.len)];
             const len = base.len + s.value.len;
             if (len > self.buf.len) return error.ConstructionFailed;
@@ -283,7 +368,6 @@ pub const ConstructEngine = struct {
     // ── phonosym ────────────────────────────────────────────────────────
 
     fn generatePhonosym(self: *ConstructEngine, category: ?Category, input_words: []const []const u8) (GenerateError || types.ParseError)!Name {
-        _ = category;
         const rand = self.prng.random();
 
         const mood: Mood = if (input_words.len >= 1)
@@ -312,7 +396,7 @@ pub const ConstructEngine = struct {
         }
 
         if (pos == 0) return error.ConstructionFailed;
-        return .{ .value = self.buf[0..pos], .category = null, .strategy_tag = "construct:phonosym" };
+        return .{ .value = self.buf[0..pos], .category = category, .strategy_tag = "construct:phonosym" };
     }
 
     // ── acronym ─────────────────────────────────────────────────────────

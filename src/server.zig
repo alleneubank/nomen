@@ -282,12 +282,14 @@ fn respondGenerateError(request: *std.http.Server.Request, err: anyerror) !void 
         error.EmptyWordList => "EMPTY_WORD_LIST",
         error.NoDistinctNames => "NO_DISTINCT_NAMES",
         error.ConstructionFailed => "CONSTRUCTION_FAILED",
+        error.InvalidInput => "INVALID_INPUT",
         else => "INTERNAL_ERROR",
     };
     const msg = switch (err) {
         error.EmptyWordList => "no words available for this category",
         error.NoDistinctNames => "cannot generate enough phonetically distinct names, reduce count",
         error.ConstructionFailed => "construction algorithm produced no valid output",
+        error.InvalidInput => "invalid input for strategy",
         else => "unexpected error",
     };
     var buf: [256]u8 = undefined;
