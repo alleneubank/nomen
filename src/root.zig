@@ -10,6 +10,7 @@ pub const version = "0.1.0";
 pub const types = @import("types.zig");
 pub const worddata = @import("worddata.zig");
 pub const constructdata = @import("constructdata.zig");
+pub const construct = @import("construct.zig");
 pub const generator = @import("generator.zig");
 pub const format = @import("format.zig");
 pub const cli = @import("cli.zig");
@@ -21,6 +22,8 @@ pub const Name = types.Name;
 pub const OutputFormat = types.OutputFormat;
 pub const Generator = generator.Generator;
 pub const BatchResult = generator.BatchResult;
+pub const ConstructEngine = construct.ConstructEngine;
+pub const ConstructBatchResult = construct.ConstructBatchResult;
 
 test {
     std.testing.refAllDecls(@This());
