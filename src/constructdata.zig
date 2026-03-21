@@ -10,7 +10,7 @@ const std = @import("std");
 const worddata = @import("worddata.zig");
 const Tone = worddata.Tone;
 
-// ── Affix types ─────────────────────────────────────────────────────
+// ── Affix types ────────────────────────────────
 
 pub const Affix = struct {
     value: []const u8,
@@ -18,13 +18,13 @@ pub const Affix = struct {
     tone: Tone,
 };
 
-// ── Backform suffixes (inlined) ─────────────────────────────────────
+// ── Backform suffixes (inlined) ───────────────────────────
 
 pub const backform_suffixes = [_][]const u8{
     "ible", "able", "tion", "ment", "ness", "ance", "ence", "ive", "ous", "ity", "ing", "ure",
 };
 
-// ── Comptime helpers ────────────────────────────────────────────────
+// ── Comptime helpers ───────────────────────────────
 
 fn comptimeFindChar(comptime s: []const u8, comptime ch: u8, comptime start: usize) ?usize {
     for (s[start..], start..) |c, i| {
@@ -51,13 +51,15 @@ fn comptimeParseTone(comptime s: []const u8) Tone {
     @compileError("unknown tone: " ++ s);
 }
 
-// ── Affix parsing ───────────────────────────────────────────────────
+// ── Affix parsing ────────────────────────────────
 
 const affix_raw = @embedFile("data/affixes.tsv");
 
 fn comptimeParseAffixLine(comptime line: []const u8) Affix {
-    const tab1 = comptimeFindChar(line, '\t', 0) orelse @compileError("missing first tab in affix line: " ++ line);
-    const tab2 = comptimeFindChar(line, '\t', tab1 + 1) orelse @compileError("missing second tab in affix line: " ++ line);
+    const tab1 = comptimeFindChar(line, '\t', 0) orelse
+        @compileError("missing first tab in affix line: " ++ line);
+    const tab2 = comptimeFindChar(line, '\t', tab1 + 1) orelse
+        @compileError("missing second tab in affix line: " ++ line);
 
     const value = line[0..tab1];
     const type_str = line[tab1 + 1 .. tab2];
@@ -108,7 +110,7 @@ fn comptimeParseAllAffixes(comptime data: []const u8) [comptimeCountLines(data)]
 /// All affixes parsed from data/affixes.tsv at comptime.
 pub const all_affixes: []const Affix = &comptimeParseAllAffixes(affix_raw);
 
-// ── Affix filtered views ────────────────────────────────────────────
+// ── Affix filtered views ─────────────────────────────
 
 fn comptimeCountAffixMatching(comptime affixes: []const Affix, comptime pred: fn (Affix) bool) comptime_int {
     var count: comptime_int = 0;
@@ -148,7 +150,7 @@ pub const prefixes: []const Affix = &comptimeExtractAffixValues(all_affixes, isP
 /// All suffixes from affixes.tsv.
 pub const suffixes: []const Affix = &comptimeExtractAffixValues(all_affixes, isSuffix);
 
-// ── Phoneme parsing ─────────────────────────────────────────────────
+// ── Phoneme parsing ───────────────────────────────
 
 const phoneme_raw = @embedFile("data/phonemes.tsv");
 
@@ -199,8 +201,10 @@ const PhonemeLine = struct {
 };
 
 fn comptimeParsePhonemeLine(comptime line: []const u8) PhonemeLine {
-    const tab1 = comptimeFindChar(line, '\t', 0) orelse @compileError("missing first tab in phoneme line: " ++ line);
-    const tab2 = comptimeFindChar(line, '\t', tab1 + 1) orelse @compileError("missing second tab in phoneme line: " ++ line);
+    const tab1 = comptimeFindChar(line, '\t', 0) orelse
+        @compileError("missing first tab in phoneme line: " ++ line);
+    const tab2 = comptimeFindChar(line, '\t', tab1 + 1) orelse
+        @compileError("missing second tab in phoneme line: " ++ line);
 
     const mood = line[0..tab1];
     const class = line[tab1 + 1 .. tab2];
@@ -246,7 +250,7 @@ fn comptimeParseAllPhonemes(comptime data: []const u8) [comptimeCountLines(data)
 
 const all_phonemes: []const PhonemeLine = &comptimeParseAllPhonemes(phoneme_raw);
 
-// ── Phoneme lookup helpers ──────────────────────────────────────────
+// ── Phoneme lookup helpers ─────────────────────────────
 
 fn comptimeFindPhonemes(comptime mood: []const u8, comptime class: []const u8) []const []const u8 {
     for (all_phonemes) |p| {
@@ -276,7 +280,7 @@ pub const rhythmic_consonants: []const []const u8 = comptimeFindPhonemes("rhythm
 /// Rhythmic mood vowels.
 pub const rhythmic_vowels: []const []const u8 = comptimeFindPhonemes("rhythmic", "vowels");
 
-// ── Tests ───────────────────────────────────────────────────────────
+// ── Tests ──────────────────────────────────
 
 test "all_affixes has at least 8 prefixes and 8 suffixes" {
     try std.testing.expect(prefixes.len >= 8);

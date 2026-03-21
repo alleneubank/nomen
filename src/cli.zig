@@ -100,7 +100,7 @@ fn parseServeArgs(args: []const []const u8) ParseError!CliCommand {
 }
 
 fn parseGenerateArgs(args: []const []const u8) ParseError!CliCommand {
-    var opts = GenerateOptions{};
+    var opts: GenerateOptions = .{};
     var saw_help = false;
     var i: usize = 0;
 
@@ -546,7 +546,7 @@ test "parse --json shorthand" {
 }
 
 test "parse no args shows help" {
-    const args = [_][]const u8{};
+    const args: [0][]const u8 = .{};
     const cmd = try parseArgs(&args);
     try std.testing.expect(cmd == .help);
 }

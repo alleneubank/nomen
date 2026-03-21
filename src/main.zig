@@ -112,7 +112,8 @@ fn run(gpa: std.mem.Allocator, stdout: anytype, stderr: anytype, cmd: lib.types.
                         const format = opts.format orelse lib.cli.resolveFormat(null);
                         try lib.format.formatError(stderr, .{
                             .code = "INVALID_INPUT",
-                            .message = "construct input must be comma-separated lowercase words (max 5 words, max 20 chars each)",
+                            .message = "construct input must be comma-separated " ++
+                                "lowercase words (max 5 words, max 20 chars each)",
                         }, format);
                         try stderr.flush();
                         std.process.exit(2);
@@ -159,7 +160,13 @@ fn run(gpa: std.mem.Allocator, stdout: anytype, stderr: anytype, cmd: lib.types.
                     const names = [_]lib.Name{name};
                     try lib.format.formatNames(stdout, &names, format, opts.fields);
                 } else {
-                    const batch = try construct_eng.generateConstructBatch(gpa, opts.count, strategy.construct, opts.category, input_words);
+                    const batch = try construct_eng.generateConstructBatch(
+                        gpa,
+                        opts.count,
+                        strategy.construct,
+                        opts.category,
+                        input_words,
+                    );
                     defer batch.deinit(gpa);
                     try lib.format.formatNames(stdout, batch.names, format, opts.fields);
                 }
@@ -198,7 +205,12 @@ fn errorToCode(err: lib.types.ParseError) []const u8 {
 fn errorToMessage(err: lib.types.ParseError) []const u8 {
     return switch (err) {
         error.InvalidCategory => "invalid category name, use 'nomen categories' to list",
-        error.InvalidStrategy => "invalid strategy, options: thematic, phrase, phrase:adjective_noun, phrase:noun_noun, phrase:verb_noun, phrase:alliterative, triple, mnemonic, construct, construct:portmanteau, construct:compound, construct:clip, construct:affix, construct:backform, construct:phonosym, construct:acronym",
+        error.InvalidStrategy => "invalid strategy, options: thematic, phrase, " ++
+            "phrase:adjective_noun, phrase:noun_noun, phrase:verb_noun, " ++
+            "phrase:alliterative, triple, mnemonic, construct, " ++
+            "construct:portmanteau, construct:compound, construct:clip, " ++
+            "construct:affix, construct:backform, construct:phonosym, " ++
+            "construct:acronym",
         error.InvalidFormat => "invalid format, options: json, jsonl, human",
         error.InvalidCount => "count must be a positive integer",
         error.InvalidSeed => "seed must be a non-negative integer",

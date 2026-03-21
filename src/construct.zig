@@ -178,9 +178,13 @@ pub const ConstructEngine = struct {
         return .{ .names = names, .values = values };
     }
 
-    // ── resolveTwo ──────────────────────────────────────────────────────
+    // ── resolveTwo ───────────────────────────────
 
-    fn resolveTwo(self: *ConstructEngine, category: ?Category, input_words: []const []const u8) GenerateError![2][]const u8 {
+    fn resolveTwo(
+        self: *ConstructEngine,
+        category: ?Category,
+        input_words: []const []const u8,
+    ) GenerateError![2][]const u8 {
         const list = if (category) |cat| worddata.getWordList(cat) else worddata.curated_nouns;
         if (list.len == 0) return error.EmptyWordList;
         const rand = self.prng.random();
@@ -191,9 +195,13 @@ pub const ConstructEngine = struct {
         return result;
     }
 
-    // ── compound ────────────────────────────────────────────────────────
+    // ── compound ────────────────────────────────
 
-    fn generateCompound(self: *ConstructEngine, category: ?Category, input_words: []const []const u8) GenerateError!Name {
+    fn generateCompound(
+        self: *ConstructEngine,
+        category: ?Category,
+        input_words: []const []const u8,
+    ) GenerateError!Name {
         const words = try self.resolveTwo(category, input_words);
         const len = words[0].len + words[1].len;
         if (len > self.buf.len or len == 0) return error.ConstructionFailed;
@@ -208,9 +216,13 @@ pub const ConstructEngine = struct {
         };
     }
 
-    // ── portmanteau ─────────────────────────────────────────────────────
+    // ── portmanteau ───────────────────────────────
 
-    fn generatePortmanteau(self: *ConstructEngine, category: ?Category, input_words: []const []const u8) GenerateError!Name {
+    fn generatePortmanteau(
+        self: *ConstructEngine,
+        category: ?Category,
+        input_words: []const []const u8,
+    ) GenerateError!Name {
         const words = try self.resolveTwo(category, input_words);
         const w1 = words[0];
         const w2 = words[1];
@@ -235,7 +247,7 @@ pub const ConstructEngine = struct {
         }
 
         // Fallback: cut w1 at rightmost vowel-consonant boundary, append w2 from first vowel
-        const cut = rightmostVCBoundary(w1);
+        const cut = rightmostVcBoundary(w1);
         const w2_start = firstVowelIndex(w2);
 
         const prefix = w1[0..cut];
@@ -248,7 +260,7 @@ pub const ConstructEngine = struct {
         return .{ .value = self.buf[0..len], .category = category, .strategy_tag = "construct:portmanteau" };
     }
 
-    // ── clip ────────────────────────────────────────────────────────────
+    // ── clip ─────────────────────────────────
 
     fn generateClip(self: *ConstructEngine, category: ?Category, input_words: []const []const u8) GenerateError!Name {
         const words = try self.resolveTwo(category, input_words);
@@ -263,7 +275,7 @@ pub const ConstructEngine = struct {
         return .{ .value = self.buf[0..len], .category = category, .strategy_tag = "construct:clip" };
     }
 
-    // ── affix ───────────────────────────────────────────────────────────
+    // ── affix ─────────────────────────────────
 
     fn generateAffix(self: *ConstructEngine, category: ?Category, input_words: []const []const u8) GenerateError!Name {
         const base = if (input_words.len >= 1)
@@ -282,49 +294,69 @@ pub const ConstructEngine = struct {
         const use_prefix = rand.boolean();
 
         if (use_prefix) {
-            // Find a tone-compatible prefix (try up to 20 times, then accept any)
-            var pick_attempts: usize = 0;
-            while (pick_attempts < 20) : (pick_attempts += 1) {
-                const p = constructdata.prefixes[rand.intRangeLessThan(usize, 0, constructdata.prefixes.len)];
+            // Count tone-compatible prefixes
+            var compat_count: usize = 0;
+            for (constructdata.prefixes) |p| {
+                if (Tone.compatible(p.tone, base_tone))
+                    compat_count += 1;
+            }
+            if (compat_count == 0) return error.ConstructionFailed;
+            // Pick nth compatible prefix
+            var pick = rand.intRangeLessThan(usize, 0, compat_count);
+            for (constructdata.prefixes) |p| {
                 if (!Tone.compatible(p.tone, base_tone)) continue;
-                const len = p.value.len + base.len;
-                if (len > self.buf.len) return error.ConstructionFailed;
-                @memcpy(self.buf[0..p.value.len], p.value);
-                @memcpy(self.buf[p.value.len..len], base);
-                return .{ .value = self.buf[0..len], .category = category, .strategy_tag = "construct:affix" };
+                if (pick == 0) {
+                    const len = p.value.len + base.len;
+                    if (len > self.buf.len)
+                        return error.ConstructionFailed;
+                    @memcpy(self.buf[0..p.value.len], p.value);
+                    @memcpy(self.buf[p.value.len..len], base);
+                    return .{
+                        .value = self.buf[0..len],
+                        .category = category,
+                        .strategy_tag = "construct:affix",
+                    };
+                }
+                pick -= 1;
             }
-            // Fallback: use any prefix
-            const p = constructdata.prefixes[rand.intRangeLessThan(usize, 0, constructdata.prefixes.len)];
-            const len = p.value.len + base.len;
-            if (len > self.buf.len) return error.ConstructionFailed;
-            @memcpy(self.buf[0..p.value.len], p.value);
-            @memcpy(self.buf[p.value.len..len], base);
-            return .{ .value = self.buf[0..len], .category = category, .strategy_tag = "construct:affix" };
+            return error.ConstructionFailed;
         } else {
-            // Find a tone-compatible suffix (try up to 20 times, then accept any)
-            var pick_attempts: usize = 0;
-            while (pick_attempts < 20) : (pick_attempts += 1) {
-                const s = constructdata.suffixes[rand.intRangeLessThan(usize, 0, constructdata.suffixes.len)];
-                if (!Tone.compatible(s.tone, base_tone)) continue;
-                const len = base.len + s.value.len;
-                if (len > self.buf.len) return error.ConstructionFailed;
-                @memcpy(self.buf[0..base.len], base);
-                @memcpy(self.buf[base.len..len], s.value);
-                return .{ .value = self.buf[0..len], .category = category, .strategy_tag = "construct:affix" };
+            // Count tone-compatible suffixes
+            var compat_count: usize = 0;
+            for (constructdata.suffixes) |s| {
+                if (Tone.compatible(s.tone, base_tone))
+                    compat_count += 1;
             }
-            // Fallback: use any suffix
-            const s = constructdata.suffixes[rand.intRangeLessThan(usize, 0, constructdata.suffixes.len)];
-            const len = base.len + s.value.len;
-            if (len > self.buf.len) return error.ConstructionFailed;
-            @memcpy(self.buf[0..base.len], base);
-            @memcpy(self.buf[base.len..len], s.value);
-            return .{ .value = self.buf[0..len], .category = category, .strategy_tag = "construct:affix" };
+            if (compat_count == 0) return error.ConstructionFailed;
+            // Pick nth compatible suffix
+            var pick = rand.intRangeLessThan(usize, 0, compat_count);
+            for (constructdata.suffixes) |s| {
+                if (!Tone.compatible(s.tone, base_tone)) continue;
+                if (pick == 0) {
+                    const len = base.len + s.value.len;
+                    if (len > self.buf.len)
+                        return error.ConstructionFailed;
+                    @memcpy(self.buf[0..base.len], base);
+                    @memcpy(self.buf[base.len..len], s.value);
+                    return .{
+                        .value = self.buf[0..len],
+                        .category = category,
+                        .strategy_tag = "construct:affix",
+                    };
+                }
+                pick -= 1;
+            }
+            return error.ConstructionFailed;
         }
     }
 
-    // ── backform ────────────────────────────────────────────────────────
+    // ── backform ────────────────────────────────
 
-    fn generateBackform(self: *ConstructEngine, category: ?Category, input_words: []const []const u8) GenerateError!Name {
+    fn generateBackform(
+        self: *ConstructEngine,
+        category: ?Category,
+        input_words: []const []const u8,
+    ) GenerateError!Name {
         const word = if (input_words.len >= 1)
             input_words[0]
         else blk: {
@@ -347,10 +379,18 @@ pub const ConstructEngine = struct {
                     // Too short, use first 3 chars
                     const safe_len = @min(3, word.len);
                     @memcpy(self.buf[0..safe_len], word[0..safe_len]);
-                    return .{ .value = self.buf[0..safe_len], .category = category, .strategy_tag = "construct:backform" };
+                    return .{
+                        .value = self.buf[0..safe_len],
+                        .category = category,
+                        .strategy_tag = "construct:backform",
+                    };
                 }
                 @memcpy(self.buf[0..result_len], word[0..result_len]);
-                return .{ .value = self.buf[0..result_len], .category = category, .strategy_tag = "construct:backform" };
+                return .{
+                    .value = self.buf[0..result_len],
+                    .category = category,
+                    .strategy_tag = "construct:backform",
+                };
             }
         }
 
@@ -365,9 +405,13 @@ pub const ConstructEngine = struct {
         return .{ .value = self.buf[0..cut], .category = category, .strategy_tag = "construct:backform" };
     }
 
-    // ── phonosym ────────────────────────────────────────────────────────
+    // ── phonosym ────────────────────────────────
 
-    fn generatePhonosym(self: *ConstructEngine, category: ?Category, input_words: []const []const u8) (GenerateError || types.ParseError)!Name {
+    fn generatePhonosym(
+        self: *ConstructEngine,
+        category: ?Category,
+        input_words: []const []const u8,
+    ) (GenerateError || types.ParseError)!Name {
         const rand = self.prng.random();
 
         const mood: Mood = if (input_words.len >= 1)
@@ -379,29 +423,71 @@ pub const ConstructEngine = struct {
         const vowels = getMoodVowels(mood);
         if (consonants.len == 0 or vowels.len == 0) return error.ConstructionFailed;
 
-        // Pick a random template (4-8 chars)
-        const template_idx = rand.intRangeLessThan(usize, 0, templates.len);
-        const template = templates[template_idx];
-
-        var pos: usize = 0;
-        for (template) |is_consonant| {
-            const phoneme = if (is_consonant)
-                consonants[rand.intRangeLessThan(usize, 0, consonants.len)]
+        // Try templates until output is 4-8 chars (REQ-CON-025).
+        // Multi-char phonemes can expand slots, so retry with
+        // progressively shorter templates if output exceeds 8.
+        var phono_attempts: usize = 0;
+        while (phono_attempts < 20) : (phono_attempts += 1) {
+            // Bias toward shorter templates on retries
+            const max_tpl = if (phono_attempts < 5)
+                templates.len
+            else if (phono_attempts < 10)
+                @min(3, templates.len)
             else
-                vowels[rand.intRangeLessThan(usize, 0, vowels.len)];
+                @min(2, templates.len);
+            const tpl_idx = rand.intRangeLessThan(
+                usize,
+                0,
+                max_tpl,
+            );
+            const template = templates[tpl_idx];
 
-            if (pos + phoneme.len > self.buf.len) return error.ConstructionFailed;
-            @memcpy(self.buf[pos .. pos + phoneme.len], phoneme);
-            pos += phoneme.len;
+            var pos: usize = 0;
+            for (template) |is_consonant| {
+                const phoneme = if (is_consonant)
+                    consonants[
+                        rand.intRangeLessThan(
+                            usize,
+                            0,
+                            consonants.len,
+                        )
+                    ]
+                else
+                    vowels[
+                        rand.intRangeLessThan(
+                            usize,
+                            0,
+                            vowels.len,
+                        )
+                    ];
+
+                if (pos + phoneme.len > self.buf.len) break;
+                @memcpy(
+                    self.buf[pos .. pos + phoneme.len],
+                    phoneme,
+                );
+                pos += phoneme.len;
+            }
+
+            if (pos >= 4 and pos <= 8) {
+                return .{
+                    .value = self.buf[0..pos],
+                    .category = category,
+                    .strategy_tag = "construct:phonosym",
+                };
+            }
         }
 
-        if (pos == 0) return error.ConstructionFailed;
-        return .{ .value = self.buf[0..pos], .category = category, .strategy_tag = "construct:phonosym" };
+        return error.ConstructionFailed;
     }
 
-    // ── acronym ─────────────────────────────────────────────────────────
+    // ── acronym ────────────────────────────────
 
-    fn generateAcronym(self: *ConstructEngine, category: ?Category, input_words: []const []const u8) GenerateError!Name {
+    fn generateAcronym(
+        self: *ConstructEngine,
+        category: ?Category,
+        input_words: []const []const u8,
+    ) GenerateError!Name {
         const rand = self.prng.random();
 
         // Resolve words: use input or pick from built-in lists
@@ -486,7 +572,7 @@ pub const ConstructEngine = struct {
     }
 };
 
-// ── Mood helpers (phonosym) ─────────────────────────────────────────
+// ── Mood helpers (phonosym) ────────────────────────────
 
 const Mood = enum { sharp, soft, rhythmic };
 
@@ -523,7 +609,7 @@ const templates = [_][]const bool{
     &.{ true, false, true, false, true, false, true, false }, // 8: CVCVCVCV
 };
 
-// ── Shared helpers ──────────────────────────────────────────────────
+// ── Shared helpers ───────────────────────────────
 
 fn isVowel(c: u8) bool {
     return c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u' or c == 'y';
@@ -531,7 +617,7 @@ fn isVowel(c: u8) bool {
 
 /// Find the rightmost vowel-to-consonant boundary in a word.
 /// Returns the index after the vowel (i.e., where to cut).
-fn rightmostVCBoundary(word: []const u8) usize {
+fn rightmostVcBoundary(word: []const u8) usize {
     if (word.len <= 1) return word.len;
     var i = word.len - 1;
     while (i > 0) : (i -= 1) {
@@ -624,7 +710,7 @@ fn isPronounceable(s: []const u8) bool {
     return has_vowel;
 }
 
-// ── Tests ───────────────────────────────────────────────────────────
+// ── Tests ──────────────────────────────────
 
 test "compound concatenates two words" {
     var eng = ConstructEngine.init(42);
@@ -687,7 +773,10 @@ test "affix attaches prefix or suffix" {
     }
     if (!found) {
         for (constructdata.suffixes) |s| {
-            if (std.mem.endsWith(u8, value, s.value) and std.mem.eql(u8, value[0 .. value.len - s.value.len], "quill")) {
+            const base = value[0 .. value.len - s.value.len];
+            if (std.mem.endsWith(u8, value, s.value) and
+                std.mem.eql(u8, base, "quill"))
+            {
                 found = true;
                 break;
             }
@@ -723,7 +812,7 @@ test "phonosym sharp produces hard consonants" {
     var eng = ConstructEngine.init(42);
     const name = try eng.generateConstruct(.phonosym, null, &.{"sharp"});
     // Templates have 4-8 slots; phonemes are 1-2 chars each, so output is 4-16 chars
-    try std.testing.expect(name.value.len >= 4 and name.value.len <= 16);
+    try std.testing.expect(name.value.len >= 4 and name.value.len <= 8);
     try std.testing.expectEqualStrings("construct:phonosym", name.strategy_tag);
     // Verify only sharp consonants and vowels
     for (name.value) |c| {
@@ -740,7 +829,7 @@ test "phonosym soft produces soft consonants" {
     var eng = ConstructEngine.init(42);
     const name = try eng.generateConstruct(.phonosym, null, &.{"soft"});
     // Templates have 4-8 slots; phonemes are 1-2 chars each, so output is 4-16 chars
-    try std.testing.expect(name.value.len >= 4 and name.value.len <= 16);
+    try std.testing.expect(name.value.len >= 4 and name.value.len <= 8);
     for (name.value) |c| {
         if (!isVowel(c)) {
             const valid = c == 'm' or c == 'l' or c == 'n' or c == 's' or c == 'w' or

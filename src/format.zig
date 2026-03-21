@@ -71,7 +71,11 @@ fn formatHuman(writer: anytype, names: []const Name) !void {
 pub fn formatDryRun(writer: anytype, format: OutputFormat) !void {
     switch (format) {
         .json, .jsonl => {
-            try writer.print("{{\"dry_run\":true,\"valid\":true,\"message\":\"inputs valid, no names generated\"}}\n", .{});
+            try writer.print(
+                "{{\"dry_run\":true,\"valid\":true," ++
+                    "\"message\":\"inputs valid, no names generated\"}}\n",
+                .{},
+            );
         },
         .human => {
             try writer.print("dry-run: inputs valid, no names generated\n", .{});

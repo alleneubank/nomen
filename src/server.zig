@@ -7,6 +7,7 @@ const Name = types.Name;
 const Category = types.Category;
 const Strategy = types.Strategy;
 
+const construct_mod = @import("construct.zig");
 const log = std.log.scoped(.server);
 
 const json_header = [_]std.http.Header{.{ .name = "content-type", .value = "application/json" }};
@@ -98,7 +99,7 @@ const QueryParams = struct {
 };
 
 fn parseQueryParams(target: []const u8) QueryParams {
-    var result = QueryParams{};
+    var result: QueryParams = .{};
 
     const qi = std.mem.indexOf(u8, target, "?") orelse return result;
     const query = target[qi + 1 ..];
@@ -138,7 +139,13 @@ fn parseQueryParams(target: []const u8) QueryParams {
         } else if (std.mem.eql(u8, key, "strategy")) {
             result.strategy = Strategy.fromString(val) catch {
                 result.err_code = "INVALID_STRATEGY";
-                result.err_msg = "invalid strategy, options: thematic, phrase, phrase:adjective_noun, phrase:noun_noun, phrase:verb_noun, phrase:alliterative, triple, mnemonic, construct, construct:portmanteau, construct:compound, construct:clip, construct:affix, construct:backform, construct:phonosym, construct:acronym";
+                result.err_msg =
+                    "invalid strategy, options: thematic, phrase, " ++
+                    "phrase:adjective_noun, phrase:noun_noun, phrase:verb_noun, " ++
+                    "phrase:alliterative, triple, mnemonic, construct, " ++
+                    "construct:portmanteau, construct:compound, construct:clip, " ++
+                    "construct:affix, construct:backform, construct:phonosym, " ++
+                    "construct:acronym";
                 return result;
             };
             explicit_strategy = true;
@@ -228,11 +235,15 @@ fn handleGenerate(allocator: std.mem.Allocator, request: *std.http.Server.Reques
             }
         }
 
-        const construct_mod = @import("construct.zig");
         var construct_eng = construct_mod.ConstructEngine.init(params.seed);
 
         if (params.count == 1) {
-            const name = construct_eng.generateConstruct(params.strategy.construct, params.category, input_words_buf[0..input_word_count]) catch |err| {
+            const input_words = input_words_buf[0..input_word_count];
+            const name = construct_eng.generateConstruct(
+                params.strategy.construct,
+                params.category,
+                input_words,
+            ) catch |err| {
                 return respondGenerateError(request, err);
             };
             var body_buf: [1024]u8 = undefined;
@@ -241,7 +252,14 @@ fn handleGenerate(allocator: std.mem.Allocator, request: *std.http.Server.Reques
             try format_mod.formatNames(fbs.writer(), &names, .json, params.fields);
             try request.respond(fbs.getWritten(), .{ .extra_headers = &json_header });
         } else {
-            const batch = construct_eng.generateConstructBatch(allocator, params.count, params.strategy.construct, params.category, input_words_buf[0..input_word_count]) catch |err| {
+            const input_words = input_words_buf[0..input_word_count];
+            const batch = construct_eng.generateConstructBatch(
+                allocator,
+                params.count,
+                params.strategy.construct,
+                params.category,
+                input_words,
+            ) catch |err| {
                 return respondGenerateError(request, err);
             };
             defer batch.deinit(allocator);
