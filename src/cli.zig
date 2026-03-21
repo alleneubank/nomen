@@ -222,10 +222,12 @@ pub fn resolveFormat(explicit: ?OutputFormat) OutputFormat {
 pub fn writeHelp(writer: anytype, format: OutputFormat) !void {
     switch (format) {
         .json, .jsonl => {
-            try writer.print(
-                \\{{"name":"nomen","description":"Categorical name generator","commands":["generate","categories","serve"],"flags":["--help","--version","--llms"]}}
-                \\
-            , .{});
+            try writer.writeAll(
+                "{\"name\":\"nomen\"," ++
+                    "\"description\":\"Categorical name generator\"," ++
+                    "\"commands\":[\"generate\",\"categories\",\"serve\"]," ++
+                    "\"flags\":[\"--help\",\"--version\",\"--llms\"]}\n",
+            );
         },
         .human => {
             try writer.print(
@@ -251,41 +253,92 @@ pub fn writeHelp(writer: anytype, format: OutputFormat) !void {
 pub fn writeGenerateHelp(writer: anytype, format: OutputFormat) !void {
     switch (format) {
         .json, .jsonl => {
-            try writer.print(
-                \\{{"name":"generate","description":"Generate names from themed word lists","flags":[
-                \\{{"name":"--count","short":"-n","type":"integer","default":1,"description":"Number of names"}},
-                \\{{"name":"--category","short":"-c","type":"string","enum":["mountains","rivers","deserts","canyons","islands","passes","moons","raptors","minerals","norse","volcanoes","forests","oceans","storms"],"description":"Word list category"}},
-                \\{{"name":"--strategy","short":"-s","type":"string","enum":["thematic","phrase","phrase:adjective_noun","phrase:noun_noun","phrase:verb_noun","phrase:alliterative","triple","mnemonic","construct","construct:portmanteau","construct:compound","construct:clip","construct:affix","construct:backform","construct:phonosym","construct:acronym"],"default":"thematic","description":"Generation strategy"}},
-                \\{{"name":"--seed","type":"integer","description":"Seed for deterministic output"}},
-                \\{{"name":"--input","short":"-i","type":"string","description":"Input for mnemonic encoding or construct seed words"}},
-                \\{{"name":"--format","short":"-f","type":"string","enum":["json","jsonl","human"],"description":"Output format"}},
-                \\{{"name":"--fields","type":"string","description":"Comma-separated output fields"}},
-                \\{{"name":"--dry-run","type":"boolean","description":"Validate without generating"}}
-                \\]}}
-                \\
-            , .{});
+            try writer.writeAll(
+                "{\"name\":\"generate\"," ++
+                    "\"description\":\"Generate names from themed word lists\"," ++
+                    "\"flags\":[\n" ++
+                    "{\"name\":\"--count\",\"short\":\"-n\"," ++
+                    "\"type\":\"integer\",\"default\":1," ++
+                    "\"description\":\"Number of names\"},\n" ++
+                    "{\"name\":\"--category\",\"short\":\"-c\"," ++
+                    "\"type\":\"string\"," ++
+                    "\"enum\":[\"mountains\",\"rivers\",\"deserts\"," ++
+                    "\"canyons\",\"islands\",\"passes\",\"moons\"," ++
+                    "\"raptors\",\"minerals\",\"norse\"," ++
+                    "\"volcanoes\",\"forests\",\"oceans\"," ++
+                    "\"storms\"]," ++
+                    "\"description\":\"Word list category\"},\n" ++
+                    "{\"name\":\"--strategy\",\"short\":\"-s\"," ++
+                    "\"type\":\"string\"," ++
+                    "\"enum\":[\"thematic\",\"phrase\"," ++
+                    "\"phrase:adjective_noun\"," ++
+                    "\"phrase:noun_noun\",\"phrase:verb_noun\"," ++
+                    "\"phrase:alliterative\",\"triple\"," ++
+                    "\"mnemonic\",\"construct\"," ++
+                    "\"construct:portmanteau\"," ++
+                    "\"construct:compound\",\"construct:clip\"," ++
+                    "\"construct:affix\"," ++
+                    "\"construct:backform\"," ++
+                    "\"construct:phonosym\"," ++
+                    "\"construct:acronym\"]," ++
+                    "\"default\":\"thematic\"," ++
+                    "\"description\":\"Generation strategy\"},\n" ++
+                    "{\"name\":\"--seed\",\"type\":\"integer\"," ++
+                    "\"description\":" ++
+                    "\"Seed for deterministic output\"},\n" ++
+                    "{\"name\":\"--input\",\"short\":\"-i\"," ++
+                    "\"type\":\"string\",\"description\":" ++
+                    "\"Input for mnemonic encoding" ++
+                    " or construct seed words\"},\n" ++
+                    "{\"name\":\"--format\",\"short\":\"-f\"," ++
+                    "\"type\":\"string\"," ++
+                    "\"enum\":[\"json\",\"jsonl\",\"human\"]," ++
+                    "\"description\":\"Output format\"},\n" ++
+                    "{\"name\":\"--fields\",\"type\":\"string\"," ++
+                    "\"description\":" ++
+                    "\"Comma-separated output fields\"},\n" ++
+                    "{\"name\":\"--dry-run\"," ++
+                    "\"type\":\"boolean\",\"description\":" ++
+                    "\"Validate without generating\"}\n" ++
+                    "]}\n",
+            );
         },
         .human => {
-            try writer.print(
-                \\nomen generate — generate names
-                \\
-                \\Usage: nomen generate [options]
-                \\
-                \\Options:
-                \\  --count, -n <N>         Number of names (default: 1)
-                \\  --category, -c <NAME>   Restrict to category
-                \\  --strategy, -s <NAME>   Strategy: thematic, phrase[:pattern], triple, mnemonic, construct[:technique] (default: thematic)
-                \\  --seed <N>              Seed for deterministic output
-                \\  --input, -i <TEXT>      Input for mnemonic (numeric/hex) or construct (comma-separated words)
-                \\  --format, -f <FMT>      Output format: json, jsonl, human
-                \\  --json                  Shorthand for --format json
-                \\  --fields <FIELDS>       Comma-separated fields to include
-                \\  --dry-run               Validate inputs without generating
-                \\  --help, -h              Show this help
-                \\
-                \\Categories: mountains, rivers, deserts, canyons, islands, passes, moons, raptors, minerals, norse, volcanoes, forests, oceans, storms
-                \\
-            , .{});
+            try writer.writeAll(
+                "nomen generate — generate names\n" ++
+                    "\n" ++
+                    "Usage: nomen generate [options]\n" ++
+                    "\n" ++
+                    "Options:\n" ++
+                    "  --count, -n <N>         " ++
+                    "Number of names (default: 1)\n" ++
+                    "  --category, -c <NAME>   " ++
+                    "Restrict to category\n" ++
+                    "  --strategy, -s <NAME>   " ++
+                    "Strategy: thematic, phrase[:pattern], " ++
+                    "triple, mnemonic, " ++
+                    "construct[:technique] (default: thematic)\n" ++
+                    "  --seed <N>              " ++
+                    "Seed for deterministic output\n" ++
+                    "  --input, -i <TEXT>      " ++
+                    "Input for mnemonic (numeric/hex) " ++
+                    "or construct (comma-separated words)\n" ++
+                    "  --format, -f <FMT>      " ++
+                    "Output format: json, jsonl, human\n" ++
+                    "  --json                  " ++
+                    "Shorthand for --format json\n" ++
+                    "  --fields <FIELDS>       " ++
+                    "Comma-separated fields to include\n" ++
+                    "  --dry-run               " ++
+                    "Validate inputs without generating\n" ++
+                    "  --help, -h              " ++
+                    "Show this help\n" ++
+                    "\n" ++
+                    "Categories: mountains, rivers, deserts, " ++
+                    "canyons, islands, passes, moons, raptors, " ++
+                    "minerals, norse, volcanoes, forests, " ++
+                    "oceans, storms\n",
+            );
         },
     }
 }
@@ -293,26 +346,37 @@ pub fn writeGenerateHelp(writer: anytype, format: OutputFormat) !void {
 pub fn writeCategoriesHelp(writer: anytype, format: OutputFormat) !void {
     switch (format) {
         .json, .jsonl => {
-            try writer.print(
-                \\{{"name":"categories","description":"List available word list categories","flags":[
-                \\{{"name":"--format","short":"-f","type":"string","enum":["json","jsonl","human"],"description":"Output format"}},
-                \\{{"name":"--json","type":"boolean","description":"Shorthand for --format json"}}
-                \\]}}
-                \\
-            , .{});
+            try writer.writeAll(
+                "{\"name\":\"categories\"," ++
+                    "\"description\":" ++
+                    "\"List available word list categories\"," ++
+                    "\"flags\":[\n" ++
+                    "{\"name\":\"--format\",\"short\":\"-f\"," ++
+                    "\"type\":\"string\"," ++
+                    "\"enum\":[\"json\",\"jsonl\",\"human\"]," ++
+                    "\"description\":\"Output format\"},\n" ++
+                    "{\"name\":\"--json\"," ++
+                    "\"type\":\"boolean\"," ++
+                    "\"description\":" ++
+                    "\"Shorthand for --format json\"}\n" ++
+                    "]}\n",
+            );
         },
         .human => {
-            try writer.print(
-                \\nomen categories — list available word list categories
-                \\
-                \\Usage: nomen categories [options]
-                \\
-                \\Options:
-                \\  --format, -f <FMT>  Output format: json, jsonl, human
-                \\  --json              Shorthand for --format json
-                \\  --help, -h          Show this help
-                \\
-            , .{});
+            try writer.writeAll(
+                "nomen categories — " ++
+                    "list available word list categories\n" ++
+                    "\n" ++
+                    "Usage: nomen categories [options]\n" ++
+                    "\n" ++
+                    "Options:\n" ++
+                    "  --format, -f <FMT>  " ++
+                    "Output format: json, jsonl, human\n" ++
+                    "  --json              " ++
+                    "Shorthand for --format json\n" ++
+                    "  --help, -h          " ++
+                    "Show this help\n",
+            );
         },
     }
 }
@@ -320,105 +384,258 @@ pub fn writeCategoriesHelp(writer: anytype, format: OutputFormat) !void {
 pub fn writeServeHelp(writer: anytype, format: OutputFormat) !void {
     switch (format) {
         .json, .jsonl => {
-            try writer.print(
-                \\{{"name":"serve","description":"Start HTTP API server","flags":[
-                \\{{"name":"--port","short":"-p","type":"integer","default":8080,"description":"Port to listen on"}}
-                \\],"endpoints":[
-                \\{{"path":"/generate","method":"GET","description":"Generate names (query params: count, category, strategy, seed, input, fields)"}},
-                \\{{"path":"/categories","method":"GET","description":"List categories"}},
-                \\{{"path":"/health","method":"GET","description":"Health check"}}
-                \\]}}
-                \\
-            , .{});
+            try writer.writeAll(
+                "{\"name\":\"serve\"," ++
+                    "\"description\":" ++
+                    "\"Start HTTP API server\"," ++
+                    "\"flags\":[\n" ++
+                    "{\"name\":\"--port\",\"short\":\"-p\"," ++
+                    "\"type\":\"integer\",\"default\":8080," ++
+                    "\"description\":\"Port to listen on\"}\n" ++
+                    "],\"endpoints\":[\n" ++
+                    "{\"path\":\"/generate\"," ++
+                    "\"method\":\"GET\"," ++
+                    "\"description\":\"Generate names " ++
+                    "(query params: count, category, " ++
+                    "strategy, seed, input, fields)\"},\n" ++
+                    "{\"path\":\"/categories\"," ++
+                    "\"method\":\"GET\"," ++
+                    "\"description\":" ++
+                    "\"List categories\"},\n" ++
+                    "{\"path\":\"/health\"," ++
+                    "\"method\":\"GET\"," ++
+                    "\"description\":\"Health check\"}\n" ++
+                    "]}\n",
+            );
         },
         .human => {
-            try writer.print(
-                \\nomen serve — start HTTP API server
-                \\
-                \\Usage: nomen serve [options]
-                \\
-                \\Options:
-                \\  --port, -p <N>  Port to listen on (default: 8080)
-                \\  --help, -h      Show this help
-                \\
-                \\Endpoints:
-                \\  GET /generate     Generate names (query: count, category, strategy, seed, input, fields)
-                \\  GET /categories   List available categories
-                \\  GET /health       Health check
-                \\
-            , .{});
+            try writer.writeAll(
+                "nomen serve — start HTTP API server\n" ++
+                    "\n" ++
+                    "Usage: nomen serve [options]\n" ++
+                    "\n" ++
+                    "Options:\n" ++
+                    "  --port, -p <N>  " ++
+                    "Port to listen on (default: 8080)\n" ++
+                    "  --help, -h      Show this help\n" ++
+                    "\n" ++
+                    "Endpoints:\n" ++
+                    "  GET /generate     " ++
+                    "Generate names (query: count, category, " ++
+                    "strategy, seed, input, fields)\n" ++
+                    "  GET /categories   " ++
+                    "List available categories\n" ++
+                    "  GET /health       Health check\n",
+            );
         },
     }
 }
 
-pub fn writeLlmsManifest(writer: anytype, version_str: []const u8) !void {
-    try writer.print(
-        \\{{
-        \\  "name": "nomen",
-        \\  "version": "{s}",
-        \\  "description": "Categorical name generator for memorable, themed names",
-        \\  "commands": [
-        \\    {{
-        \\      "name": "generate",
-        \\      "description": "Generate names from themed word lists",
-        \\      "flags": [
-        \\        {{"name": "--count", "type": "integer", "default": 1, "description": "Number of names to generate"}},
-        \\        {{"name": "--category", "type": "string", "enum": ["mountains","rivers","deserts","canyons","islands","passes","moons","raptors","minerals","norse","volcanoes","forests","oceans","storms"], "description": "Word list category"}},
-        \\        {{"name": "--strategy", "type": "string", "enum": ["thematic","phrase","phrase:adjective_noun","phrase:noun_noun","phrase:verb_noun","phrase:alliterative","triple","mnemonic","construct","construct:portmanteau","construct:compound","construct:clip","construct:affix","construct:backform","construct:phonosym","construct:acronym"], "default": "thematic", "description": "Generation strategy"}},
-        \\        {{"name": "--seed", "type": "integer", "description": "Seed for deterministic output"}},
-        \\        {{"name": "--input", "type": "string", "description": "Input for mnemonic encoding or construct seed words"}},
-        \\        {{"name": "--format", "type": "string", "enum": ["json","jsonl","human"], "description": "Output format"}},
-        \\        {{"name": "--fields", "type": "string", "description": "Comma-separated output fields"}},
-        \\        {{"name": "--dry-run", "type": "boolean", "description": "Validate without generating"}}
-        \\      ],
-        \\      "examples": [
-        \\        {{"command": "nomen generate", "description": "Generate one name"}},
-        \\        {{"command": "nomen generate --count 5 --category rivers", "description": "Five river names"}},
-        \\        {{"command": "nomen generate --strategy phrase --format json", "description": "Two-word phrase as JSON"}},
-        \\        {{"command": "nomen generate --seed 42 --format json", "description": "Deterministic JSON output"}},
-        \\        {{"command": "nomen generate --strategy mnemonic --input 0xdeadbeef", "description": "Mnemonic encoding"}},
-        \\        {{"command": "nomen generate --strategy construct:portmanteau --input spell,master", "description": "Blend two words into a portmanteau"}},
-        \\        {{"command": "nomen generate --strategy construct:compound --input storm,forge", "description": "Concatenate words into compound"}},
-        \\        {{"command": "nomen generate --strategy construct:phonosym --input sharp --count 5", "description": "Generate sharp-sounding constructed words"}},
-        \\        {{"command": "nomen generate --strategy construct:affix --input quill", "description": "Add prefix or suffix to a word"}},
-        \\        {{"command": "nomen generate --strategy construct:acronym --input spell,practice,app", "description": "Create pronounceable acronym"}}
-        \\      ],
-        \\      "mutates": false,
-        \\      "destructive": false,
-        \\      "idempotent": true
-        \\    }},
-        \\    {{
-        \\      "name": "categories",
-        \\      "description": "List available word list categories",
-        \\      "flags": [
-        \\        {{"name": "--format", "type": "string", "enum": ["json","jsonl","human"], "description": "Output format"}}
-        \\      ],
-        \\      "examples": [
-        \\        {{"command": "nomen categories", "description": "List all categories"}},
-        \\        {{"command": "nomen categories --format json", "description": "List as JSON array"}}
-        \\      ],
-        \\      "mutates": false,
-        \\      "destructive": false,
-        \\      "idempotent": true
-        \\    }},
-        \\    {{
-        \\      "name": "serve",
-        \\      "description": "Start HTTP API server",
-        \\      "flags": [
-        \\        {{"name": "--port", "type": "integer", "default": 8080, "description": "Port to listen on"}}
-        \\      ],
-        \\      "examples": [
-        \\        {{"command": "nomen serve", "description": "Start server on port 8080"}},
-        \\        {{"command": "nomen serve --port 3000", "description": "Start on custom port"}}
-        \\      ],
-        \\      "mutates": false,
-        \\      "destructive": false,
-        \\      "idempotent": true
-        \\    }}
-        \\  ]
-        \\}}
-        \\
-    , .{version_str});
+pub fn writeLlmsManifest(
+    writer: anytype,
+    version_str: []const u8,
+) !void {
+    try writer.writeAll(
+        "{\n" ++
+            "  \"name\": \"nomen\",\n" ++
+            "  \"version\": \"",
+    );
+    try writer.writeAll(version_str);
+    try writer.writeAll(
+        "\",\n" ++
+            "  \"description\": " ++
+            "\"Categorical name generator " ++
+            "for memorable, themed names\",\n" ++
+            "  \"commands\": [\n" ++
+            "    {\n" ++
+            "      \"name\": \"generate\",\n" ++
+            "      \"description\": " ++
+            "\"Generate names from " ++
+            "themed word lists\",\n" ++
+            "      \"flags\": [\n" ++
+            "        {\"name\": \"--count\", " ++
+            "\"type\": \"integer\", " ++
+            "\"default\": 1, \"description\": " ++
+            "\"Number of names to generate\"},\n" ++
+            "        {\"name\": \"--category\", " ++
+            "\"type\": \"string\", " ++
+            "\"enum\": [\"mountains\"," ++
+            "\"rivers\",\"deserts\"," ++
+            "\"canyons\",\"islands\"," ++
+            "\"passes\",\"moons\"," ++
+            "\"raptors\",\"minerals\"," ++
+            "\"norse\",\"volcanoes\"," ++
+            "\"forests\",\"oceans\"," ++
+            "\"storms\"], " ++
+            "\"description\": " ++
+            "\"Word list category\"},\n" ++
+            "        {\"name\": \"--strategy\"," ++
+            " \"type\": \"string\", " ++
+            "\"enum\": [\"thematic\"," ++
+            "\"phrase\"," ++
+            "\"phrase:adjective_noun\"," ++
+            "\"phrase:noun_noun\"," ++
+            "\"phrase:verb_noun\"," ++
+            "\"phrase:alliterative\"," ++
+            "\"triple\",\"mnemonic\"," ++
+            "\"construct\"," ++
+            "\"construct:portmanteau\"," ++
+            "\"construct:compound\"," ++
+            "\"construct:clip\"," ++
+            "\"construct:affix\"," ++
+            "\"construct:backform\"," ++
+            "\"construct:phonosym\"," ++
+            "\"construct:acronym\"], " ++
+            "\"default\": \"thematic\", " ++
+            "\"description\": " ++
+            "\"Generation strategy\"},\n" ++
+            "        {\"name\": \"--seed\", " ++
+            "\"type\": \"integer\", " ++
+            "\"description\": " ++
+            "\"Seed for deterministic output\"},\n" ++
+            "        {\"name\": \"--input\", " ++
+            "\"type\": \"string\", " ++
+            "\"description\": " ++
+            "\"Input for mnemonic encoding " ++
+            "or construct seed words\"},\n" ++
+            "        {\"name\": \"--format\", " ++
+            "\"type\": \"string\", " ++
+            "\"enum\": " ++
+            "[\"json\",\"jsonl\",\"human\"], " ++
+            "\"description\": " ++
+            "\"Output format\"},\n" ++
+            "        {\"name\": \"--fields\", " ++
+            "\"type\": \"string\", " ++
+            "\"description\": " ++
+            "\"Comma-separated " ++
+            "output fields\"},\n" ++
+            "        {\"name\": \"--dry-run\", " ++
+            "\"type\": \"boolean\", " ++
+            "\"description\": " ++
+            "\"Validate without generating\"}\n" ++
+            "      ],\n" ++
+            "      \"examples\": [\n" ++
+            "        {\"command\": " ++
+            "\"nomen generate\", " ++
+            "\"description\": " ++
+            "\"Generate one name\"},\n" ++
+            "        {\"command\": " ++
+            "\"nomen generate --count 5 " ++
+            "--category rivers\", " ++
+            "\"description\": " ++
+            "\"Five river names\"},\n" ++
+            "        {\"command\": " ++
+            "\"nomen generate " ++
+            "--strategy phrase " ++
+            "--format json\", " ++
+            "\"description\": " ++
+            "\"Two-word phrase as JSON\"},\n" ++
+            "        {\"command\": " ++
+            "\"nomen generate " ++
+            "--seed 42 --format json\", " ++
+            "\"description\": " ++
+            "\"Deterministic JSON output\"},\n" ++
+            "        {\"command\": " ++
+            "\"nomen generate " ++
+            "--strategy mnemonic " ++
+            "--input 0xdeadbeef\", " ++
+            "\"description\": " ++
+            "\"Mnemonic encoding\"},\n" ++
+            "        {\"command\": " ++
+            "\"nomen generate " ++
+            "--strategy construct:portmanteau " ++
+            "--input spell,master\", " ++
+            "\"description\": " ++
+            "\"Blend two words " ++
+            "into a portmanteau\"},\n" ++
+            "        {\"command\": " ++
+            "\"nomen generate " ++
+            "--strategy construct:compound " ++
+            "--input storm,forge\", " ++
+            "\"description\": " ++
+            "\"Concatenate words " ++
+            "into compound\"},\n" ++
+            "        {\"command\": " ++
+            "\"nomen generate " ++
+            "--strategy construct:phonosym " ++
+            "--input sharp --count 5\", " ++
+            "\"description\": " ++
+            "\"Generate sharp-sounding " ++
+            "constructed words\"},\n" ++
+            "        {\"command\": " ++
+            "\"nomen generate " ++
+            "--strategy construct:affix " ++
+            "--input quill\", " ++
+            "\"description\": " ++
+            "\"Add prefix or suffix " ++
+            "to a word\"},\n" ++
+            "        {\"command\": " ++
+            "\"nomen generate " ++
+            "--strategy construct:acronym " ++
+            "--input spell,practice,app\", " ++
+            "\"description\": " ++
+            "\"Create pronounceable acronym\"}\n" ++
+            "      ],\n" ++
+            "      \"mutates\": false,\n" ++
+            "      \"destructive\": false,\n" ++
+            "      \"idempotent\": true\n" ++
+            "    },\n" ++
+            "    {\n" ++
+            "      \"name\": \"categories\",\n" ++
+            "      \"description\": " ++
+            "\"List available " ++
+            "word list categories\",\n" ++
+            "      \"flags\": [\n" ++
+            "        {\"name\": \"--format\"," ++
+            " \"type\": \"string\", " ++
+            "\"enum\": " ++
+            "[\"json\",\"jsonl\",\"human\"]," ++
+            " \"description\": " ++
+            "\"Output format\"}\n" ++
+            "      ],\n" ++
+            "      \"examples\": [\n" ++
+            "        {\"command\": " ++
+            "\"nomen categories\", " ++
+            "\"description\": " ++
+            "\"List all categories\"},\n" ++
+            "        {\"command\": " ++
+            "\"nomen categories " ++
+            "--format json\", " ++
+            "\"description\": " ++
+            "\"List as JSON array\"}\n" ++
+            "      ],\n" ++
+            "      \"mutates\": false,\n" ++
+            "      \"destructive\": false,\n" ++
+            "      \"idempotent\": true\n" ++
+            "    },\n" ++
+            "    {\n" ++
+            "      \"name\": \"serve\",\n" ++
+            "      \"description\": " ++
+            "\"Start HTTP API server\",\n" ++
+            "      \"flags\": [\n" ++
+            "        {\"name\": \"--port\"," ++
+            " \"type\": \"integer\", " ++
+            "\"default\": 8080, " ++
+            "\"description\": " ++
+            "\"Port to listen on\"}\n" ++
+            "      ],\n" ++
+            "      \"examples\": [\n" ++
+            "        {\"command\": " ++
+            "\"nomen serve\", " ++
+            "\"description\": " ++
+            "\"Start server on port 8080\"},\n" ++
+            "        {\"command\": " ++
+            "\"nomen serve --port 3000\", " ++
+            "\"description\": " ++
+            "\"Start on custom port\"}\n" ++
+            "      ],\n" ++
+            "      \"mutates\": false,\n" ++
+            "      \"destructive\": false,\n" ++
+            "      \"idempotent\": true\n" ++
+            "    }\n" ++
+            "  ]\n" ++
+            "}\n",
+    );
 }
 
 test "parse generate command" {
