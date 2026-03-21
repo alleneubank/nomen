@@ -24,8 +24,8 @@ pub const syllable_preference_attempts = 10;
 
 pub const Generator = struct {
     prng: std.Random.DefaultPrng,
-    // 38 bytes = max triple-word (12+1+12+1+12) or 3-word mnemonic
-    buf: [38]u8 = undefined,
+    // 42 bytes = max compound (20+20) or construct output with margin
+    buf: [42]u8 = undefined,
 
     pub fn init(seed: ?u64) Generator {
         const actual_seed = seed orelse blk: {
@@ -268,7 +268,7 @@ pub const Generator = struct {
         const names = try allocator.alloc(Name, count);
         errdefer allocator.free(names);
 
-        const values = try allocator.alloc([38]u8, count);
+        const values = try allocator.alloc([42]u8, count);
         errdefer allocator.free(values);
 
         // Store first syllables for existing names
@@ -317,7 +317,7 @@ pub const Generator = struct {
 
 pub const BatchResult = struct {
     names: []Name,
-    values: [][38]u8,
+    values: [][42]u8,
 
     pub fn deinit(self: BatchResult, allocator: std.mem.Allocator) void {
         allocator.free(self.values);
@@ -471,7 +471,7 @@ test "triple generation produces three-word dns-safe names" {
 test "mnemonic generation uses FNV-1a and is deterministic" {
     var gen1 = Generator.init(0);
     const name1 = try gen1.generate(.{ .mnemonic = "test123" }, null);
-    var val1: [38]u8 = undefined;
+    var val1: [42]u8 = undefined;
     @memcpy(val1[0..name1.value.len], name1.value);
     const saved1 = val1[0..name1.value.len];
 
