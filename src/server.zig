@@ -94,6 +94,7 @@ const QueryParams = struct {
     dry_run: bool = false,
     err_code: ?[]const u8 = null,
     err_msg: ?[]const u8 = null,
+    construct_input: ?[]const u8 = null,
 };
 
 fn parseQueryParams(target: []const u8) QueryParams {
@@ -137,7 +138,7 @@ fn parseQueryParams(target: []const u8) QueryParams {
         } else if (std.mem.eql(u8, key, "strategy")) {
             result.strategy = Strategy.fromString(val) catch {
                 result.err_code = "INVALID_STRATEGY";
-                result.err_msg = "invalid strategy, options: thematic, phrase, phrase:adjective_noun, phrase:noun_noun, phrase:verb_noun, phrase:alliterative, triple, mnemonic";
+                result.err_msg = "invalid strategy, options: thematic, phrase, phrase:adjective_noun, phrase:noun_noun, phrase:verb_noun, phrase:alliterative, triple, mnemonic, construct, construct:portmanteau, construct:compound, construct:clip, construct:affix, construct:backform, construct:phonosym, construct:acronym";
                 return result;
             };
             explicit_strategy = true;
@@ -148,11 +149,6 @@ fn parseQueryParams(target: []const u8) QueryParams {
                 return result;
             };
         } else if (std.mem.eql(u8, key, "input")) {
-            types.validateMnemonicInput(val) catch {
-                result.err_code = "INVALID_INPUT";
-                result.err_msg = "mnemonic input must be numeric or hex (e.g. 12345, 0xdeadbeef)";
-                return result;
-            };
             mnemonic_input = val;
         } else if (std.mem.eql(u8, key, "fields")) {
             result.fields = val;
@@ -167,13 +163,25 @@ fn parseQueryParams(target: []const u8) QueryParams {
 
     // Cross-validate input and strategy
     if (mnemonic_input) |input| {
-        // input is only valid with mnemonic strategy
-        if (explicit_strategy and result.strategy != .mnemonic) {
+        if (result.strategy == .mnemonic or (!explicit_strategy)) {
+            types.validateMnemonicInput(input) catch {
+                result.err_code = "INVALID_INPUT";
+                result.err_msg = "mnemonic input must be numeric or hex (e.g. 12345, 0xdeadbeef)";
+                return result;
+            };
+            result.strategy = .{ .mnemonic = input };
+        } else if (result.strategy == .construct) {
+            types.validateConstructInput(input) catch {
+                result.err_code = "INVALID_INPUT";
+                result.err_msg = "construct input must be comma-separated lowercase words (max 5, each <= 20 chars)";
+                return result;
+            };
+            result.construct_input = input;
+        } else {
             result.err_code = "INVALID_INPUT";
-            result.err_msg = "input parameter is only valid with strategy=mnemonic";
+            result.err_msg = "input parameter is only valid with strategy=mnemonic or strategy=construct:*";
             return result;
         }
-        result.strategy = .{ .mnemonic = input };
     } else if (result.strategy == .mnemonic) {
         result.err_code = "MISSING_VALUE";
         result.err_msg = "strategy=mnemonic requires input parameter";
@@ -208,6 +216,43 @@ fn handleGenerate(allocator: std.mem.Allocator, request: *std.http.Server.Reques
         return;
     }
 
+    if (params.strategy == .construct) {
+        var input_words_buf: [5][]const u8 = undefined;
+        var input_word_count: usize = 0;
+        if (params.construct_input) |input| {
+            var iter = std.mem.splitScalar(u8, input, ',');
+            while (iter.next()) |word| {
+                if (input_word_count >= 5) break;
+                input_words_buf[input_word_count] = word;
+                input_word_count += 1;
+            }
+        }
+
+        const construct_mod = @import("construct.zig");
+        var construct_eng = construct_mod.ConstructEngine.init(params.seed);
+
+        if (params.count == 1) {
+            const name = construct_eng.generateConstruct(params.strategy.construct, params.category, input_words_buf[0..input_word_count]) catch |err| {
+                return respondGenerateError(request, err);
+            };
+            var body_buf: [1024]u8 = undefined;
+            var fbs = std.io.fixedBufferStream(&body_buf);
+            const names = [_]Name{name};
+            try format_mod.formatNames(fbs.writer(), &names, .json, params.fields);
+            try request.respond(fbs.getWritten(), .{ .extra_headers = &json_header });
+        } else {
+            const batch = construct_eng.generateConstructBatch(allocator, params.count, params.strategy.construct, params.category, input_words_buf[0..input_word_count]) catch |err| {
+                return respondGenerateError(request, err);
+            };
+            defer batch.deinit(allocator);
+            var body_buf: [8192]u8 = undefined;
+            var fbs = std.io.fixedBufferStream(&body_buf);
+            try format_mod.formatNames(fbs.writer(), batch.names, .json, params.fields);
+            try request.respond(fbs.getWritten(), .{ .extra_headers = &json_header });
+        }
+        return;
+    }
+
     var gen = Generator.init(params.seed);
 
     if (params.count == 1) {
@@ -236,11 +281,13 @@ fn respondGenerateError(request: *std.http.Server.Request, err: anyerror) !void 
     const code = switch (err) {
         error.EmptyWordList => "EMPTY_WORD_LIST",
         error.NoDistinctNames => "NO_DISTINCT_NAMES",
+        error.ConstructionFailed => "CONSTRUCTION_FAILED",
         else => "INTERNAL_ERROR",
     };
     const msg = switch (err) {
         error.EmptyWordList => "no words available for this category",
         error.NoDistinctNames => "cannot generate enough phonetically distinct names, reduce count",
+        error.ConstructionFailed => "construction algorithm produced no valid output",
         else => "unexpected error",
     };
     var buf: [256]u8 = undefined;
@@ -281,4 +328,17 @@ test "parseQueryParams invalid seed returns error" {
     const params = parseQueryParams("/generate?seed=abc");
     try std.testing.expect(params.err_code != null);
     try std.testing.expectEqualStrings("INVALID_SEED", params.err_code.?);
+}
+
+test "parseQueryParams construct strategy" {
+    const params = parseQueryParams("/generate?strategy=construct:portmanteau&input=spell,master");
+    try std.testing.expect(params.err_code == null);
+    try std.testing.expect(params.strategy == .construct);
+    try std.testing.expectEqualStrings("spell,master", params.construct_input.?);
+}
+
+test "parseQueryParams construct invalid technique" {
+    const params = parseQueryParams("/generate?strategy=construct:bogus");
+    try std.testing.expect(params.err_code != null);
+    try std.testing.expectEqualStrings("INVALID_STRATEGY", params.err_code.?);
 }
