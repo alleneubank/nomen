@@ -32,7 +32,7 @@
           inherit system;
           overlays = [
             (final: prev: {
-              zigpkgs = inputs.zig-overlay.packages.${prev.system};
+              zigpkgs = inputs.zig-overlay.packages.${prev.stdenv.hostPlatform.system};
             })
           ];
         };
@@ -86,10 +86,46 @@
               platforms = builtins.attrNames ziglintSources;
             };
           };
-      in {
+      in rec {
         formatter = pkgs.alejandra;
 
         packages.ziglint = ziglint;
+
+        packages.nomen = pkgs.stdenvNoCC.mkDerivation {
+          pname = "nomen";
+          version = "0.1.0";
+          src = pkgs.lib.cleanSourceWith {
+            src = ./.;
+            filter = path: type: let
+              base = baseNameOf path;
+            in
+              pkgs.lib.cleanSourceFilter path type
+              && !(pkgs.lib.hasPrefix ".zig" base)
+              && base != "zig-out";
+          };
+          nativeBuildInputs = [pkgs.zigpkgs."0.15.2"];
+          dontConfigure = true;
+          dontInstall = true;
+          buildPhase = ''
+            runHook preBuild
+            export ZIG_GLOBAL_CACHE_DIR="$TMPDIR/zig-cache"
+            zig build -Doptimize=ReleaseSafe -Dcpu=baseline --prefix "$out"
+            runHook postBuild
+          '';
+          meta = with pkgs.lib; {
+            description = "Categorical name generator";
+            homepage = "https://github.com/alleneubank/nomen";
+            license = licenses.mit;
+            mainProgram = "nomen";
+          };
+        };
+
+        packages.default = packages.nomen;
+
+        apps.default = {
+          type = "app";
+          program = "${packages.nomen}/bin/nomen";
+        };
 
         devShells.default = pkgs.mkShell {
           name = "zig-dev";

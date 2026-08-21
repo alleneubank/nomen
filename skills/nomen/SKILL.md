@@ -10,7 +10,7 @@ Generate memorable, DNS-safe names from themed word lists via the `nomen` CLI.
 ## Prerequisite
 
 ```bash
-command -v nomen >/dev/null || echo "nomen not found — install from https://github.com/0xbigboss/nomen"
+command -v nomen >/dev/null || echo "nomen not found — install from https://github.com/alleneubank/nomen"
 ```
 
 ## Choosing a Strategy
@@ -24,6 +24,8 @@ command -v nomen >/dev/null || echo "nomen not found — install from https://gi
 - **Triple** — three-word combination, randomly choosing adjective-adjective-noun or adjective-noun-noun. Best for: when two words aren't distinct enough, or you want extra flavor. Use `--strategy triple`.
 
 - **Mnemonic** — deterministic word pair (or triple for long inputs) from a numeric/hex input. Same input always produces the same name. Best for: giving stable aliases to ugly identifiers (SHAs, IPs, UUIDs). Uses FNV-1a hash for good distribution across ~4.4M combos.
+
+- **Construct** — build a new token from seed words (`--input word,word`). Techniques: `portmanteau`, `compound`, `clip`, `affix`, `backform`, `phonosym` (`sharp`/`soft`/`rhythmic`), `acronym`. Best for: product names that should not already exist as dictionary words.
 
 ## Always Use `--format json` for Programmatic Use
 
@@ -44,6 +46,9 @@ nomen generate --strategy triple --count 3              # three-word names
 nomen generate --strategy mnemonic --input 0xABC        # deterministic from hex
 nomen generate --strategy mnemonic --input 0xdeadbeefcafe  # 3-word for long input
 nomen generate --seed 42                                # reproducible output
+nomen generate --strategy construct:portmanteau --input "spell,master"
+nomen generate --strategy construct:compound --input "storm,forge"
+nomen generate --strategy construct:phonosym --input sharp --count 5
 nomen categories                                        # list 14 categories
 ```
 
@@ -80,9 +85,9 @@ nomen generate -s triple -f human
 |------|-------|-------------|
 | `--count N` | `-n` | Number of names (default: 1) |
 | `--category NAME` | `-c` | Restrict to category |
-| `--strategy NAME` | `-s` | thematic, phrase[:pattern], triple, mnemonic |
+| `--strategy NAME` | `-s` | thematic, phrase[:pattern], triple, mnemonic, construct[:technique] |
 | `--seed N` | | Deterministic output |
-| `--input TEXT` | `-i` | Input for mnemonic (numeric/hex) |
+| `--input TEXT` | `-i` | Mnemonic (numeric/hex) or construct seed words |
 | `--format FMT` | `-f` | json, jsonl, human |
 | `--fields LIST` | | Comma-separated output fields |
 | `--dry-run` | | Validate without generating |

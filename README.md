@@ -1,79 +1,115 @@
 # nomen
 
-Categorical name generator that produces memorable, themed names for devices, projects, and resources. Agent-first CLI and HTTP API.
+Categorical name generator. DNS-safe names from fourteen geographic and natural-history lists, plus construct techniques (portmanteau, compound, clip, affix, backform, phonosym, acronym).
+
+CLI and HTTP API for humans and agents. Same seed and flags always produce the same name.
 
 ## Install
 
-Requires [Nix](https://nixos.org/download/) with flakes enabled.
+Requires [Zig 0.15](https://ziglang.org/download/) or Nix with flakes.
 
 ```bash
-nix develop    # enter dev shell with zig 0.15.2, zls, ziglint
-zig build      # build
-zig build test # run tests
+# Nix
+nix run github:alleneubank/nomen -- generate --count 5
+
+# from source
+git clone https://github.com/alleneubank/nomen
+cd nomen
+zig build -Doptimize=ReleaseSafe
+./zig-out/bin/nomen generate
+```
+
+Library consumers:
+
+```bash
+zig fetch --save git+https://github.com/alleneubank/nomen
+```
+
+Dev shell (Zig 0.15.2, zls, ziglint):
+
+```bash
+nix develop
+zig build test
 ```
 
 ## Usage
 
 ```bash
-# Generate names
 nomen generate                                    # one name (human in TTY, json otherwise)
-nomen generate --count 5 --category rivers         # five river names
-nomen generate --strategy phrase --format json      # two-word phrase as JSON
-nomen generate --strategy phrase:verb_noun          # verb+noun pattern
-nomen generate --strategy mnemonic --input 0xbeef   # mnemonic from hex
-nomen generate --seed 42                            # deterministic output
-nomen generate --fields value --format json         # filter output fields
-nomen generate --dry-run                            # validate without generating
+nomen generate --count 5 --category rivers
+nomen generate --strategy phrase --format json
+nomen generate --strategy phrase:alliterative --count 5
+nomen generate --strategy triple --count 3
+nomen generate --strategy mnemonic --input 0xdeadbeefcafe
+nomen generate --seed 42
+nomen generate --strategy construct:portmanteau --input "spell,master"
+nomen generate --strategy construct:compound --input "storm,forge"
+nomen generate --strategy construct:phonosym --input "sharp" --count 5
+nomen generate --strategy construct:affix --input "quill"
+nomen generate --strategy construct:acronym --input "spell,practice,app"
+nomen generate --dry-run
 
-# List categories
 nomen categories
-nomen categories --format json
-
-# HTTP API
-nomen serve                    # start on port 8080
-nomen serve --port 3000        # custom port
+nomen serve --port 8080
 # GET /generate?count=3&category=mountains&seed=42
 # GET /categories
 # GET /health
 
-# Agent discovery
-nomen --llms                   # machine-readable manifest
-nomen generate --help --format json  # structured help
+nomen --llms
+nomen generate --help --format json
 ```
 
 ## Categories
 
-mountains, rivers, deserts, canyons, islands, passes, moons, raptors, minerals, norse
+mountains, rivers, deserts, canyons, islands, passes, moons, raptors, minerals, norse, volcanoes, forests, oceans, storms
 
 ## Strategies
 
-| Strategy | Description | Example |
-|----------|-------------|---------|
-| `thematic` | Single word from a category | `denali` |
-| `phrase` | Adjective+Noun (default pattern) | `swift-ridge` |
-| `phrase:noun_noun` | Noun+Noun | `stone-creek` |
-| `phrase:verb_noun` | Verb+Noun | `climb-peak` |
-| `mnemonic` | Deterministic pair from hex/numeric input | `wild-dune` |
+| Strategy | Description |
+|----------|-------------|
+| `thematic` | One word from a category |
+| `phrase` | Adjective-noun (default pattern) |
+| `phrase:noun_noun` | Noun-noun |
+| `phrase:verb_noun` | Verb-noun |
+| `phrase:alliterative` | Shared first letter, with fallback |
+| `triple` | Three words |
+| `mnemonic` | Deterministic pair or triple from hex/numeric input |
+| `construct:portmanteau` | Blend two words at an overlap |
+| `construct:compound` | Concatenate two words |
+| `construct:clip` | First syllable + last syllable |
+| `construct:affix` | Prefix or suffix |
+| `construct:backform` | Strip a recognized suffix |
+| `construct:phonosym` | Mood-tagged phonemes (`sharp`, `soft`, `rhythmic`) |
+| `construct:acronym` | Pronounceable initials |
 
-## Agent-First Design
+## Agent-first
 
-- Structured JSON output by default in non-TTY, human-readable in TTY
-- `--format json|jsonl|human` on every command
-- `--llms` manifest for agent discovery with schemas and examples
-- `--help --format json` for machine-readable help on every subcommand
-- `--dry-run` validates inputs without side effects
+- JSON on non-TTY stdout; `--format json|jsonl|human` on every command
+- `--llms` manifest with schemas and examples
+- `--help --format json` on every subcommand
 - `--fields` filters output keys
-- Structured error responses with `code` and `message` fields
-- stdout = data only, stderr = messages/errors
+- Structured errors with `code` and `message`
+- stdout is data; stderr is messages
+
+## Playground
+
+The generator also compiles to WebAssembly:
+
+```bash
+zig build wasm
+python3 -m http.server -d site 4173
+```
+
+Open `http://127.0.0.1:4173`. Visual system: `DESIGN.md`.
 
 ## Development
 
 ```bash
-zig build test     # run all tests
-zig build fmt      # check formatting
-ziglint            # static analysis
-lefthook install   # setup git hooks
-zig build docs     # generate documentation
+zig build test
+zig build fmt
+ziglint
+lefthook install
+zig build docs
 ```
 
 ## License

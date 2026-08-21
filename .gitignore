@@ -2,6 +2,8 @@
 zig-out/
 zig-cache/
 .zig-cache/
+site/nomen.wasm
+.rl/
 
 # Nix
 result

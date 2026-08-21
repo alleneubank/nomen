@@ -41,8 +41,11 @@ Naming resources (servers, projects, deployments, branches) is a recurring frict
 
 **Name** — generated output:
 - `value: []const u8` — the generated name string
-- `category: Category` — source category
-- `strategy: Strategy` — generation method used
+- `category: ?Category` — source category when the strategy uses one, otherwise null
+- `strategy_tag: []const u8` — generation method used (e.g. `thematic`, `construct:portmanteau`)
+
+**ConstructTechnique** — word-construction algorithm on the `construct` strategy variant:
+- `portmanteau`, `compound`, `clip`, `affix`, `backform`, `phonosym`, `acronym`
 
 **OutputFormat** — serialization target:
 - `json` — JSON object (default in non-TTY)
@@ -69,6 +72,36 @@ Naming resources (servers, projects, deployments, branches) is a recurring frict
 - **REQ-GEN-014**: Mnemonic strategy must use FNV-1a hash for better distribution across the word pair space.
 - **REQ-GEN-015**: Mnemonic strategy should encode long inputs (>8 hex chars) as three words instead of two for higher entropy.
 
+### Construct
+
+- **REQ-CON-001**: `ConstructTechnique` enum: `portmanteau`, `compound`, `clip`, `affix`, `backform`, `phonosym`, `acronym`.
+- **REQ-CON-002**: `Strategy` includes `construct: ConstructTechnique`. The variant carries only the technique, not input words.
+- **REQ-CON-003**: `Strategy.fromString` parses `construct` (defaults to portmanteau) and `construct:<technique>`.
+- **REQ-CON-004**: Bare `--strategy construct` resolves `strategy_tag` to `construct:portmanteau`.
+- **REQ-CON-010**: `--input` for construct is comma-separated lowercase alphabetic words, max 5 words, max 20 characters each.
+- **REQ-CON-011**: `--input` is optional for construct. Omitted input draws from built-in lists.
+- **REQ-CON-012**: Missing words for a technique are filled from built-in lists (category list when `--category` is set).
+- **REQ-CON-013**: Input validation is strategy-aware: mnemonic uses `validateMnemonicInput`, construct uses `validateConstructInput`.
+- **REQ-CON-014**: User-supplied construct words have no tone metadata and are treated as `general`.
+- **REQ-CON-020**: Portmanteau blends two words on the longest end/start overlap of at least 2 characters; otherwise vowel-consonant splice.
+- **REQ-CON-021**: Compound concatenates two words with no separator.
+- **REQ-CON-022**: Clip takes the first syllable of word1 and the last syllable of word2.
+- **REQ-CON-023**: Affix attaches a tone-compatible prefix or suffix from `src/data/affixes.tsv`.
+- **REQ-CON-024**: Backform strips the longest recognized suffix, with a syllable fallback.
+- **REQ-CON-025**: Phonosym builds a 4–8 character word from mood templates (`sharp`, `soft`, `rhythmic`). Invalid mood is `InvalidInput`.
+- **REQ-CON-026**: Acronym takes initials and inserts vowels to break 3+ consonant clusters.
+- **REQ-CON-027**: `--count > 1` varies construction per iteration (replace word2, affix, mood draw, or input substitution).
+- **REQ-CON-028**: Exploratory mode (no `--input`) draws from category lists or curated nouns as specified per technique.
+- **REQ-CON-029**: First-syllable phonetic dedup applies to construct batches.
+- **REQ-CON-030**: `src/data/affixes.tsv` is parsed at comptime (prefix/suffix, tone).
+- **REQ-CON-031**: `src/data/phonemes.tsv` is parsed at comptime (mood, class, values).
+- **REQ-CON-040**: CLI surface is `nomen generate --strategy construct:<technique>`.
+- **REQ-CON-050**: HTTP `/generate` accepts `strategy=construct:<technique>` and `input=word1,word2`.
+- **REQ-CON-060**: Construct output uses `Name` with `strategy_tag` `construct:<technique>`.
+- **REQ-CON-061**: Constructed names are lowercase `[a-z0-9]` (no hyphens).
+- **REQ-CON-063**: Same seed and parameters produce the same construct output.
+- **REQ-CON-065**: Empty or invalid construction returns `GenerateError.ConstructionFailed`.
+
 ### CLI
 
 - **REQ-CLI-001**: `nomen generate` subcommand produces names to stdout.
@@ -90,6 +123,18 @@ Naming resources (servers, projects, deployments, branches) is a recurring frict
 - **REQ-HTTP-003**: `GET /categories` endpoint returns available categories.
 - **REQ-HTTP-004**: `GET /health` endpoint returns server status.
 - **REQ-HTTP-005**: Structured JSON error responses with `code` and `message` fields.
+
+### Playground
+
+- **REQ-SITE-001**: `zig build wasm` emits `site/nomen.wasm` from `src/wasm.zig` targeting wasm32-freestanding.
+- **REQ-SITE-002**: The playground exposes thematic, phrase (all patterns), triple, mnemonic, and all construct techniques.
+- **REQ-SITE-003**: The same seed, strategy, category, count, and input produce the same names as the CLI.
+- **REQ-SITE-004**: Query string round-trips strategy, category, count, seed, and input.
+- **REQ-SITE-005**: Visual system is `DESIGN.md`. `npx impeccable detect site/` is the slop floor.
+- **REQ-SITE-006**: After a draw, the playground fills a compare sheet: one wasm generate call per checked column, same seed, `count` rows. Default columns are the four phrase patterns. Columns may also be triple, `construct:<technique>`, or `thematic:<category>`.
+- **REQ-SITE-007**: Changing strategy, pattern, technique, category, count, or sheet columns redraws without a submit. Seed and input fields debounce.
+- **REQ-SITE-008**: A Random control on the plate picks a strategy, category, phrase pattern or construct technique, and seed at random, then draws. Mnemonic gets a random hex input.
+- **REQ-SITE-009**: The CLI and HTTP API remain one `--strategy` and one `--category` per invocation. Multi-column compare is playground fan-out of those calls, not a new engine mode.
 
 ### Word Lists
 
@@ -117,7 +162,8 @@ Naming resources (servers, projects, deployments, branches) is a recurring frict
 - **Configuration files** — all options are flags or environment variables. No config file format.
 - **Plugin system** — custom word lists or strategies are not supported in v1. Embed everything.
 - **TLS/auth on HTTP** — the HTTP server is plain HTTP for local/internal use. Put it behind a reverse proxy for production.
-- **MCP server** — deferred to v2. v1 focuses on CLI and HTTP interfaces.
+- **MCP server** — deferred to v2. v1 focuses on CLI, HTTP, and the static playground.
+- **Hosted generate API** — the public playground runs the generator in WebAssembly. It does not call `nomen serve`.
 
 ## Risk Tags
 
@@ -145,3 +191,7 @@ Naming resources (servers, projects, deployments, branches) is a recurring frict
 - [ ] `nomen generate --category volcanoes` produces volcano-themed names
 - [ ] `nomen generate --strategy mnemonic --input 0xdeadbeefcafe` produces a three-word mnemonic
 - [ ] `nomen categories` lists >= 14 categories
+- [ ] `nomen generate --strategy construct:compound --input "storm,forge"` produces `stormforge`
+- [ ] `nomen generate --strategy construct:portmanteau --input "spell,master" --seed 42` is deterministic
+- [ ] `zig build wasm` produces `site/nomen.wasm`
+- [ ] `npx impeccable detect site/` exits 0

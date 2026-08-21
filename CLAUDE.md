@@ -44,10 +44,11 @@ src/
   main.zig        # CLI entrypoint — arg parsing, I/O wiring
   root.zig        # Library root — public API re-exports
   types.zig       # Domain types: Category, Strategy, Name, OutputFormat, errors
-  wordlist.zig    # Comptime word lists organized by category
+  worddata.zig    # Comptime word lists organized by category
   generator.zig   # Name generation engine (thematic, phrase, mnemonic)
   construct.zig   # Word-construction algorithms (portmanteau, compound, clip, affix, backform, phonosym, acronym)
   constructdata.zig # Comptime parsing of affix and phoneme data
+  wasm.zig        # wasm32-freestanding playground exports
   format.zig      # Output formatting (json, jsonl, human)
   cli.zig         # CLI argument parser, help text, LLMs manifest
   server.zig      # HTTP API server (/generate, /categories, /health)
@@ -57,18 +58,20 @@ src/
     curated_nouns.txt       # Curated noun list for phrase generation
     affixes.tsv     # Prefix/suffix list with tone tags for construct:affix
     phonemes.tsv    # Phoneme sets per mood for construct:phonosym
-build.zig         # Build script (test, docs, fmt, run steps)
+build.zig         # Build script (test, docs, fmt, run, wasm steps)
 build.zig.zon     # Package manifest (name, version, deps)
 SPEC.md           # Product specification with requirement IDs
-PLAN.md           # Implementation plan (ephemeral)
+DESIGN.md         # Playground visual system
+site/             # Static playground (HTML/CSS/JS + nomen.wasm)
 .ziglint.zon      # Linter configuration
-flake.nix         # Nix dev environment
+flake.nix         # Nix dev environment and packages.default
 ```
 
 ## Architecture
 
 - **types.zig** defines the domain model: `Category` enum (14 themes), `Strategy` tagged union (thematic/phrase/triple/mnemonic/construct), `ConstructTechnique` enum, `Name` struct, `OutputFormat`, and explicit error sets
-- **wordlist.zig** contains comptime arrays of curated words per category plus adjective/noun/verb lists for phrase generation
+- **worddata.zig** contains comptime arrays of curated words per category plus adjective/noun/verb lists for phrase generation
+- **wasm.zig** exports the generator to wasm32-freestanding for `site/`
 - **generator.zig** implements `Generator` struct with seeded PRNG. Supports batch generation with first-syllable phonetic deduplication
 - **construct.zig** implements `ConstructEngine` struct with 7 word-construction algorithms. Supports batch generation with phonetic dedup
 - **constructdata.zig** parses `affixes.tsv` and `phonemes.tsv` at comptime. Exports affix lists, phoneme sets, and backform suffixes
