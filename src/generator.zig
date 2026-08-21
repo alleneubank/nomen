@@ -1,4 +1,5 @@
 const std = @import("std");
+const builtin = @import("builtin");
 const types = @import("types.zig");
 const worddata = @import("worddata.zig");
 const Tone = worddata.Tone;
@@ -7,6 +8,30 @@ const Strategy = types.Strategy;
 const PhrasePattern = types.PhrasePattern;
 const Name = types.Name;
 const GenerateError = types.GenerateError;
+
+/// Index into a slice using a width-stable draw so 32-bit WASM matches native.
+pub fn pickIndex(rand: std.Random, len: usize) usize {
+    std.debug.assert(len > 0);
+    const n: u32 = @intCast(len);
+    return rand.intRangeLessThan(u32, 0, n);
+}
+
+/// Inclusive range draw with a u32 width so 32-bit WASM matches native.
+pub fn pickIndexAtMost(rand: std.Random, min: usize, max: usize) usize {
+    std.debug.assert(min <= max);
+    const lo: u32 = @intCast(min);
+    const hi: u32 = @intCast(max);
+    return rand.intRangeAtMost(u32, lo, hi);
+}
+
+/// Resolve a PRNG seed. WASM/freestanding has no getrandom; callers must pass a seed.
+pub fn resolveSeed(seed: ?u64) u64 {
+    if (seed) |s| return s;
+    if (builtin.os.tag == .freestanding) return 0;
+    var bytes: [8]u8 = undefined;
+    std.posix.getrandom(&bytes) catch return 0;
+    return std.mem.readInt(u64, &bytes, .little);
+}
 
 /// FNV-1a 64-bit hash — better distribution than multiply-add for mnemonic encoding.
 fn fnv1a(input: []const u8) u64 {
@@ -28,15 +53,8 @@ pub const Generator = struct {
     buf: [42]u8 = undefined,
 
     pub fn init(seed: ?u64) Generator {
-        const actual_seed = seed orelse blk: {
-            var s: [8]u8 = undefined;
-            std.posix.getrandom(&s) catch {
-                break :blk @as(u64, 0);
-            };
-            break :blk std.mem.readInt(u64, &s, .little);
-        };
         return .{
-            .prng = std.Random.DefaultPrng.init(actual_seed),
+            .prng = std.Random.DefaultPrng.init(resolveSeed(seed)),
         };
     }
 
@@ -53,14 +71,14 @@ pub const Generator = struct {
     fn randomCategory(self: *Generator) Category {
         const categories = comptime std.enums.values(Category);
         const rand = self.prng.random();
-        return categories[rand.intRangeLessThan(usize, 0, categories.len)];
+        return categories[pickIndex(rand, categories.len)];
     }
 
     fn generateThematic(self: *Generator, category: Category) GenerateError!Name {
         const list = worddata.getWordList(category);
         if (list.len == 0) return error.EmptyWordList;
         const rand = self.prng.random();
-        const idx = rand.intRangeLessThan(usize, 0, list.len);
+        const idx = pickIndex(rand, list.len);
         return .{
             .value = list[idx],
             .category = category,
@@ -96,8 +114,8 @@ pub const Generator = struct {
         var attempts: usize = 0;
 
         while (attempts < max_attempts) : (attempts += 1) {
-            const first = first_list[rand.intRangeLessThan(usize, 0, first_list.len)];
-            const second = second_list[rand.intRangeLessThan(usize, 0, second_list.len)];
+            const first = first_list[pickIndex(rand, first_list.len)];
+            const second = second_list[pickIndex(rand, second_list.len)];
 
             // Alliteration check: both words must start with the same letter
             if (is_alliterative and first[0] != second[0]) continue;
@@ -120,15 +138,15 @@ pub const Generator = struct {
         // Fallback: drop alliteration and syllable constraints but keep tone
         var fallback_attempts: usize = 0;
         while (fallback_attempts < 50) : (fallback_attempts += 1) {
-            const first = first_list[rand.intRangeLessThan(usize, 0, first_list.len)];
-            const second = second_list[rand.intRangeLessThan(usize, 0, second_list.len)];
+            const first = first_list[pickIndex(rand, first_list.len)];
+            const second = second_list[pickIndex(rand, second_list.len)];
             if (!Tone.compatible(worddata.getTone(first), worddata.getTone(second))) continue;
             return self.writePhraseToBuffer(first, second, strategy_tag) orelse continue;
         }
 
         // Final safety
-        const first = first_list[rand.intRangeLessThan(usize, 0, first_list.len)];
-        const second = second_list[rand.intRangeLessThan(usize, 0, second_list.len)];
+        const first = first_list[pickIndex(rand, first_list.len)];
+        const second = second_list[pickIndex(rand, second_list.len)];
         return self.writePhraseToBuffer(first, second, strategy_tag) orelse error.EmptyWordList;
     }
 
@@ -157,12 +175,12 @@ pub const Generator = struct {
         // Randomly choose: adjective-adjective-noun or adjective-noun-noun
         const use_adj_adj_noun = rand.boolean();
 
-        const w1 = ca[rand.intRangeLessThan(usize, 0, ca.len)];
+        const w1 = ca[pickIndex(rand, ca.len)];
         const w2 = if (use_adj_adj_noun)
-            ca[rand.intRangeLessThan(usize, 0, ca.len)]
+            ca[pickIndex(rand, ca.len)]
         else
-            cn[rand.intRangeLessThan(usize, 0, cn.len)];
-        const w3 = cn[rand.intRangeLessThan(usize, 0, cn.len)];
+            cn[pickIndex(rand, cn.len)];
+        const w3 = cn[pickIndex(rand, cn.len)];
 
         const adj1 = w1;
         const adj2 = w2;
@@ -207,9 +225,10 @@ pub const Generator = struct {
         // Derive all three indices from the same 64-bit FNV-1a hash:
         // low bits -> word 1, mid bits -> word 2, high bits -> word 3
         if (effective_len > 8) {
-            const idx1 = hash % wlen;
-            const idx2 = (hash / wlen) % wlen;
-            const idx3 = (hash / wlen / wlen) % wlen;
+            const len64: u64 = wlen;
+            const idx1: usize = @intCast(hash % len64);
+            const idx2: usize = @intCast((hash / len64) % len64);
+            const idx3: usize = @intCast((hash / len64 / len64) % len64);
 
             const w1 = worddata.mnemonic_all[idx1];
             const w2 = worddata.mnemonic_all[idx2];
@@ -238,8 +257,9 @@ pub const Generator = struct {
         }
 
         // Short inputs: 2 words
-        const first_idx = hash % wlen;
-        const second_idx = (hash / wlen) % wlen;
+        const len64: u64 = wlen;
+        const first_idx: usize = @intCast(hash % len64);
+        const second_idx: usize = @intCast((hash / len64) % len64);
 
         const w1 = worddata.mnemonic_all[first_idx];
         const w2 = worddata.mnemonic_all[second_idx];

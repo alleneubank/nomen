@@ -53,4 +53,28 @@ pub fn build(b: *std.Build) void {
     const fmt_step = b.step("fmt", "Check source formatting");
     const fmt = b.addFmt(.{ .paths = &.{ "src", "build.zig" } });
     fmt_step.dependOn(&fmt.step);
+
+    // Playground WASM (wasm32-freestanding, no WASI)
+    const wasm = b.addExecutable(.{
+        .name = "nomen",
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/wasm.zig"),
+            .target = b.resolveTargetQuery(.{
+                .cpu_arch = .wasm32,
+                .os_tag = .freestanding,
+            }),
+            .optimize = .ReleaseSmall,
+        }),
+    });
+    wasm.entry = .disabled;
+    wasm.rdynamic = true;
+
+    const wasm_step = b.step("wasm", "Build playground WASM into site/");
+    const wasm_install = b.addInstallBinFile(wasm.getEmittedBin(), "nomen.wasm");
+    wasm_step.dependOn(&wasm_install.step);
+
+    const copy_wasm = b.addSystemCommand(&.{"cp"});
+    copy_wasm.addFileArg(wasm.getEmittedBin());
+    copy_wasm.addArg(b.pathFromRoot("site/nomen.wasm"));
+    wasm_step.dependOn(&copy_wasm.step);
 }

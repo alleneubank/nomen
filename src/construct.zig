@@ -24,14 +24,7 @@ pub const ConstructEngine = struct {
     buf: [42]u8 = undefined,
 
     pub fn init(seed: ?u64) ConstructEngine {
-        const actual_seed = seed orelse blk: {
-            var s: [8]u8 = undefined;
-            std.posix.getrandom(&s) catch {
-                break :blk @as(u64, 0);
-            };
-            break :blk std.mem.readInt(u64, &s, .little);
-        };
-        return .{ .prng = std.Random.DefaultPrng.init(actual_seed) };
+        return .{ .prng = std.Random.DefaultPrng.init(generator_mod.resolveSeed(seed)) };
     }
 
     pub fn generateConstruct(
@@ -87,11 +80,11 @@ pub const ConstructEngine = struct {
                         // Two-word techniques: replace word2 with a built-in word
                         if (input_words.len >= 2 and list.len > 0) {
                             varied_words_buf[0] = input_words[0];
-                            varied_words_buf[1] = list[rand.intRangeLessThan(usize, 0, list.len)];
+                            varied_words_buf[1] = list[generator_mod.pickIndex(rand, list.len)];
                             varied_words = varied_words_buf[0..2];
                         } else if (input_words.len >= 1 and list.len > 0) {
                             varied_words_buf[0] = input_words[0];
-                            varied_words_buf[1] = list[rand.intRangeLessThan(usize, 0, list.len)];
+                            varied_words_buf[1] = list[generator_mod.pickIndex(rand, list.len)];
                             varied_words = varied_words_buf[0..2];
                         }
                     },
@@ -99,7 +92,7 @@ pub const ConstructEngine = struct {
                         // Different prefix/suffix selected per iteration (PRNG advances naturally)
                         // If no input, pick a different base word each time
                         if (input_words.len == 0 and list.len > 0) {
-                            varied_words_buf[0] = list[rand.intRangeLessThan(usize, 0, list.len)];
+                            varied_words_buf[0] = list[generator_mod.pickIndex(rand, list.len)];
                             varied_words = varied_words_buf[0..1];
                         }
                     },
@@ -110,7 +103,7 @@ pub const ConstructEngine = struct {
                             var found = false;
                             var back_attempts: usize = 0;
                             while (back_attempts < 100) : (back_attempts += 1) {
-                                const w = mnemonic_list[rand.intRangeLessThan(usize, 0, mnemonic_list.len)];
+                                const w = mnemonic_list[generator_mod.pickIndex(rand, mnemonic_list.len)];
                                 if (w.len >= 6) {
                                     varied_words_buf[0] = w;
                                     varied_words = varied_words_buf[0..1];
@@ -119,7 +112,7 @@ pub const ConstructEngine = struct {
                                 }
                             }
                             if (!found) {
-                                varied_words_buf[0] = mnemonic_list[rand.intRangeLessThan(usize, 0, mnemonic_list.len)];
+                                varied_words_buf[0] = mnemonic_list[generator_mod.pickIndex(rand, mnemonic_list.len)];
                                 varied_words = varied_words_buf[0..1];
                             }
                         }
@@ -130,12 +123,12 @@ pub const ConstructEngine = struct {
                     .acronym => {
                         // Substitute individual input words with built-in alternatives
                         if (input_words.len >= 2 and list.len > 0) {
-                            const replace_idx = rand.intRangeLessThan(usize, 0, input_words.len);
+                            const replace_idx = generator_mod.pickIndex(rand, input_words.len);
                             const copy_len = @min(input_words.len, 5);
                             for (input_words[0..copy_len], 0..) |w, idx| {
                                 varied_words_buf[idx] = w;
                             }
-                            varied_words_buf[replace_idx] = list[rand.intRangeLessThan(usize, 0, list.len)];
+                            varied_words_buf[replace_idx] = list[generator_mod.pickIndex(rand, list.len)];
                             varied_words = varied_words_buf[0..copy_len];
                         }
                     },
@@ -190,8 +183,8 @@ pub const ConstructEngine = struct {
         const rand = self.prng.random();
 
         var result: [2][]const u8 = undefined;
-        result[0] = if (input_words.len >= 1) input_words[0] else list[rand.intRangeLessThan(usize, 0, list.len)];
-        result[1] = if (input_words.len >= 2) input_words[1] else list[rand.intRangeLessThan(usize, 0, list.len)];
+        result[0] = if (input_words.len >= 1) input_words[0] else list[generator_mod.pickIndex(rand, list.len)];
+        result[1] = if (input_words.len >= 2) input_words[1] else list[generator_mod.pickIndex(rand, list.len)];
         return result;
     }
 
@@ -283,7 +276,7 @@ pub const ConstructEngine = struct {
         else blk: {
             const list = if (category) |cat| worddata.getWordList(cat) else worddata.curated_nouns;
             if (list.len == 0) return error.EmptyWordList;
-            break :blk list[self.prng.random().intRangeLessThan(usize, 0, list.len)];
+            break :blk list[generator_mod.pickIndex(self.prng.random(), list.len)];
         };
 
         // Determine base word tone for tonal coherence (REQ-CON-023/014)
@@ -302,7 +295,7 @@ pub const ConstructEngine = struct {
             }
             if (compat_count == 0) return error.ConstructionFailed;
             // Pick nth compatible prefix
-            var pick = rand.intRangeLessThan(usize, 0, compat_count);
+            var pick = generator_mod.pickIndex(rand, compat_count);
             for (constructdata.prefixes) |p| {
                 if (!Tone.compatible(p.tone, base_tone)) continue;
                 if (pick == 0) {
@@ -329,7 +322,7 @@ pub const ConstructEngine = struct {
             }
             if (compat_count == 0) return error.ConstructionFailed;
             // Pick nth compatible suffix
-            var pick = rand.intRangeLessThan(usize, 0, compat_count);
+            var pick = generator_mod.pickIndex(rand, compat_count);
             for (constructdata.suffixes) |s| {
                 if (!Tone.compatible(s.tone, base_tone)) continue;
                 if (pick == 0) {
@@ -365,7 +358,7 @@ pub const ConstructEngine = struct {
             const rand = self.prng.random();
             var attempts: usize = 0;
             while (attempts < 100) : (attempts += 1) {
-                const w = list[rand.intRangeLessThan(usize, 0, list.len)];
+                const w = list[generator_mod.pickIndex(rand, list.len)];
                 if (w.len >= 6) break :blk w;
             }
             return error.EmptyWordList;
@@ -435,31 +428,15 @@ pub const ConstructEngine = struct {
                 @min(3, templates.len)
             else
                 @min(2, templates.len);
-            const tpl_idx = rand.intRangeLessThan(
-                usize,
-                0,
-                max_tpl,
-            );
+            const tpl_idx = generator_mod.pickIndex(rand, max_tpl);
             const template = templates[tpl_idx];
 
             var pos: usize = 0;
             for (template) |is_consonant| {
                 const phoneme = if (is_consonant)
-                    consonants[
-                        rand.intRangeLessThan(
-                            usize,
-                            0,
-                            consonants.len,
-                        )
-                    ]
+                    consonants[generator_mod.pickIndex(rand, consonants.len)]
                 else
-                    vowels[
-                        rand.intRangeLessThan(
-                            usize,
-                            0,
-                            vowels.len,
-                        )
-                    ];
+                    vowels[generator_mod.pickIndex(rand, vowels.len)];
 
                 if (pos + phoneme.len > self.buf.len) break;
                 @memcpy(
@@ -503,9 +480,9 @@ pub const ConstructEngine = struct {
             // Exploratory: pick 3-5 words
             const list = if (category) |cat| worddata.getWordList(cat) else worddata.curated_nouns;
             if (list.len == 0) return error.EmptyWordList;
-            word_count = rand.intRangeAtMost(usize, 3, @min(5, list.len));
+            word_count = generator_mod.pickIndexAtMost(rand, 3, @min(5, list.len));
             for (0..word_count) |i| {
-                picked_buf[i] = list[rand.intRangeLessThan(usize, 0, list.len)];
+                picked_buf[i] = list[generator_mod.pickIndex(rand, list.len)];
             }
         }
 
@@ -562,7 +539,7 @@ pub const ConstructEngine = struct {
 
             if (idx < 5 and insert_after[idx]) {
                 if (pos >= self.buf.len) return error.ConstructionFailed;
-                self.buf[pos] = vowel_options[rand.intRangeLessThan(usize, 0, vowel_options.len)];
+                self.buf[pos] = vowel_options[generator_mod.pickIndex(rand, vowel_options.len)];
                 pos += 1;
             }
         }
