@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>nomen</title>
+    <meta
+      name="description"
+      content="DNS-safe names from fourteen geographic and natural-history lists. CLI, HTTP API, and a local generator compiled to WebAssembly."
+    />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="mast">
+      <p class="wordmark">nomen</p>
+      <p class="mast-links">
+        <a href="https://github.com/alleneubank/nomen">source</a>
+        <span class="sep" aria-hidden="true">·</span>
+        <span>v0.1.0</span>
+      </p>
+      <p class="tag">categorical name generator</p>
+    </header>
+
+    <main>
+      <section class="plate" aria-live="polite">
+        <span class="tick tick-nw" aria-hidden="true"></span>
+        <span class="tick tick-ne" aria-hidden="true"></span>
+        <span class="tick tick-sw" aria-hidden="true"></span>
+        <span class="tick tick-se" aria-hidden="true"></span>
+        <h1 id="name">denali</h1>
+        <div class="plate-bar">
+          <p class="meta">
+            <span id="meta-cat">mountains</span>
+            <span class="sep" aria-hidden="true">·</span>
+            <span id="meta-strat">thematic</span>
+            <span class="sep" aria-hidden="true">·</span>
+            seed <span id="meta-seed">42</span>
+          </p>
+          <p class="plate-actions">
+            <button type="button" id="copy">Copy</button>
+            <button type="button" id="again">Again</button>
+            <button type="button" id="random" class="random">
+              <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+                <rect x="1.5" y="1.5" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <circle cx="5" cy="5" r="1.15" fill="currentColor" />
+                <circle cx="11" cy="5" r="1.15" fill="currentColor" />
+                <circle cx="8" cy="8" r="1.15" fill="currentColor" />
+                <circle cx="5" cy="11" r="1.15" fill="currentColor" />
+                <circle cx="11" cy="11" r="1.15" fill="currentColor" />
+              </svg>
+              Random
+            </button>
+          </p>
+        </div>
+      </section>
+
+      <form id="sheet" class="sheet">
+        <p class="row-label" id="lbl-strategy">strategy</p>
+        <div class="opts" role="radiogroup" aria-labelledby="lbl-strategy" id="strategy-opts"></div>
+
+        <p class="row-label" id="lbl-pattern">pattern</p>
+        <div class="opts" role="radiogroup" aria-labelledby="lbl-pattern" id="pattern-opts"></div>
+
+        <p class="row-label" id="lbl-technique">technique</p>
+        <div class="opts" role="radiogroup" aria-labelledby="lbl-technique" id="technique-opts"></div>
+
+        <p class="row-label" id="lbl-category">category</p>
+        <div class="opts wrap" role="radiogroup" aria-labelledby="lbl-category" id="category-opts"></div>
+
+        <p class="row-label" id="lbl-cols">sheet</p>
+        <div class="opts wrap" id="col-opts"></div>
+
+        <p class="row-label" id="lbl-lists">lists</p>
+        <div class="opts wrap" id="list-opts"></div>
+
+        <p class="row-label" id="lbl-count">count</p>
+        <div class="opts" role="radiogroup" aria-labelledby="lbl-count" id="count-opts"></div>
+
+        <label class="row-label" for="seed">seed</label>
+        <div class="seed-row">
+          <input id="seed" name="seed" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" value="42" />
+          <label class="hold">
+            <input id="hold" type="checkbox" />
+            hold
+          </label>
+        </div>
+
+        <label class="row-label" for="input" id="lbl-input">input</label>
+        <input id="input" name="input" type="text" autocomplete="off" spellcheck="false" />
+
+        <div class="draw-row">
+          <button type="submit" class="draw">Draw</button>
+          <p class="hint">Changing a control draws. Random picks new settings. Draw rerolls the seed unless held.</p>
+        </div>
+      </form>
+
+      <ul id="batch" class="batch" hidden></ul>
+
+      <p id="status" class="status" role="status"></p>
+
+      <section class="ledger-wrap" aria-labelledby="ledger-title">
+        <h2 id="ledger-title">Sheet</h2>
+        <p>
+          One seed, one generator call per column. The CLI takes a single strategy and
+          category; check several to compare them here. Click a name to copy.
+        </p>
+        <div class="ledger-scroll">
+          <table class="ledger">
+            <thead id="ledger-head"></thead>
+            <tbody id="ledger-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="install">
+        <h2>Install</h2>
+        <p>
+          The playground runs the same generator as the CLI, compiled to WebAssembly.
+          Names stay lowercase, ASCII, and DNS-safe.
+        </p>
+        <p class="pre-label">Nix</p>
+        <pre><code>nix run github:alleneubank/nomen -- generate --count 5</code></pre>
+        <p class="pre-label">Zig</p>
+        <pre><code>git clone https://github.com/alleneubank/nomen
+cd nomen
+zig build -Doptimize=ReleaseSafe
+./zig-out/bin/nomen generate --strategy phrase</code></pre>
+        <p class="pre-label">Library</p>
+        <pre><code>zig fetch --save git+https://github.com/alleneubank/nomen</code></pre>
+        <p>
+          Agent-facing surface: <code>nomen --llms</code> and
+          <code>nomen generate --help --format json</code>.
+          HTTP: <code>nomen serve</code> then <code>/generate</code>, <code>/categories</code>, <code>/health</code>.
+        </p>
+      </section>
+    </main>
+
+    <footer class="colophon">
+      <p>MIT License. Zig 0.15. Fourteen lists, no network at generate time.</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

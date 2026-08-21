@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreFiles": [
+      "src/**",
+      "evals/**",
+      "docs/**",
+      "skills/**",
+      "commands/**",
+      "tools/**",
+      "flake.nix",
+      "flake.lock"
+    ]
+  }
+}
